@@ -16,7 +16,7 @@ public class SequencePlayerTest {
 		SequencePlayer player;
 		try {
 
-			// Create a new player, with 140 beats per minute, 4 ticks per beat
+			// Create a new player, with 140 beats per minute, 12 ticks per beat
 			// and a LyricListener that prints each lyric that it sees.
 			LyricListener listener = new LyricListener() {
 				public void processLyricEvent(String text) {
@@ -35,8 +35,7 @@ public class SequencePlayerTest {
 			player.addNote(new Pitch('D').toMidiNote(), 57, 3); // D/4
 			player.addNote(new Pitch('E').toMidiNote(), 60, 9); // E3/4
 			player.addNote(new Pitch('F').toMidiNote(), 69, 3); // F/4
-			player.addNote(new Pitch('G').toMidiNote(), 72, 12); // G2 
-			player.addNote(new Pitch('G').toMidiNote(), 84, 12); // G2 |
+			player.addNote(new Pitch('G').toMidiNote(), 72, 24); // G2 |
 			
 			player.addNote(new Pitch('C').transpose(Pitch.OCTAVE).toMidiNote(), 96, 4); // 3ccc
 			player.addNote(new Pitch('C').transpose(Pitch.OCTAVE).toMidiNote(), 100, 4); // 3ccc
@@ -59,8 +58,73 @@ public class SequencePlayerTest {
 			player.addNote(new Pitch('F').toMidiNote(), 153, 3); // F/4
 			player.addNote(new Pitch('E').toMidiNote(), 156, 9); // E3/4
 			player.addNote(new Pitch('D').toMidiNote(), 165, 3); // D/4
-			player.addNote(new Pitch('C').toMidiNote(), 168, 12); // C2
-			player.addNote(new Pitch('C').toMidiNote(), 180, 12); // C2
+			player.addNote(new Pitch('C').toMidiNote(), 168, 24); // C2
+			
+						
+			System.out.println(player);
+
+			// play!
+			player.play();
+
+			/*
+			 * Note: A possible weird behavior of the Java sequencer: Even if the
+			 * sequencer has finished playing all of the scheduled notes and is
+			 * manually closed, the program may not terminate. This is likely
+			 * due to daemon threads that are spawned when the sequencer is
+			 * opened but keep on running even after the sequencer is killed. In
+			 * this case, you need to explicitly exit the program with
+			 * System.exit(0).
+			 */
+			// System.exit(0);
+
+		} catch (MidiUnavailableException e) {
+			e.printStackTrace();
+		} catch (InvalidMidiDataException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void pieceThreeTest() {
+		SequencePlayer player;
+		try {
+
+			// Create a new player, with 100 beats per minute, 4 ticks per beat
+			// and a LyricListener that prints each lyric that it sees.
+			LyricListener listener = new LyricListener() {
+				public void processLyricEvent(String text) {
+					System.out.println(text);
+				}
+			};
+			player = new SequencePlayer(100, 4, listener);
+			// z4 D2 | G4 BG | B4 A2 | G4 E2 | D4 D2 | G4 BG | B4 A2 | (D'6 | D'2) z4 |]
+
+			// z4 = rest for 8 ticks
+			player.addNote(new Pitch('D').toMidiNote(), 8, 4); // D2 |
+			
+			player.addNote(new Pitch('G').toMidiNote(), 12, 8); // G4
+			player.addNote(new Pitch('B').toMidiNote(), 20, 2); // B
+			player.addNote(new Pitch('G').toMidiNote(), 22, 2); // G |
+			
+			player.addNote(new Pitch('B').toMidiNote(), 24, 8); // B4
+			player.addNote(new Pitch('A').toMidiNote(), 32, 4); // A2 |
+			
+			player.addNote(new Pitch('G').toMidiNote(), 36, 8); // G4
+			player.addNote(new Pitch('E').toMidiNote(), 44, 4); // E2 |
+			
+			player.addNote(new Pitch('D').toMidiNote(), 48, 8); // D4
+			player.addNote(new Pitch('D').toMidiNote(), 56, 4); // D2 |
+			
+			player.addNote(new Pitch('G').toMidiNote(), 60, 8); // G4
+			player.addNote(new Pitch('B').toMidiNote(), 68, 2); // B
+			player.addNote(new Pitch('G').toMidiNote(), 70, 2); // G |
+			
+			player.addNote(new Pitch('B').toMidiNote(), 72, 8); // B4
+			player.addNote(new Pitch('A').toMidiNote(), 80, 4); // A2 |
+			
+			player.addNote(new Pitch('D').transpose(Pitch.OCTAVE).toMidiNote(), 84, 12); // D'6 |
+			
+			player.addNote(new Pitch('D').transpose(Pitch.OCTAVE).toMidiNote(), 84, 4); // D'2 |
 			
 						
 			System.out.println(player);
