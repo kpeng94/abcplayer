@@ -23,7 +23,7 @@ public class SequencePlayerTest {
 					System.out.println(text);
 				}
 			};
-			player = new SequencePlayer(140, 48, listener);
+			player = new SequencePlayer(140, 12, listener);
 			// C C C3/4 D/4 E | E3/4 D/4 E3/4 F/4 G2 | (3ccc (3GGG (3BBB (3DDD | G3/4 A/4 B3/4 C/4 D2
 			player.addNote(new Pitch('C').toMidiNote(), 0, 12); // C
 			player.addNote(new Pitch('C').toMidiNote(), 12, 12); // C
@@ -50,17 +50,17 @@ public class SequencePlayerTest {
 			player.addNote(new Pitch('B').toMidiNote(), 124, 4); // 3BBB
 			player.addNote(new Pitch('B').toMidiNote(), 128, 4); // 3BBB
 			
-			player.addNote(new Pitch('D').toMidiNote(), 132, 4); // 3DDD |
-			player.addNote(new Pitch('D').toMidiNote(), 136, 4); // 3DDD |
-			player.addNote(new Pitch('D').toMidiNote(), 140, 4); // 3DDD |
+			player.addNote(new Pitch('C').toMidiNote(), 132, 4); // 3DDD |
+			player.addNote(new Pitch('C').toMidiNote(), 136, 4); // 3DDD |
+			player.addNote(new Pitch('C').toMidiNote(), 140, 4); // 3DDD |
 			
 			
 			player.addNote(new Pitch('G').toMidiNote(), 144, 9); // G3/4
-			player.addNote(new Pitch('A').toMidiNote(), 153, 3); // A/4
-			player.addNote(new Pitch('B').toMidiNote(), 156, 9); // B3/4
-			player.addNote(new Pitch('C').toMidiNote(), 165, 3); // C/4
-			player.addNote(new Pitch('D').toMidiNote(), 168, 12); // D2
-			player.addNote(new Pitch('D').toMidiNote(), 180, 12); // D2
+			player.addNote(new Pitch('F').toMidiNote(), 153, 3); // F/4
+			player.addNote(new Pitch('E').toMidiNote(), 156, 9); // E3/4
+			player.addNote(new Pitch('D').toMidiNote(), 165, 3); // D/4
+			player.addNote(new Pitch('C').toMidiNote(), 168, 12); // C2
+			player.addNote(new Pitch('C').toMidiNote(), 180, 12); // C2
 			
 						
 			System.out.println(player);
