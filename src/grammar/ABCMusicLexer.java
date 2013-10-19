@@ -2,9 +2,6 @@
 
 package grammar;
 
-
-package grammar;
-
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
@@ -38,23 +35,6 @@ public class ABCMusicLexer extends Lexer {
 		"IMETER", "ITEMPO", "IVOICE", "IKEY", "EOL", "MODEMINOR", "ACCIDENTAL", 
 		"COMMENTSIGN", "SLASH", "EQUALS", "BASENOTE", "COMMON"
 	};
-
-
-	    // This method makes the lexer or parser stop running if it encounters
-	    // invalid input and throw a RuntimeException.
-	    public void reportErrorsAsExceptions() {
-	        removeErrorListeners();
-	        addErrorListener(new ExceptionThrowingErrorListener());
-	    }
-
-	    private static class ExceptionThrowingErrorListener extends BaseErrorListener {
-	        @Override
-	        public void syntaxError(Recognizer<?, ?> recognizer,
-	                Object offendingSymbol, int line, int charPositionInLine,
-	                String msg, RecognitionException e) {
-	            throw new RuntimeException(msg);
-	        }
-	    }
 
 
 	    // This method makes the lexer or parser stop running if it encounters
