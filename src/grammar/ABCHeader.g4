@@ -44,8 +44,24 @@ package grammar;
 /*
  * These are the lexical rules. They define the tokens used by the lexer.
  */
-PLUS     : '+';
-TIMES : '*';
+DIGIT: [0-9];
+TEXT: [a-z]+;
+INUMBER: 'X:';
+ITITLE: 'T:';
+ICOMPOSER: 'C:';
+ILENGTH: 'L:';
+IMETER: 'M:';
+ITEMPO: 'Q:';
+IVOICE: 'V:';
+IKEY: 'K:';
+EOL: [\r\n];
+MODEMINOR: 'm';
+ACCIDENTAL: [#b];
+COMMENTSIGN: '%';
+SLASH: '/';
+EQUALS: '=';
+BASENOTE: [abcdefgABCDEFG];
+COMMON: [C|?];
 
 /*
  * These are the parser rules. They define the structures used by the parser.
@@ -58,4 +74,25 @@ TIMES : '*';
  * For more information, see
  * http://www.antlr.org/wiki/display/ANTLR4/Parser+Rules#ParserRules-StartRulesandEOF
  */
-line     : PLUS EOF;
+abc_header: field_number comment* field_title other_fields* field_key;
+field_number: INUMBER DIGIT+ end_of_line;
+field_title: ITITLE TEXT end_of_line;
+other_fields: field_composer | field_default_length | field_meter | field_tempo | field_voice | comment;
+field_composer: ICOMPOSER TEXT end_of_line;
+field_default_length: ILENGTH note_length_strict end_of_line;
+field_meter: IMETER meter end_of_line;
+field_tempo: ITEMPO tempo end_of_line;
+field_voice: IVOICE TEXT end_of_line;
+field_key: IKEY key end_of_line;
+
+key: keynote MODEMINOR?;
+keynote: BASENOTE ACCIDENTAL?;
+
+meter: COMMON | meter_fraction;
+meter_fraction: DIGIT+ SLASH DIGIT+;
+note_length_strict: DIGIT+ SLASH DIGIT+;
+
+tempo: meter_fraction EQUALS DIGIT+;
+
+comment: COMMENTSIGN TEXT EOL;
+end_of_line: comment | EOL;
