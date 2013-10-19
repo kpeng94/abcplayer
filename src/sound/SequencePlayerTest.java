@@ -46,9 +46,9 @@ public class SequencePlayerTest {
 			player.addNote(new Pitch('G').toMidiNote(), 112, 4); // 3GGG
 			player.addNote(new Pitch('G').toMidiNote(), 116, 4); // 3GGG
 			
-			player.addNote(new Pitch('B').toMidiNote(), 120, 4); // 3BBB
-			player.addNote(new Pitch('B').toMidiNote(), 124, 4); // 3BBB
-			player.addNote(new Pitch('B').toMidiNote(), 128, 4); // 3BBB
+			player.addNote(new Pitch('E').toMidiNote(), 120, 4); // 3EEE
+			player.addNote(new Pitch('E').toMidiNote(), 124, 4); // 3EEE
+			player.addNote(new Pitch('E').toMidiNote(), 128, 4); // 3EEE
 			
 			player.addNote(new Pitch('C').toMidiNote(), 132, 4); // 3DDD |
 			player.addNote(new Pitch('C').toMidiNote(), 136, 4); // 3DDD |
