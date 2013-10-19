@@ -101,30 +101,42 @@ public class SequencePlayerTest {
 
 			// z4 = rest for 8 ticks
 			player.addNote(new Pitch('D').toMidiNote(), 8, 4); // D2 |
+			player.addLyricEvent("A", 8);
 			
 			player.addNote(new Pitch('G').toMidiNote(), 12, 8); // G4
+			player.addLyricEvent("ma", 12);
 			player.addNote(new Pitch('B').toMidiNote(), 20, 2); // B
+			player.addLyricEvent("zing", 20);
 			player.addNote(new Pitch('G').toMidiNote(), 22, 2); // G |
 			
 			player.addNote(new Pitch('B').toMidiNote(), 24, 8); // B4
+			player.addLyricEvent("grace!", 24);
 			player.addNote(new Pitch('A').toMidiNote(), 32, 4); // A2 |
+			player.addLyricEvent("How", 32);
 			
 			player.addNote(new Pitch('G').toMidiNote(), 36, 8); // G4
+			player.addLyricEvent("sweet", 36);
 			player.addNote(new Pitch('E').toMidiNote(), 44, 4); // E2 |
+			player.addLyricEvent("the", 44);
 			
 			player.addNote(new Pitch('D').toMidiNote(), 48, 8); // D4
+			player.addLyricEvent("sound", 48);
 			player.addNote(new Pitch('D').toMidiNote(), 56, 4); // D2 |
+			player.addLyricEvent("That", 56);
 			
 			player.addNote(new Pitch('G').toMidiNote(), 60, 8); // G4
+			player.addLyricEvent("saved", 60);
 			player.addNote(new Pitch('B').toMidiNote(), 68, 2); // B
+			player.addLyricEvent("a", 68);
 			player.addNote(new Pitch('G').toMidiNote(), 70, 2); // G |
 			
 			player.addNote(new Pitch('B').toMidiNote(), 72, 8); // B4
+			player.addLyricEvent("wretch", 72);
 			player.addNote(new Pitch('A').toMidiNote(), 80, 4); // A2 |
+			player.addLyricEvent("like", 80);
 			
-			player.addNote(new Pitch('D').transpose(Pitch.OCTAVE).toMidiNote(), 84, 12); // D'6 |
-			
-			player.addNote(new Pitch('D').transpose(Pitch.OCTAVE).toMidiNote(), 84, 4); // D'2 |
+			player.addNote(new Pitch('D').transpose(Pitch.OCTAVE).toMidiNote(), 84, 16); // D'6 |
+			player.addLyricEvent("me.", 84);
 			
 						
 			System.out.println(player);
