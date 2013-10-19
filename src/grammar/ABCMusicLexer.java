@@ -2,6 +2,9 @@
 
 package grammar;
 
+
+package grammar;
+
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
@@ -17,17 +20,17 @@ public class ABCMusicLexer extends Lexer {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		PLUS=1;
+		PLUS=1, TIMES=2;
 	public static String[] modeNames = {
 		"DEFAULT_MODE"
 	};
 
 	public static final String[] tokenNames = {
 		"<INVALID>",
-		"'+'"
+		"'+'", "'*'"
 	};
 	public static final String[] ruleNames = {
-		"PLUS"
+		"PLUS", "TIMES"
 	};
 
 
@@ -37,7 +40,24 @@ public class ABCMusicLexer extends Lexer {
 	        removeErrorListeners();
 	        addErrorListener(new ExceptionThrowingErrorListener());
 	    }
-	    
+
+	    private static class ExceptionThrowingErrorListener extends BaseErrorListener {
+	        @Override
+	        public void syntaxError(Recognizer<?, ?> recognizer,
+	                Object offendingSymbol, int line, int charPositionInLine,
+	                String msg, RecognitionException e) {
+	            throw new RuntimeException(msg);
+	        }
+	    }
+
+
+	    // This method makes the lexer or parser stop running if it encounters
+	    // invalid input and throw a RuntimeException.
+	    public void reportErrorsAsExceptions() {
+	        removeErrorListeners();
+	        addErrorListener(new ExceptionThrowingErrorListener());
+	    }
+
 	    private static class ExceptionThrowingErrorListener extends BaseErrorListener {
 	        @Override
 	        public void syntaxError(Recognizer<?, ?> recognizer,
@@ -69,8 +89,9 @@ public class ABCMusicLexer extends Lexer {
 	public ATN getATN() { return _ATN; }
 
 	public static final String _serializedATN =
-		"\2\4\3\7\b\1\4\2\t\2\3\2\3\2\2\3\3\3\1\3\2\2\6\2\3\3\2\2\2\3\5\3\2\2\2"+
-		"\5\6\7-\2\2\6\4\3\2\2\2\3\2";
+		"\2\4\4\13\b\1\4\2\t\2\4\3\t\3\3\2\3\2\3\3\3\3\2\4\3\3\1\5\4\1\3\2\2\n"+
+		"\2\3\3\2\2\2\2\5\3\2\2\2\3\7\3\2\2\2\5\t\3\2\2\2\7\b\7-\2\2\b\4\3\2\2"+
+		"\2\t\n\7,\2\2\n\6\3\2\2\2\3\2";
 	public static final ATN _ATN =
 		ATNSimulator.deserialize(_serializedATN.toCharArray());
 	static {

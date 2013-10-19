@@ -2,6 +2,9 @@
 
 package grammar;
 
+
+package grammar;
+
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -17,9 +20,9 @@ public class ABCMusicParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		PLUS=1;
+		PLUS=1, TIMES=2;
 	public static final String[] tokenNames = {
-		"<INVALID>", "'+'"
+		"<INVALID>", "'+'", "'*'"
 	};
 	public static final int
 		RULE_line = 0;
@@ -46,7 +49,24 @@ public class ABCMusicParser extends Parser {
 	        removeErrorListeners();
 	        addErrorListener(new ExceptionThrowingErrorListener());
 	    }
-	    
+
+	    private static class ExceptionThrowingErrorListener extends BaseErrorListener {
+	        @Override
+	        public void syntaxError(Recognizer<?, ?> recognizer,
+	                Object offendingSymbol, int line, int charPositionInLine,
+	                String msg, RecognitionException e) {
+	            throw new RuntimeException(msg);
+	        }
+	    }
+
+
+	    // This method makes the lexer or parser stop running if it encounters
+	    // invalid input and throw a RuntimeException.
+	    public void reportErrorsAsExceptions() {
+	        removeErrorListeners();
+	        addErrorListener(new ExceptionThrowingErrorListener());
+	    }
+
 	    private static class ExceptionThrowingErrorListener extends BaseErrorListener {
 	        @Override
 	        public void syntaxError(Recognizer<?, ?> recognizer,
@@ -99,7 +119,7 @@ public class ABCMusicParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\2\3\3\b\4\2\t\2\3\2\3\2\3\2\3\2\2\3\2\2\2\6\2\4\3\2\2\2\4\5\7\3\2\2\5"+
+		"\2\3\4\b\4\2\t\2\3\2\3\2\3\2\3\2\2\3\2\2\2\6\2\4\3\2\2\2\4\5\7\3\2\2\5"+
 		"\6\7\1\2\2\6\3\3\2\2\2\2";
 	public static final ATN _ATN =
 		ATNSimulator.deserialize(_serializedATN.toCharArray());

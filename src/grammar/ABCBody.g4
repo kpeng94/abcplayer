@@ -8,9 +8,8 @@
  * java -jar ../../antlr.jar ABCMusic.g4
  */
 
-grammar ABCMusic;
-import ABCHeader;
-import ABCBody;
+grammar ABCBody;
+
 /*
  * This puts "package grammar;" at the top of the output Java files.
  * Do not change these lines unless you know what you're doing.
@@ -46,7 +45,7 @@ package grammar;
  * These are the lexical rules. They define the tokens used by the lexer.
  */
 PLUS     : '+';
-
+TIMES : '*';
 
 /*
  * These are the parser rules. They define the structures used by the parser.
