@@ -11,18 +11,17 @@
 grammar ABCBody;
 
 
-
 /*
  * These are the lexical rules. They define the tokens used by the lexer.
  */
 BASENOTE     : 'C' | 'D' | 'E' | 'F' | 'G' | 'A' | 'B' | 'c' | 'd' | 'e' | 'f' | 'g' | 'a' | 'b' ;
 REST : 'z';
 BAR : '|' | '||' | '[|' | '|]' | ':|' | '|:';
-SHARP: '^' | '^^'
-FLAT : '_' | '__'
-NEUTRAL : '='
+SHARP: '^' | '^^';
+FLAT : '_' | '__';
+NEUTRAL : '=';
 TIMES : '*';
-NTH-REPEAT:  '[1' | '[2'
+NTH_REPEAT:  '[1' | '[2';
 
 
 /*
@@ -37,5 +36,5 @@ NTH-REPEAT:  '[1' | '[2'
  * http://www.antlr.org/wiki/display/ANTLR4/Parser+Rules#ParserRules-StartRulesandEOF
  */
 line     : PLUS EOF;
-accidental : SHARP | FLAT | NEUTRAL
-literal: BASENOTE | REST | BAR
+accidental : SHARP | FLAT | NEUTRAL;
+literal: BASENOTE | REST | BAR;
