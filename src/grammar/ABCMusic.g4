@@ -9,8 +9,8 @@
  */
 
 grammar ABCMusic;
-import ABCHeader;
-import ABCBody;
+import ABCHeader, ABCBody;
+
 /*
  * This puts "package grammar;" at the top of the output Java files.
  * Do not change these lines unless you know what you're doing.
