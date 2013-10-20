@@ -59,4 +59,6 @@ PLUS     : '+';
  * For more information, see
  * http://www.antlr.org/wiki/display/ANTLR4/Parser+Rules#ParserRules-StartRulesandEOF
  */
-line     : PLUS EOF;
+abc_music : abc_line+;
+abc_line     : element* linefeed (lyric linefed) | mid_tune_field | comment;
+mid_tune_field : FIELD_VOICE;

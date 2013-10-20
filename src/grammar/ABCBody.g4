@@ -22,6 +22,18 @@ FLAT : '_' | '__';
 NEUTRAL : '=';
 TIMES : '*';
 NTH_REPEAT:  '[1' | '[2';
+OCTAVE_HIGHER: "'";
+OCTAVE_LOWER: ',';
+DIGIT: [0-9];
+BACKSLASH: '/';
+ILYRIC: 'w:';
+SPACE: ' ';
+LYRICAL_ELEMENT: '-' | '_' | '*' | '~' | '\-' | '|';
+LYRIC_TEXT: [^\w'-]+; // Unsure about this
+OPEN_BRACKET : '[';
+CLOSE_BRACKET : ']';
+OPEN_PAREN : '(';
+
 
 
 /*
@@ -35,6 +47,17 @@ NTH_REPEAT:  '[1' | '[2';
  * For more information, see
  * http://www.antlr.org/wiki/display/ANTLR4/Parser+Rules#ParserRules-StartRulesandEOF
  */
-line     : PLUS EOF;
+
+element: note_element | tuplet_element | BAR | NTH_REPEAT | SPACE;
+note_element: note | multi_note;
+tuplet_element: tuplet_spec note_element+;
+tuplet_spec : OPEN_PAREN DIGIT;
+multi_note : OPEN_BRACKET note+ CLOSE_BRACKET;
+lyric: ILYRIC (LYRICAL_ELEMENT | LYRIC_TEXT)*;
+note : note_or_rest (note_length)*;
+note_or_rest : pitch | REST;
+pitch: accidental* BASENOTE octave*;
 accidental : SHARP | FLAT | NEUTRAL;
+octave: OCTAVE_LOWER* | OCTAVE_HIGHER*;
+note_length: (DIGIT+)? (BACKSLASH DIGIT+)?;
 literal: BASENOTE | REST | BAR;
