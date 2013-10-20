@@ -15,12 +15,31 @@ import org.junit.Test;
  */
 public class LexerTest {
 
+    // Here, we will test ABCHeader grammar against the three warm up pieces.
+    
     @Test
-    public void test() {
-      //Testing that the lexer parses a single token
-        verifyLexer("m", new String[] {"m"});
+    public void testPieceOneHeader() {
+      // Testing that the lexer tokenizes piece one properly
+        verifyLexer("X:1\nT:Piece No.1\nM:4/4\nL:1/4\nQ:1/4=140\nK:C", new String[] {"X:", "1", "\n", "T:", "Piece No.1", "\n", "M:", "4", "/", "4", "\n", "L:", "1", "/", "4", "\n", "Q:", "1", "/", "4", "=", "140", "\n", "K:", "C"});
     }
     
+    @Test
+    public void testPieceTwoHeader() {
+      // Testing that the lexer tokenizes piece two properly
+        verifyLexer("X:1\nT:Piece No.2\nM:C\nL:1/4\nQ:1/4=200\nK:C", new String[] {"X:", "1", "\n", "T:", "Piece No.2", "\n", "M:", "C", "\n", "L:", "1", "/", "4", "\n", "Q:", "1", "/", "4", "=", "200", "\n", "K:", "C"});
+    }
+    
+    @Test
+    public void testPieceThreeHeader() {
+      // Testing that the lexer tokenizes piece three properly
+        verifyLexer("X: 3\nT: Sample 3\nC: Me\nQ: 1/8=100\nM: 3/4\nL: 1/8\nK: C", new String[] {"X:", "3", "\n", "T:", "Sample 3", "\n", "C:", "Me", "\n", "Q:", "1", "/", "8", "=", "100", "\n", "M:", "3", "/", "4", "\n", "L:", "1", "/", "8", "\n", "K:", "C"});
+    }
+    
+    // Here, we will test ABCBody grammar portion against the three warm up pieces file.
+    
+    //TODO (ajain94) Write tests. 
+
+    // This code is taken from PS2
     public void verifyLexer(String input, String[] expectedTokens) {
         CharStream stream = new ANTLRInputStream(input);
         ABCMusicLexer lexer = new ABCMusicLexer(stream);
@@ -31,6 +50,7 @@ public class LexerTest {
         
         for(int i = 0; i < actualTokens.size(); i++) {
              String actualToken = actualTokens.get(i).getText();
+             System.out.println(actualToken);
              String expectedToken = expectedTokens[i];
              assertEquals(actualToken, expectedToken);
         }
