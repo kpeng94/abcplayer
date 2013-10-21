@@ -48,11 +48,11 @@ public interface ABCMusicListener extends ParseTreeListener {
 	void enterTuplet_element(ABCMusicParser.Tuplet_elementContext ctx);
 	void exitTuplet_element(ABCMusicParser.Tuplet_elementContext ctx);
 
-	void enterNote(ABCMusicParser.NoteContext ctx);
-	void exitNote(ABCMusicParser.NoteContext ctx);
-
 	void enterKey(ABCMusicParser.KeyContext ctx);
 	void exitKey(ABCMusicParser.KeyContext ctx);
+
+	void enterNote(ABCMusicParser.NoteContext ctx);
+	void exitNote(ABCMusicParser.NoteContext ctx);
 
 	void enterKeynote(ABCMusicParser.KeynoteContext ctx);
 	void exitKeynote(ABCMusicParser.KeynoteContext ctx);
@@ -62,6 +62,9 @@ public interface ABCMusicListener extends ParseTreeListener {
 
 	void enterElement(ABCMusicParser.ElementContext ctx);
 	void exitElement(ABCMusicParser.ElementContext ctx);
+
+	void enterLyrical_element(ABCMusicParser.Lyrical_elementContext ctx);
+	void exitLyrical_element(ABCMusicParser.Lyrical_elementContext ctx);
 
 	void enterMid_tune_field(ABCMusicParser.Mid_tune_fieldContext ctx);
 	void exitMid_tune_field(ABCMusicParser.Mid_tune_fieldContext ctx);
