@@ -33,6 +33,9 @@ public class ABCMusicBaseListener implements ABCMusicListener {
 	@Override public void enterNote_length(ABCMusicParser.Note_lengthContext ctx) { }
 	@Override public void exitNote_length(ABCMusicParser.Note_lengthContext ctx) { }
 
+	@Override public void enterAbc_tune(ABCMusicParser.Abc_tuneContext ctx) { }
+	@Override public void exitAbc_tune(ABCMusicParser.Abc_tuneContext ctx) { }
+
 	@Override public void enterField_key(ABCMusicParser.Field_keyContext ctx) { }
 	@Override public void exitField_key(ABCMusicParser.Field_keyContext ctx) { }
 
