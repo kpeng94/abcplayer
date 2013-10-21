@@ -14,23 +14,23 @@ grammar ABCHeader;
  * These are the lexical rules. They define the tokens used by the lexer.
  */
 DIGIT: [0-9];
-TEXT: [a-zA-Z0-9. ]+;
-INUMBER: 'X:'([ \t]+)?;
-ITITLE: 'T:'([ \t]+)?;
-ICOMPOSER: 'C:'([ \t]+)?;
-ILENGTH: 'L:'([ \t]+)?;
-IMETER: 'M:'([ \t]+)?;
-ITEMPO: 'Q:'([ \t]+)?;
-IVOICE: 'V:'([ \t]+)?;
-IKEY: 'K:'([ \t]+)?;
+TEXT: [a-zA-Z0-9.,'"?\-!& ]+;
+INUMBER: 'X:'[ \t]*;
+ITITLE: 'T:'[ \t]*;
+ICOMPOSER: 'C:'[ \t]*;
+ILENGTH: 'L:'[ \t]*;
+IMETER: 'M:'[ \t]*;
+ITEMPO: 'Q:'[ \t]*;
+IVOICE: 'V:'[ \t]*;
+IKEY: 'K:'[ \t]*;
 EOL: [\r\n];
 MODEMINOR: 'm';
 ACCIDENTAL: [#b];
 COMMENTSIGN: '%';
 SLASH: '/';
 EQUALS: '=';
-BASENOTE: [abcdefgABCDEFG];
-COMMON: [C|?];
+BASENOTE: [a-gA-G];
+COMMON: ([C][\|])|[C];
 
 /*
  * These are the parser rules. They define the structures used by the parser.
