@@ -15,14 +15,14 @@ grammar ABCHeader;
  */
 DIGIT: [0-9];
 TEXT: [a-zA-Z0-9. ]+;
-INUMBER: 'X:([ \t]+)?';
-ITITLE: 'T:([ \t]+)?';
-ICOMPOSER: 'C:([ \t]+)?';
-ILENGTH: 'L:([ \t]+)?';
-IMETER: 'M:([ \t]+)?';
-ITEMPO: 'Q:([ \t]+)?';
-IVOICE: 'V:([ \t]+)?';
-IKEY: 'K:([ \t]+)?';
+INUMBER: 'X:'([ \t]+)?;
+ITITLE: 'T:'([ \t]+)?;
+ICOMPOSER: 'C:'([ \t]+)?;
+ILENGTH: 'L:'([ \t]+)?;
+IMETER: 'M:'([ \t]+)?;
+ITEMPO: 'Q:'([ \t]+)?;
+IVOICE: 'V:'([ \t]+)?;
+IKEY: 'K:'([ \t]+)?;
 EOL: [\r\n];
 MODEMINOR: 'm';
 ACCIDENTAL: [#b];
@@ -31,7 +31,6 @@ SLASH: '/';
 EQUALS: '=';
 BASENOTE: [abcdefgABCDEFG];
 COMMON: [C|?];
-WHITESPACE : [ \t]+ -> skip ;
 
 /*
  * These are the parser rules. They define the structures used by the parser.

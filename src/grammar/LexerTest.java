@@ -32,7 +32,7 @@ public class LexerTest {
     @Test
     public void testPieceThreeHeader() {
       // Testing that the lexer tokenizes piece three properly
-        verifyLexer("X: 3\nT: Sample 3\nC: Me\nQ: 1/8=100\nM: 3/4\nL: 1/8\nK: C", new String[] {"X:", "3", "\n", "T:", "Sample 3", "\n", "C:", "Me", "\n", "Q:", "1", "/", "8", "=", "100", "\n", "M:", "3", "/", "4", "\n", "L:", "1", "/", "8", "\n", "K:", "C"});
+        verifyLexer("X: 3\nT: Sample 3\nC: Me\nQ: 1/8=100\nM: 3/4\nL: 1/8\nK: C", new String[] {"X: ", "3", "\n", "T: ", "Sample 3", "\n", "C: ", "Me", "\n", "Q: ", "1", "/", "8", "=", "100", "\n", "M: ", "3", "/", "4", "\n", "L: ", "1", "/", "8", "\n", "K: ", "C"});
     }
     
     // Here, we will test ABCBody grammar portion against the three warm up pieces file.
@@ -69,7 +69,6 @@ public class LexerTest {
         
         for(int i = 0; i < actualTokens.size(); i++) {
              String actualToken = actualTokens.get(i).getText();
-             System.out.println(actualToken);
              String expectedToken = expectedTokens[i];
              assertEquals(actualToken, expectedToken);
         }
