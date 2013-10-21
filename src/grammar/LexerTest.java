@@ -37,8 +37,27 @@ public class LexerTest {
     
     // Here, we will test ABCBody grammar portion against the three warm up pieces file.
     
-    //TODO (ajain94) Write tests. 
-
+    @Test
+    public void testNote(){
+    	// Testing that a single note is parsed properly
+    	verifyLexer("B", new String[] {"B"});
+    }
+    
+    @Test
+    public void testSharpNote() {
+    	// Testing that a note with a sharp gets tokenized
+    	verifyLexer("B^", new String[] {"B", "^"});
+    }
+    
+    @Test(expected=IllegalArgumentException.class)
+    public void testNonNote() {
+    	verifyLexer("ZZ", new String[] {"ZZ"});
+    }
+    
+    @Test
+    public void testMeasureNote() {
+    	verifyLexer("C C C3/4 D/4 E |", new String[] {"C", "C", "C3/4", "D/4", "E", "|"});
+    }
     // This code is taken from PS2
     public void verifyLexer(String input, String[] expectedTokens) {
         CharStream stream = new ANTLRInputStream(input);
