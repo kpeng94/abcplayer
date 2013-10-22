@@ -16,7 +16,7 @@ public class Bar {
     public void addNote(Note note) {
         if ((notesSum + note.getLength()) > measureLength) {
             //TODO: (kpeng94) Throw some sort of exception
-            throw new RuntimeException();
+            throw new IllegalArgumentException("This note is too long to add.");
         }
         notesSum += note.getLength();
         notes.add(note);
