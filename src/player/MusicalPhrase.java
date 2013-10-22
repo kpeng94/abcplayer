@@ -8,6 +8,10 @@ public class MusicalPhrase {
     public MusicalPhrase(ArrayList<Bar> bars) {
         this.bars = bars;
     }
+    
+    public ArrayList<Bar> getBars() {
+        return new ArrayList<Bar>(this.bars);
+    }
 
     public int getTicks() {
         int ticks = 1;

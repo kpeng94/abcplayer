@@ -22,6 +22,10 @@ public class Bar {
         notes.add(note);
     }
     
+    public ArrayList<Note> getNotes() {
+        return new ArrayList<Note>(this.notes);
+    }
+    
     public int getTicks() {
         int ticks = 1; 
         int gcd;
