@@ -18,7 +18,8 @@ public class SequencePlayerTest {
 
 			// Create a new player, with 140 beats per minute, 12 ticks per beat
 			// and a LyricListener that prints each lyric that it sees.
-			LyricListener listener = new LyricListener() {
+			LyricListener listener = new 
+			        LyricListener() {
 				public void processLyricEvent(String text) {
 					System.out.println(text);
 				}

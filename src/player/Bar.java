@@ -40,7 +40,7 @@ public class Bar {
             gcd = 1;
             if (noteTicks % 2 == 0 && ticks % 2 == 0)
                 gcd = 2;
-            for (int j = 3; j < Math.min(noteTicks, ticks); j += 2) {
+            for (int j = 3; j <= Math.min(noteTicks, ticks); j++) {
                 if (noteTicks % j == 0 && ticks % j == 0) {
                     gcd = j;
                 }

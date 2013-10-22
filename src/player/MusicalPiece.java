@@ -39,7 +39,7 @@ public class MusicalPiece {
             gcd = 1;
             if (phraseTicks % 2 == 0 && ticks % 2 == 0)
                 gcd = 2;
-            for (int j = 3; j < Math.min(phraseTicks, ticks); j += 2) {
+            for (int j = 3; j <= Math.min(phraseTicks, ticks); j++) {
                 if (phraseTicks % j == 0 && ticks % j == 0) {
                     gcd = j;
                 }
@@ -64,20 +64,21 @@ public class MusicalPiece {
                 }
             };
             player = new SequencePlayer(this.getTempo(), this.getTicks(), listener);
-            int tickCount = 0;
             for (MusicalPhrase phrase : this.phrases) {
+                int tickCount = 0;
                 for (Bar bar : phrase.getBars()) {
                     for (Note note : bar.getNotes()) {
                         if (note instanceof PitchNote) {
-                            player.addNote(note.getNote(), tickCount, (int) (note.getLength() * this.getTicks()));
+                            player.addNote(note.getNote(), tickCount, this.getTicks() * this.measureLength * note.getNumerator() / note.getDenominator());
                         }
                         if (!(note.getLyric().equals(""))) {
                             player.addLyricEvent(note.getLyric(), tickCount);
                         }
-                        tickCount += note.getLength() * this.getTicks();
+                        tickCount += note.getNumerator() * this.measureLength * this.getTicks() / note.getDenominator();
                     }
                 }
             }
+            player.play();
         }
         catch (Exception e) {
             e.printStackTrace();
