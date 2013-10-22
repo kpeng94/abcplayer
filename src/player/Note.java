@@ -6,7 +6,8 @@ public interface Note {
 
     public int getNumerator();
     public int getDenominator();
-    public Integer getLength();
+    public int getNote();
+    public double getLength();
     public String getLyric();
-
+    
 }
