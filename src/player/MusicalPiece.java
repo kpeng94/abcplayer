@@ -2,6 +2,11 @@ package player;
 
 import java.util.ArrayList;
 
+import javax.sound.midi.MidiUnavailableException;
+
+import sound.LyricListener;
+import sound.SequencePlayer;
+
 public class MusicalPiece {
     private String title;
     private String composer;
@@ -25,6 +30,31 @@ public class MusicalPiece {
     public Integer getTicks() {
         //TODO: (kpeng94) Implement this using phrases
         return 0;
+    }
+    
+    /**
+     * @return ticks
+     */
+    public void playPiece() {
+        SequencePlayer player;
+        try {
+            LyricListener listener = new LyricListener() {
+                public void processLyricEvent(String text) {
+                    System.out.print(text);
+                }
+            };
+            player = new SequencePlayer(this.getTempo(), this.getTicks(), listener);
+            for (MusicalPhrase phrase : this.phrases) {
+                for (Bar bar : phrase.getBars()) {
+                    for (Note note : bar.getNotes()) {
+                        
+                    }
+                }
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }  
     }
 
     /**
