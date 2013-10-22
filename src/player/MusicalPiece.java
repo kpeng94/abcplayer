@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.sound.midi.MidiUnavailableException;
 
 import sound.LyricListener;
+import sound.Pitch;
 import sound.SequencePlayer;
 
 public class MusicalPiece {
@@ -59,14 +60,21 @@ public class MusicalPiece {
         try {
             LyricListener listener = new LyricListener() {
                 public void processLyricEvent(String text) {
-                    System.out.print(text);
+                    System.out.println(text);
                 }
             };
             player = new SequencePlayer(this.getTempo(), this.getTicks(), listener);
+            int tickCount = 0;
             for (MusicalPhrase phrase : this.phrases) {
                 for (Bar bar : phrase.getBars()) {
                     for (Note note : bar.getNotes()) {
-                        
+                        if (note instanceof PitchNote) {
+                            player.addNote(note.getNote(), tickCount, (int) (note.getLength() * this.getTicks()));
+                        }
+                        if (!(note.getLyric().equals(""))) {
+                            player.addLyricEvent(note.getLyric(), tickCount);
+                        }
+                        tickCount += note.getLength() * this.getTicks();
                     }
                 }
             }
