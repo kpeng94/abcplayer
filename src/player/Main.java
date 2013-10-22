@@ -27,9 +27,9 @@ public class Main {
         
         // For Demo:
         // Voice 1
-        Note pn1 = new PitchNote(1, 8, new Pitch('F').transpose(1).toMidiNote(), "");
+        Note pn1 = new PitchNote(1, 8, new Pitch('F').transpose(1).toMidiNote(), "Super");
         Note restNote = new RestNote(1, 8, "");
-        Note pn3 = new PitchNote(1, 4, new Pitch('F').transpose(1).toMidiNote(), "");
+        Note pn3 = new PitchNote(1, 4, new Pitch('F').transpose(1).toMidiNote(), "Mario");
         Bar bar = new Bar(4);
         bar.addNote(pn1);
         bar.addNote(pn1);
