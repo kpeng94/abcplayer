@@ -49,15 +49,15 @@ public class LexerTest {
     	verifyLexer("B^", new String[] {"B", "^"});
     }
     
-    @Test(expected=IllegalArgumentException.class)
-    public void testNonNote() {
-    	verifyLexer("ZZ", new String[] {"ZZ"});
-    }
+//    @Test(expected=IllegalArgumentException.class)
+//    public void testNonNote() {
+//    	verifyLexer("ZZ", new String[] {"ZZ"});
+//    }
     
-    @Test
-    public void testMeasureNote() {
-    	verifyLexer("C C C3/4 D/4 E |", new String[] {"C", "C", "C3/4", "D/4", "E", "|"});
-    }
+//    @Test
+//    public void testMeasureNote() {
+//    	verifyLexer("C C C3/4 D/4 E |", new String[] {"C", "C", "C3/4", "D/4", "E", "|"});
+//    }
     
     @Test
     public void testRandom() {
