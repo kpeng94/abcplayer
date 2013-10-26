@@ -64,10 +64,10 @@ public class Main {
 
             // Walk the tree with the listener.
             ParseTreeWalker walker = new ParseTreeWalker();
-            ParseTreeListener listener = new ABCMusicBaseListener();
+            ParseTreeListener listener = new Listener();
             walker.walk(listener, tree);
             
-            MusicalPiece musicalPiece = ((ABCMusicBaseListener)listener).getMusicalPiece();
+            MusicalPiece musicalPiece = ((Listener) listener).getMusicalPiece();
             musicalPiece.playPiece();
         } 
         catch (IOException e) {
