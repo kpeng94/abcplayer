@@ -34,9 +34,8 @@ OPEN_BRACKET : '[';
 CLOSE_BRACKET : ']';
 OPEN_PAREN : '(';
 COMMENTSIGN: '%';
-TEXT: [a-zA-Z0-9.,'"?\-!& ]+;
 EOL: [\r\n];
-IVOICE: 'V:'[ \t]*;
+IVOICE: 'V:'[ \t]*[a-zA-Z0-9.,'"?\-!& ]+;
 
 /*
  * These are the parser rules. They define the structures used by the parser.
@@ -50,22 +49,22 @@ IVOICE: 'V:'[ \t]*;
  * http://www.antlr.org/wiki/display/ANTLR4/Parser+Rules#ParserRules-StartRulesandEOF
  */
 
-abc_music : abc_line+;
+abc_music: abc_line+;
 abc_line: element+ EOL (lyric EOL)? | mid_tune_field | comment;
 element: note_element | tuplet_element | BAR | NTH_REPEAT | SPACE;
 note_element: note | multi_note;
-note : note_or_rest note_length?;
-note_or_rest : pitch | REST;
+note: note_or_rest note_length?;
+note_or_rest: pitch | REST;
 pitch: accidental? BASENOTE octave?;
 octave: OCTAVE_LOWER+ | OCTAVE_HIGHER+;
 note_length: (DIGIT+)? (SLASH (DIGIT+)?)?;
-accidental : SHARP | FLAT | NEUTRAL;
+accidental: SHARP | FLAT | NEUTRAL;
 tuplet_element: tuplet_spec note_element+;
-tuplet_spec : OPEN_PAREN DIGIT;
-multi_note : OPEN_BRACKET note+ CLOSE_BRACKET;
-mid_tune_field : field_voice;
+tuplet_spec: OPEN_PAREN DIGIT;
+multi_note: OPEN_BRACKET note+ CLOSE_BRACKET;
+mid_tune_field: field_voice;
 
-field_voice: IVOICE TEXT end_of_line;
+field_voice: IVOICE end_of_line;
 lyric: ILYRIC lyrical_element*;
 lyrical_element: LYRICAL_ELEMENT_TOKEN | LYRIC_TEXT;
 literal: BASENOTE | REST | BAR;

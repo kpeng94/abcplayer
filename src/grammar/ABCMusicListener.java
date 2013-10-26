@@ -81,11 +81,11 @@ public interface ABCMusicListener extends ParseTreeListener {
 	void enterField_composer(ABCMusicParser.Field_composerContext ctx);
 	void exitField_composer(ABCMusicParser.Field_composerContext ctx);
 
-	void enterOctave(ABCMusicParser.OctaveContext ctx);
-	void exitOctave(ABCMusicParser.OctaveContext ctx);
-
 	void enterNote_or_rest(ABCMusicParser.Note_or_restContext ctx);
 	void exitNote_or_rest(ABCMusicParser.Note_or_restContext ctx);
+
+	void enterOctave(ABCMusicParser.OctaveContext ctx);
+	void exitOctave(ABCMusicParser.OctaveContext ctx);
 
 	void enterLyric(ABCMusicParser.LyricContext ctx);
 	void exitLyric(ABCMusicParser.LyricContext ctx);

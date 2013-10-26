@@ -14,19 +14,18 @@ grammar ABCHeader;
  * These are the lexical rules. They define the tokens used by the lexer.
  */
 DIGIT: [0-9];
-TEXT: [a-zA-Z0-9.,'"?\-!& ]+;
-INUMBER: 'X:'[ \t]*;
-ITITLE: 'T:'[ \t]*;
-ICOMPOSER: 'C:'[ \t]*;
+INUMBER: 'X:'[ \t]*[0-9]+;
+ITITLE: 'T:'[ \t]*[a-zA-Z0-9.,'"?\-!& ]+;
+ICOMPOSER: 'C:'[ \t]*[a-zA-Z0-9.,'"?\-!& ]+;
 ILENGTH: 'L:'[ \t]*;
 IMETER: 'M:'[ \t]*;
-ITEMPO: 'Q:'[ \t]*;
-IVOICE: 'V:'[ \t]*;
+ITEMPO: 'Q:'[ \t]*[0-9]+'/'[0-9]+'='[0-9]+;
+IVOICE: 'V:'[ \t]*[a-zA-Z0-9.,'"?\-!& ]+;
 IKEY: 'K:'[ \t]*;
 EOL: [\r\n];
 MODEMINOR: 'm';
 ACCIDENTAL: [#b];
-COMMENTSIGN: '%';
+COMMENTSIGN: '%'[a-zA-Z0-9.,'"?\-!& ]+;
 SLASH: '/';
 EQUALS: '=';
 BASENOTE: [a-gA-G];
@@ -44,14 +43,14 @@ COMMON: ([C][\|])|[C];
  * http://www.antlr.org/wiki/display/ANTLR4/Parser+Rules#ParserRules-StartRulesandEOF
  */
 abc_header: field_number comment* field_title other_fields* field_key;
-field_number: INUMBER DIGIT+ end_of_line;
-field_title: ITITLE TEXT end_of_line;
-other_fields: field_composer | field_default_length | field_meter | field_tempo | field_voice | comment;
-field_composer: ICOMPOSER TEXT end_of_line;
+field_number: INUMBER end_of_line;
+field_title: ITITLE end_of_line;
+field_composer: ICOMPOSER end_of_line;
 field_default_length: ILENGTH note_length_strict end_of_line;
 field_meter: IMETER meter end_of_line;
-field_tempo: ITEMPO tempo end_of_line;
-field_voice: IVOICE TEXT end_of_line;
+field_tempo: ITEMPO end_of_line;
+field_voice: IVOICE end_of_line;
+other_fields: field_composer | field_default_length | field_meter | field_tempo | field_voice | comment;
 field_key: IKEY key end_of_line;
 
 key: keynote MODEMINOR?;
@@ -60,8 +59,14 @@ keynote: BASENOTE ACCIDENTAL?;
 meter: COMMON | meter_fraction;
 meter_fraction: DIGIT+ SLASH DIGIT+;
 note_length_strict: DIGIT+ SLASH DIGIT+;
+note : note_or_rest note_length?;
+note_or_rest : pitch | REST;
+pitch: accidental? BASENOTE octave?;
+octave: OCTAVE_LOWER+ | OCTAVE_HIGHER+;
+
+note_length: (DIGIT+)? (SLASH (DIGIT+)?)?;
 
 tempo: meter_fraction EQUALS DIGIT+;
 
-comment: COMMENTSIGN TEXT EOL;
+comment: COMMENTSIGN EOL;
 end_of_line: comment | EOL;
