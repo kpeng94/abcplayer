@@ -13,13 +13,13 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 public class MusicPlayer {
     
-    public void parse(String piece) {
-        runListener(piece);
+    public void parse(String piece, String testField) {
+        runListener(piece, testField);
 //        TODO: return MusicalPiece
 //        return runListener(piece);
     }
     
-    public void runListener(String input) {
+    public void runListener(String input, String testField) {
               CharStream stream = new ANTLRInputStream(input);
               // TODO: Change this to FileStream
               ABCMusicLexer lexer = new ABCMusicLexer(stream);
@@ -31,9 +31,15 @@ public class MusicPlayer {
               parser.reportErrorsAsExceptions();
               
               ParseTree tree;
-//              tree = parser.abc_music();
-              System.out.println("wat");
-//              System.err.println(tree.toStringTree(parser));
+              if (testField.equals("header")) {
+                  tree = parser.abc_header();
+              } else if (testField.equals("body")) {
+                  tree = parser.abc_music();
+              } else {
+                  tree = parser.abc_tune();
+              }
+
+              System.err.println(tree.toStringTree(parser));
               
 //              ParseTreeWalker walker = new ParseTreeWalker();
 //              ParseTreeListener listener = new Listener();
