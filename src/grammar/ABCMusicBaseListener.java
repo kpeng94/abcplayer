@@ -8,14 +8,7 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.ErrorNode;
 
-import player.MusicalPiece;
-
 public class ABCMusicBaseListener implements ABCMusicListener {
-    public MusicalPiece getMusicalPiece() {
-        //TODO: Implement getMusicalPiece()
-        return null;
-    }
-    
 	@Override public void enterNote_length_strict(ABCMusicParser.Note_length_strictContext ctx) { }
 	@Override public void exitNote_length_strict(ABCMusicParser.Note_length_strictContext ctx) { }
 
