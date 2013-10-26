@@ -59,4 +59,4 @@ PLUS     : '+';
  * For more information, see
  * http://www.antlr.org/wiki/display/ANTLR4/Parser+Rules#ParserRules-StartRulesandEOF
  */
-abc_tune : abc_header abc_music EOF;
+abc_tune : abc_header abc_music;

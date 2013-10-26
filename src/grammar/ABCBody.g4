@@ -50,7 +50,7 @@ IVOICE: 'V:'[ \t]*[a-zA-Z0-9.,'"?\-!& ]+;
  */
 
 abc_music: abc_line+;
-abc_line: element+ EOL (lyric EOL)? | mid_tune_field | comment;
+abc_line: element+ (EOL | EOF) (lyric EOL)? | mid_tune_field | comment;
 element: note_element | tuplet_element | BAR | NTH_REPEAT | SPACE;
 note_element: note | multi_note;
 note: note_or_rest note_length?;

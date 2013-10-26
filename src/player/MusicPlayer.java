@@ -6,6 +6,7 @@ import grammar.ABCMusicParser;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
@@ -40,6 +41,7 @@ public class MusicPlayer {
               }
 
               System.err.println(tree.toStringTree(parser));
+              ((RuleContext) tree).inspect(parser);
               
 //              ParseTreeWalker walker = new ParseTreeWalker();
 //              ParseTreeListener listener = new Listener();
