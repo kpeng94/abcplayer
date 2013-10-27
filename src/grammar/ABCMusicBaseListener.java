@@ -24,9 +24,6 @@ public class ABCMusicBaseListener implements ABCMusicListener {
 	@Override public void enterMulti_note(ABCMusicParser.Multi_noteContext ctx) { }
 	@Override public void exitMulti_note(ABCMusicParser.Multi_noteContext ctx) { }
 
-	@Override public void enterTempo(ABCMusicParser.TempoContext ctx) { }
-	@Override public void exitTempo(ABCMusicParser.TempoContext ctx) { }
-
 	@Override public void enterNote_element(ABCMusicParser.Note_elementContext ctx) { }
 	@Override public void exitNote_element(ABCMusicParser.Note_elementContext ctx) { }
 
@@ -38,12 +35,6 @@ public class ABCMusicBaseListener implements ABCMusicListener {
 
 	@Override public void enterField_key(ABCMusicParser.Field_keyContext ctx) { }
 	@Override public void exitField_key(ABCMusicParser.Field_keyContext ctx) { }
-
-	@Override public void enterMeter(ABCMusicParser.MeterContext ctx) { }
-	@Override public void exitMeter(ABCMusicParser.MeterContext ctx) { }
-
-	@Override public void enterMeter_fraction(ABCMusicParser.Meter_fractionContext ctx) { }
-	@Override public void exitMeter_fraction(ABCMusicParser.Meter_fractionContext ctx) { }
 
 	@Override public void enterAccidental(ABCMusicParser.AccidentalContext ctx) { }
 	@Override public void exitAccidental(ABCMusicParser.AccidentalContext ctx) { }
@@ -65,9 +56,6 @@ public class ABCMusicBaseListener implements ABCMusicListener {
 
 	@Override public void enterElement(ABCMusicParser.ElementContext ctx) { }
 	@Override public void exitElement(ABCMusicParser.ElementContext ctx) { }
-
-	@Override public void enterLyrical_element(ABCMusicParser.Lyrical_elementContext ctx) { }
-	@Override public void exitLyrical_element(ABCMusicParser.Lyrical_elementContext ctx) { }
 
 	@Override public void enterMid_tune_field(ABCMusicParser.Mid_tune_fieldContext ctx) { }
 	@Override public void exitMid_tune_field(ABCMusicParser.Mid_tune_fieldContext ctx) { }

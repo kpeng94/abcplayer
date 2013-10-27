@@ -70,10 +70,11 @@ public class Main {
             walker.walk(listener, tree);
             
             MusicalPiece musicalPiece = ((Listener) listener).getMusicalPiece();
-            musicalPiece.playPiece();
+//            musicalPiece.playPiece();
         } 
         catch (IOException e) {
             System.err.println("ERROR: " + e.getMessage());
+            System.err.println("Please try again.");
         } 
     }
 
@@ -83,6 +84,7 @@ public class Main {
         do {
             // Display prompt
             System.out.println("\nEnter ABC Song Name. ");
+            // TODO: edit println statement to give example as well.
             // Read input as file path relative to abcplayer directory
             fileName = in.readLine();
             // Terminate if input empty
