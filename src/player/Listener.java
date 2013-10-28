@@ -172,7 +172,6 @@ public class Listener extends ABCMusicBaseListener {
 			pitch = new Pitch(baseNote);
 			pitch = pitch.transpose(accidental.length());
 		} else if (ctx.start.getType() == ABCMusicLexer.NEUTRAL) {
-			String accidental = ctx.NEUTRAL().getText();
 			pitch = new Pitch(baseNote);
 		} else if (ctx.start.getType() == ABCMusicLexer.FLAT) {
 			String accidental = ctx.FLAT().getText();
@@ -182,18 +181,14 @@ public class Listener extends ABCMusicBaseListener {
 	}
 	
 	@Override
-	public void exitOctave(ABCMusicParser.OctaveContext ctx) {
-		for (int i = 0; i < ctx.getChildCount(); i++) {
-			ctx.
-		}
-
-		*/*if (ctx.start== ABCMusicLexer.OCTAVE_HIGHER) {
-			
-		}
-	}
-	
-	@Override
 	public void exitPitch(ABCMusicParser.PitchContext ctx) {
-//		ctx.BASENOTE()
+		String octave = ctx.OCTAVE().getText();
+		for (int i = 0; i < octave.length(); i++) {
+			if (octave.charAt(i) == ',') {
+				pitch = pitch.transpose(-Pitch.OCTAVE);
+			} else {
+				pitch = pitch.transpose(Pitch.OCTAVE);
+			}
+		}
 	}
 }
