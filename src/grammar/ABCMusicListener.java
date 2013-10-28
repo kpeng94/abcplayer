@@ -6,9 +6,6 @@ import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
 
 public interface ABCMusicListener extends ParseTreeListener {
-	void enterNote_length_strict(ABCMusicParser.Note_length_strictContext ctx);
-	void exitNote_length_strict(ABCMusicParser.Note_length_strictContext ctx);
-
 	void enterAbc_music(ABCMusicParser.Abc_musicContext ctx);
 	void exitAbc_music(ABCMusicParser.Abc_musicContext ctx);
 
