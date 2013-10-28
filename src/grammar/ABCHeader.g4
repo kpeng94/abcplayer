@@ -26,6 +26,7 @@ EOL: [\r\n];
 COMMENTSIGN: '%'[a-zA-Z0-9.,'"?\-!& ]*;
 SLASH: '/';
 BASENOTE: [a-gA-G];
+OCTAVE: ([']|[,])+;
 //(([C][\|])|[C])|
 /*
  * These are the parser rules. They define the structures used by the parser.
@@ -51,8 +52,7 @@ field_key: IKEY end_of_line;
 
 note : note_or_rest note_length?;
 note_or_rest : pitch | REST;
-pitch: accidental? BASENOTE octave?;
-octave: OCTAVE_LOWER+ | OCTAVE_HIGHER+;
+pitch: accidental? BASENOTE OCTAVE?;
 
 note_length: (DIGIT+)? (SLASH (DIGIT+)?)?;
 

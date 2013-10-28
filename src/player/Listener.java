@@ -45,8 +45,7 @@ public class Listener extends ABCMusicBaseListener {
     }
     
     public MusicalPiece getMusicalPiece() {
-        // TODO: implement getMusicalPiece()
-        return null;
+        return new MusicalPiece(title, composer, meterDenominator, meterNumerator, tempoSpeed, phrases);
     }
         
     @Override
