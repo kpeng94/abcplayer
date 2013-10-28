@@ -151,11 +151,6 @@ public class Listener extends ABCMusicBaseListener {
     		currentVoice=voice;
     }
 
-	@Override 
-	public void exitNote(ABCMusicParser.NoteContext ctx) { 
-		for (int x=0; x< (ctx.getChildCount()-1)/2; x++){
-		}
-	}
 
 	@Override
 	public void enterPitch(ABCMusicParser.PitchContext ctx) {
@@ -189,6 +184,12 @@ public class Listener extends ABCMusicBaseListener {
 			} else {
 				pitch = pitch.transpose(Pitch.OCTAVE);
 			}
+		}
+	}
+	
+	@Override 
+	public void exitNote(ABCMusicParser.NoteContext ctx) { 
+		for (int x=0; x< (ctx.getChildCount()-1)/2; x++){
 		}
 	}
 }
