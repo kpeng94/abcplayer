@@ -61,6 +61,8 @@ public class MusicalPiece {
      * 
      */
     public void playPiece() {
+        System.out.println(this.title);
+        System.out.println(this.composer);
         SequencePlayer player;
         try {
             LyricListener listener = new LyricListener() {

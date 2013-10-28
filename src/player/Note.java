@@ -22,10 +22,10 @@ public interface Note {
     public int getDenominator();
     
     /**
-     * Returns the Note value as an integer MIDI value
-     * @return Note value
+     * Returns the Note value as an integer array of MIDI values
+     * @return Array of note value
      */
-    public int getNote();
+    public int[] getNote();
     
     /**
      * Returns the length the Note will be played

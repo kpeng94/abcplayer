@@ -7,10 +7,10 @@ package player;
 public class PitchNote implements Note{
 	private int numerator;
 	private int denominator;
-	private int note;
+	private int[] note;
 	private String lyric;
 
-	public PitchNote(int numerator, int denominator, int note, String lyric) {
+	public PitchNote(int numerator, int denominator, int[] note, String lyric) {
 		if ((numerator <= 0) || (denominator <= 0)){
 			throw new IllegalArgumentException("Illegal argument for numerator or denominator");
 		}
@@ -31,7 +31,7 @@ public class PitchNote implements Note{
 	}
 
 	@Override
-	public int getNote() {
+	public int[] getNote() {
 		return this.note;
 	}
 

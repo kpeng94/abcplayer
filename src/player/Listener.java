@@ -4,13 +4,15 @@ import grammar.ABCMusicBaseListener;
 import grammar.ABCMusicLexer;
 import grammar.ABCMusicParser;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 public class Listener extends ABCMusicBaseListener {
     // TODO: handle null cases
-    private Stack<Object> stack = new Stack<Object>();
+    private ArrayList<MusicalPhrase> phrases;
+    private ArrayList<Bar> bars;
     
     // Header instance variables
     private String title, composer, key;
@@ -31,38 +33,6 @@ public class Listener extends ABCMusicBaseListener {
             }
         }
         return s.substring(whitespaceCounter);       
-    }
-    
-    public String getTitle() {
-        return this.title;
-    }
-
-    public String getComposer() {
-        return this.composer;
-    }
-    
-    public String getKey() {
-        return this.key;
-    }
-    
-    public int getMeterNumerator() {
-        return this.meterNumerator;
-    }
-    
-    public int getMeterDenominator() {
-        return this.meterDenominator;
-    }
-
-    public int getTempoNumerator() {
-        return this.tempoNumerator;
-    }
-    
-    public int getTempoDenominator() {
-        return this.tempoDenominator;
-    }
-    
-    public int getTempoSpeed() {
-        return this.tempoSpeed;
     }
     
     public MusicalPiece getMusicalPiece() {
