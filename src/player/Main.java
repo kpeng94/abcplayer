@@ -61,7 +61,7 @@ public class Main {
             tree = parser.abc_tune(); // "line" is the starter rule.
             
             // Next 2 Lines ***FOR DEBUGGING ONLY***
-            System.err.println(tree.toStringTree(parser));
+            //System.err.println(tree.toStringTree(parser));
             ((RuleContext) tree).inspect(parser);
 
             // Walk the tree with the listener.

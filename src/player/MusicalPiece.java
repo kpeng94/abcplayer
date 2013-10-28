@@ -61,8 +61,9 @@ public class MusicalPiece {
      * 
      */
     public void playPiece() {
-        System.out.println(this.title);
-        System.out.println(this.composer);
+        System.out.println("Title: " + this.title);
+        System.out.println("Composer: " + this.composer);
+        System.out.println("Played in " + this.measureLength + "/" + this.beatUnit + " time @ " + this.tempo + " BPM.");
         SequencePlayer player;
         try {
             LyricListener listener = new LyricListener() {
