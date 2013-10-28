@@ -5,9 +5,12 @@ import grammar.ABCMusicLexer;
 import grammar.ABCMusicParser;
 
 import java.util.ArrayList;
-import java.util.Stack;
+import java.util.HashMap;
 
+import org.antlr.v4.parse.GrammarTreeVisitor.tokenSpec_return;
 import org.antlr.v4.runtime.tree.TerminalNode;
+
+import sound.Pitch;
 
 public class Listener extends ABCMusicBaseListener {
     // TODO: handle null cases
@@ -19,6 +22,12 @@ public class Listener extends ABCMusicBaseListener {
     private int meterNumerator, meterDenominator, 
                           tempoNumerator, tempoDenominator, tempoSpeed,
                           lengthNumerator, lengthDenominator;
+   
+    //Mutable Variables
+    private HashMap<String, ArrayList<Bar>> voiceHash = new HashMap<String, ArrayList<Bar>>();
+    private String currentVoice;
+    private Pitch pitch;
+    private char baseNote;
     
     /**
      * Removes all whitespace at the beginning of the string passed in.
@@ -130,6 +139,62 @@ public class Listener extends ABCMusicBaseListener {
 //            stack.push(new Object(token.getText()));
         }
     }
+    
+    @Override 
+    public void exitField_voice(ABCMusicParser.Field_voiceContext ctx) { 
+    	String voice = ctx.IVOICE().getText();
+    	voice = voice.substring(2);
+    	voice = removeWhitespaceAtBeginning(voice);
+    	
+    	if (!voiceHash.containsKey(voice))
+    		voiceHash.put(voice, new ArrayList<Bar>());
+    	else
+    		currentVoice=voice;
+    }
 
+	@Override 
+	public void exitNote(ABCMusicParser.NoteContext ctx) { 
+		for (int x=0; x< (ctx.getChildCount()-1)/2; x++){
+		}
+	}
 
+	@Override
+	public void enterPitch(ABCMusicParser.PitchContext ctx) {
+		// TODO: Make the default pitch based on the key signature or measure
+		// using a hashmap
+		pitch = new Pitch(ctx.BASENOTE().getText().charAt(0));
+		baseNote = ctx.BASENOTE().getText().charAt(0);
+	}	
+	
+	@Override
+	public void exitAccidental(ABCMusicParser.AccidentalContext ctx) {
+		if (ctx.start.getType() == ABCMusicLexer.SHARP) {
+			String accidental = ctx.SHARP().getText();
+			pitch = new Pitch(baseNote);
+			pitch = pitch.transpose(accidental.length());
+		} else if (ctx.start.getType() == ABCMusicLexer.NEUTRAL) {
+			String accidental = ctx.NEUTRAL().getText();
+			pitch = new Pitch(baseNote);
+		} else if (ctx.start.getType() == ABCMusicLexer.FLAT) {
+			String accidental = ctx.FLAT().getText();
+			pitch = new Pitch(baseNote);
+			pitch = pitch.transpose(-1 * accidental.length());
+		}
+	}
+	
+	@Override
+	public void exitOctave(ABCMusicParser.OctaveContext ctx) {
+		for (int i = 0; i < ctx.getChildCount(); i++) {
+			ctx.
+		}
+
+		*/*if (ctx.start== ABCMusicLexer.OCTAVE_HIGHER) {
+			
+		}
+	}
+	
+	@Override
+	public void exitPitch(ABCMusicParser.PitchContext ctx) {
+//		ctx.BASENOTE()
+	}
 }
