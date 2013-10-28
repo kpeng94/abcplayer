@@ -129,16 +129,7 @@ public class Listener extends ABCMusicBaseListener {
         this.lengthNumerator = Integer.parseInt(length.substring(0, slashLocation));
         this.lengthDenominator = Integer.parseInt(length.substring(slashLocation + 1));
     }
-    
-    @Override 
-    public void exitLiteral(ABCMusicParser.LiteralContext ctx) { 
-        TerminalNode token;
-        if (ctx.start.getType() == ABCMusicLexer.BASENOTE) {
-            token = ctx.BASENOTE();
-//            stack.push(new Object(token.getText()));
-        }
-    }
-    
+        
     @Override 
     public void exitField_voice(ABCMusicParser.Field_voiceContext ctx) { 
     	String voice = ctx.IVOICE().getText();
@@ -156,35 +147,49 @@ public class Listener extends ABCMusicBaseListener {
 	public void enterPitch(ABCMusicParser.PitchContext ctx) {
 		// TODO: Make the default pitch based on the key signature or measure
 		// using a hashmap
-		pitch = new Pitch(ctx.BASENOTE().getText().charAt(0));
 		baseNote = ctx.BASENOTE().getText().charAt(0);
+        pitch = new Pitch(Character.toUpperCase(baseNote));
+        if (Character.toLowerCase(baseNote) == baseNote) {
+            pitch = pitch.transpose(Pitch.OCTAVE);
+        }
 	}	
 	
 	@Override
 	public void exitAccidental(ABCMusicParser.AccidentalContext ctx) {
 		if (ctx.start.getType() == ABCMusicLexer.SHARP) {
 			String accidental = ctx.SHARP().getText();
-			pitch = new Pitch(baseNote);
+	        pitch = new Pitch(Character.toUpperCase(baseNote));
+	        if (Character.toLowerCase(baseNote) == baseNote) {
+	            pitch = pitch.transpose(Pitch.OCTAVE);
+	        }
 			pitch = pitch.transpose(accidental.length());
 		} else if (ctx.start.getType() == ABCMusicLexer.NEUTRAL) {
-			pitch = new Pitch(baseNote);
+	        pitch = new Pitch(Character.toUpperCase(baseNote));
+            if (Character.toLowerCase(baseNote) == baseNote) {
+                pitch = pitch.transpose(Pitch.OCTAVE);
+            }
 		} else if (ctx.start.getType() == ABCMusicLexer.FLAT) {
 			String accidental = ctx.FLAT().getText();
-			pitch = new Pitch(baseNote);
+	        pitch = new Pitch(Character.toUpperCase(baseNote));
+            if (Character.toLowerCase(baseNote) == baseNote) {
+                pitch = pitch.transpose(Pitch.OCTAVE);
+            }
 			pitch = pitch.transpose(-1 * accidental.length());
 		}
 	}
 	
 	@Override
 	public void exitPitch(ABCMusicParser.PitchContext ctx) {
-		String octave = ctx.OCTAVE().getText();
-		for (int i = 0; i < octave.length(); i++) {
-			if (octave.charAt(i) == ',') {
-				pitch = pitch.transpose(-Pitch.OCTAVE);
-			} else {
-				pitch = pitch.transpose(Pitch.OCTAVE);
-			}
-		}
+	    if (ctx.OCTAVE() != null) {
+	        String octave = ctx.OCTAVE().getText();
+            for (int i = 0; i < octave.length(); i++) {
+                if (octave.charAt(i) == ',') {
+                    pitch = pitch.transpose(-Pitch.OCTAVE);
+                } else {
+                    pitch = pitch.transpose(Pitch.OCTAVE);
+                }
+            }           	        
+	    }
 	}
 	
 	@Override 
