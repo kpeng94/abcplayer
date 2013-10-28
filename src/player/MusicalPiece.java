@@ -76,7 +76,8 @@ public class MusicalPiece {
                 for (Bar bar : phrase.getBars()) {
                     for (Note note : bar.getNotes()) {
                         if (note instanceof PitchNote) {
-                            player.addNote(note.getNote(), tickCount, this.getTicks() * this.measureLength * note.getNumerator() / note.getDenominator());
+                            for(int i=0; i<note.getNote().length; i++)
+                            	player.addNote(note.getNote()[i], tickCount, this.getTicks() * this.measureLength * note.getNumerator() / note.getDenominator());
                         }
                         if (!(note.getLyric().equals(""))) {
                             player.addLyricEvent(note.getLyric(), tickCount);

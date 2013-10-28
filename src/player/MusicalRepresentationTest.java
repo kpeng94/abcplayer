@@ -33,22 +33,22 @@ public class MusicalRepresentationTest {
 
 	@Test(expected=IllegalArgumentException.class)
 	public void pitchNoteZeroLengthTest() {
-		new PitchNote(0, 0, 9, "");
+		new PitchNote(0, 0, new int[] {9}, "");
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void pitchNoteNegativeLengthTest() {
-		new PitchNote(-1, 1, 9, "");
+		new PitchNote(-1, 1,new int[] {9}, "");
 	}
 	
 	@Test
 	public void pitchNoteChordTest() {
-		new PitchNote(-1, 1, [3,6,9], "");
+		new PitchNote(1, 4, new int[]{3,4,5}, "");
 	}
 	
 	@Test
 	public void pitchNoteBasicTest() {
-		new PitchNote(1,4, 9, "Hi");
+		new PitchNote(1,4, new int[] {9}, "Hi");
 	}
 	
 	@Test
@@ -70,7 +70,7 @@ public class MusicalRepresentationTest {
 	public void barPitchNoteTest() {
 		Bar bar=new Bar(4);
 		for (int i=0; i< 4; i++)
-			bar.addNote(new PitchNote(1,4,9,"Test!"));
+			bar.addNote(new PitchNote(1,4,new int[] {9},"Test!"));
 	}
 	
 	@Test
@@ -85,7 +85,7 @@ public class MusicalRepresentationTest {
 		Bar bar=new Bar(4);
 		for (int i=0; i<2; i++)
 		{
-			bar.addNote(new PitchNote(1,4,9,"Testing for an error!"));
+			bar.addNote(new PitchNote(1,4,new int[]{9},"Testing for an error!"));
 			bar.addNote(new RestNote(2,4, ""));
 		}
 	}
@@ -108,7 +108,7 @@ public class MusicalRepresentationTest {
 		for (int i=0; i<4; i++)
 			bar.addNote(new RestNote(1,4,""));
 		for (int k=0; k<4; k++)
-			bar2.addNote(new PitchNote(1,4, 9, "Hi"));
+			bar2.addNote(new PitchNote(1,4,new int[] {9}, "Hi"));
 		barArray.add(bar);
 		barArray.add(bar2);
 		new MusicalPhrase(barArray);

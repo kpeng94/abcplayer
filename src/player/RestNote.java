@@ -1,7 +1,6 @@
 package player;
 /**
  * Implements Note and represents all musical rests
- * 
  *
  */
 public class RestNote implements Note{
@@ -26,8 +25,8 @@ public class RestNote implements Note{
     }
 
     @Override
-    public int getNote() {
-        return 0;
+    public int[] getNote() {
+        return new int[] {};
     }
     
     @Override
