@@ -6,13 +6,17 @@ import java.util.ArrayList;
  * 
  */
 public class Bar {
-    private Integer measureLength;
-    private Double notesSum;
+    private int meterNumerator; // represents measure length
+    private int meterDenominator; // represents note value that represents a beat
+    private double meter;
+    private double notesSum;
     private ArrayList<Note> notes;
     
-    public Bar(Integer measureLength) {
+    public Bar(int meterNumerator, int meterDenominator) {
     	// TODO add in some way of determining how many beats are allowed, because right now, noteSum is off in my opinion
-        this.measureLength = measureLength;
+        this.meterNumerator = meterNumerator;
+        this.meterDenominator = meterDenominator;
+        this.meter=(double) this.meterNumerator/this.meterDenominator;
         this.notesSum = 0.0;
         this.notes = new ArrayList<Note>();
     }
@@ -22,7 +26,7 @@ public class Bar {
      * @param note
      */
     public void addNote(Note note) {
-        if ((notesSum + note.getLength()) > measureLength) {
+        if ((notesSum + note.getLength()) > meter) {
             throw new IllegalArgumentException("This note is too long to add.");
         }
         notesSum += note.getLength();

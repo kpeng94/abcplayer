@@ -68,21 +68,21 @@ public class MusicalRepresentationTest {
 	
 	@Test
 	public void barPitchNoteTest() {
-		Bar bar=new Bar(4);
+		Bar bar=new Bar(4,4);
 		for (int i=0; i< 4; i++)
 			bar.addNote(new PitchNote(1,4,new int[] {9},"Test!"));
 	}
 	
 	@Test
 	public void barRestNoteTest() {
-		Bar bar = new Bar(4);
+		Bar bar = new Bar(4,4);
 		for (int i=0; i<4; i++)
 			bar.addNote(new RestNote(1,4, ""));
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void barTooManyNotesTest() {
-		Bar bar=new Bar(4);
+		Bar bar=new Bar(4,4);
 		for (int i=0; i<2; i++)
 		{
 			bar.addNote(new PitchNote(1,4,new int[]{9},"Testing for an error!"));
@@ -93,7 +93,7 @@ public class MusicalRepresentationTest {
 	@Test
 	public void basicMusicalPhraseTest() {
 		ArrayList<Bar> barArray=new ArrayList<Bar>();
-		Bar bar=new Bar(4);
+		Bar bar=new Bar(4,4);
 		for (int i=0; i<4; i++)
 			bar.addNote(new RestNote(1,4, ""));
 		barArray.add(bar);
@@ -103,8 +103,8 @@ public class MusicalRepresentationTest {
 	@Test
 	public void multipleBarsMusicalPhraseTest() {
 		ArrayList<Bar> barArray=new ArrayList<Bar>();
-		Bar bar=new Bar(4);
-		Bar bar2=new Bar(4);
+		Bar bar=new Bar(4,4);
+		Bar bar2=new Bar(4,4);
 		for (int i=0; i<4; i++)
 			bar.addNote(new RestNote(1,4,""));
 		for (int k=0; k<4; k++)
