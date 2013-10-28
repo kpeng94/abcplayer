@@ -13,7 +13,6 @@ grammar ABCHeader;
 /*
  * These are the lexical rules. They define the tokens used by the lexer.
  */
-DIGIT: [0-9];
 INUMBER: 'X:'[ \t]*[0-9]+;
 ITITLE: 'T:'[ \t]*[a-zA-Z0-9.,'"?\-!& ]+;
 ICOMPOSER: 'C:'[ \t]*[a-zA-Z0-9.,'"?\-!& ]+;
@@ -24,10 +23,7 @@ IVOICE: 'V:'[ \t]*[a-zA-Z0-9.,'"?\-!& ]+;
 IKEY: 'K:'[ \t]*[a-gA-g][#b]?[m]?;
 EOL: [\r\n];
 COMMENTSIGN: '%'[a-zA-Z0-9.,'"?\-!& ]*;
-SLASH: '/';
-BASENOTE: [a-gA-G];
-OCTAVE: ([']|[,])+;
-//(([C][\|])|[C])|
+
 /*
  * These are the parser rules. They define the structures used by the parser.
  *
@@ -49,12 +45,6 @@ field_tempo: ITEMPO end_of_line;
 field_voice: IVOICE end_of_line;
 other_fields: field_composer | field_default_length | field_meter | field_tempo | field_voice | comment;
 field_key: IKEY end_of_line;
-
-note : note_or_rest note_length?;
-note_or_rest : pitch | REST;
-pitch: accidental? BASENOTE OCTAVE?;
-
-note_length: (DIGIT+)? (SLASH (DIGIT+)?)?;
 
 comment: COMMENTSIGN EOL;
 end_of_line: comment | EOL;
