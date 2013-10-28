@@ -7,10 +7,8 @@ import grammar.ABCMusicParser;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.antlr.v4.parse.GrammarTreeVisitor.tokenSpec_return;
-import org.antlr.v4.runtime.tree.TerminalNode;
-
 import sound.Pitch;
+import sound.PitchCalculator;
 
 public class Listener extends ABCMusicBaseListener {
     // TODO: handle null cases
@@ -28,6 +26,9 @@ public class Listener extends ABCMusicBaseListener {
     private String currentVoice;
     private Pitch pitch;
     private char baseNote;
+
+    // 
+    PitchCalculator pitchCalculator = new PitchCalculator();
     
     /**
      * Removes all whitespace at the beginning of the string passed in.
@@ -143,10 +144,30 @@ public class Listener extends ABCMusicBaseListener {
     }
 
 
+
+//    @Override
+//    public void enterPitch(ABCMusicParser.PitchContext ctx) {
+//        baseNote = ctx.BASENOTE().getText();
+//        pitch = pitchCalculator.getPitchForKey(this.key, baseNote);
+//    }   
+//    
+//    @Override
+//    public void exitAccidental(ABCMusicParser.AccidentalContext ctx) {
+//        if (ctx.start.getType() == ABCMusicLexer.SHARP) {
+//            String accidental = ctx.SHARP().getText();
+//            pitch = pitchCalculator.getPitchForKey("C", baseNote);
+//            pitch = pitch.transpose(accidental.length());
+//        } else if (ctx.start.getType() == ABCMusicLexer.NEUTRAL) {
+//            pitch = pitchCalculator.getPitchForKey("C", baseNote);
+//        } else if (ctx.start.getType() == ABCMusicLexer.FLAT) {
+//            String accidental = ctx.FLAT().getText();
+//            pitch = pitchCalculator.getPitchForKey("C", baseNote);
+//            pitch = pitch.transpose(-1 * accidental.length());
+//        }
+//    }
+
 	@Override
 	public void enterPitch(ABCMusicParser.PitchContext ctx) {
-		// TODO: Make the default pitch based on the key signature or measure
-		// using a hashmap
 		baseNote = ctx.BASENOTE().getText().charAt(0);
         pitch = new Pitch(Character.toUpperCase(baseNote));
         if (Character.toLowerCase(baseNote) == baseNote) {

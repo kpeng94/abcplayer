@@ -203,6 +203,9 @@ public class PitchCalculator {
         if (innerMap == null) {
             return null;
         }
+        if (note.toLowerCase().equals(note)) {
+            return innerMap.get(note).transpose(Pitch.OCTAVE);
+        }
         return innerMap.get(note);
     }
     
