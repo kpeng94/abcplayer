@@ -28,7 +28,7 @@ DIGIT: [0-9];
 SLASH: '/';
 SPACE: ' ' -> skip;
 LYRICAL_ELEMENT_TOKEN: ' '|'-'|'_'|'*'|'~'|'\-'|'|';
-ILYRIC: 'w:'[ \t]*([A-Za-z0-9'\!.,]+|LYRICAL_ELEMENT_TOKEN)*;
+ILYRIC: 'w:'[ \t]*([A-Za-z0-9'\\!.,()?&$#@]+|LYRICAL_ELEMENT_TOKEN)*;
 OPEN_BRACKET : '[';
 CLOSE_BRACKET : ']';
 OPEN_PAREN : '(';
@@ -57,7 +57,7 @@ note_or_rest: pitch | REST;
 pitch: accidental? BASENOTE octave?;
 octave: OCTAVE_LOWER+ | OCTAVE_HIGHER+;
 note_length: (DIGIT+)? (SLASH (DIGIT+)?)?;
-accidental: SHARP | FLAT | NEUTRAL;
+accidental: SHARP | FLAT | NEUTRAL;	
 tuplet_element: tuplet_spec note_element+;
 tuplet_spec: OPEN_PAREN DIGIT;
 multi_note: OPEN_BRACKET note+ CLOSE_BRACKET note_length?;
@@ -65,8 +65,6 @@ mid_tune_field: field_voice;
 
 field_voice: IVOICE end_of_line;
 lyric: ILYRIC;
-// lyric: ILYRIC lyrical_element*;
-// lyrical_element: LYRICAL_ELEMENT_TOKEN | LYRIC_TEXT;
 literal: BASENOTE | REST | BAR;
 
 comment: COMMENTSIGN TEXT EOL;

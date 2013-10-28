@@ -21,13 +21,10 @@ ILENGTH: 'L:'[ \t]*;
 IMETER: 'M:'[ \t]*((([C][\|])|[C])|[0-9]+'/'[0-9]+);
 ITEMPO: 'Q:'[ \t]*((([C][\|])|[C])|([0-9]+'/'[0-9]+)('='[0-9]+)*);
 IVOICE: 'V:'[ \t]*[a-zA-Z0-9.,'"?\-!& ]+;
-IKEY: 'K:'[ \t]*;
+IKEY: 'K:'[ \t]*[a-gA-g][#b]?[m]?;
 EOL: [\r\n];
-MODEMINOR: 'm';
-ACCIDENTAL: [#b];
-COMMENTSIGN: '%'[a-zA-Z0-9.,'"?\-!& ]+;
+COMMENTSIGN: '%'[a-zA-Z0-9.,'"?\-!& ]*;
 SLASH: '/';
-EQUALS: '=';
 BASENOTE: [a-gA-G];
 //(([C][\|])|[C])|
 /*
@@ -50,13 +47,8 @@ field_meter: IMETER end_of_line;
 field_tempo: ITEMPO end_of_line;
 field_voice: IVOICE end_of_line;
 other_fields: field_composer | field_default_length | field_meter | field_tempo | field_voice | comment;
-field_key: IKEY key end_of_line;
+field_key: IKEY end_of_line;
 
-key: keynote MODEMINOR?;
-keynote: BASENOTE ACCIDENTAL?;
-
-//meter: COMMON | meter_fraction;
-//meter_fraction: DIGIT+ SLASH DIGIT+;
 note_length_strict: DIGIT+ SLASH DIGIT+;
 note : note_or_rest note_length?;
 note_or_rest : pitch | REST;
@@ -64,8 +56,6 @@ pitch: accidental? BASENOTE octave?;
 octave: OCTAVE_LOWER+ | OCTAVE_HIGHER+;
 
 note_length: (DIGIT+)? (SLASH (DIGIT+)?)?;
-
-//tempo: meter_fraction EQUALS DIGIT+;
 
 comment: COMMENTSIGN EOL;
 end_of_line: comment | EOL;
