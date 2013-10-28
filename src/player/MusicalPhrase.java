@@ -2,17 +2,28 @@ package player;
 
 import java.util.ArrayList;
 
+/**
+ * Represents the bars for each voice
+ * Comprised as a list of bars
+ *
+ */
 public class MusicalPhrase {
     private ArrayList<Bar> bars;
     
     public MusicalPhrase(ArrayList<Bar> bars) {
         this.bars = bars;
     }
-    
+    /**
+     * Returns the measures of the MusicalPhrase
+     * @return list of Bars
+     */
     public ArrayList<Bar> getBars() {
         return new ArrayList<Bar>(this.bars);
     }
 
+    /** Returns the integer number of ticks per beat
+     * @return ticks
+     */
     public int getTicks() {
         int ticks = 1;
         int gcd;

@@ -1,5 +1,9 @@
 package player;
-
+/**
+ * Implements Note and represents all musical rests
+ * 
+ *
+ */
 public class RestNote implements Note{
     private int numerator;
     private int denominator;

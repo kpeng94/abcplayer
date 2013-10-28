@@ -7,12 +7,16 @@ import javax.sound.midi.MidiUnavailableException;
 import sound.LyricListener;
 import sound.Pitch;
 import sound.SequencePlayer;
-
+/**
+ * Represents an ABC file after being parsed, made up of a list of MusicalPhrases
+ * Also stores header information, like title, composer, meter, and tempo
+ *
+ */
 public class MusicalPiece {
     private String title;
     private String composer;
-    private Integer beatUnit;
-    private Integer measureLength;
+    private Integer beatUnit; // denominator in meter, represents the note value that represents one beat
+    private Integer measureLength; // numerator in meter, represents number of beats in a measure
     private Integer tempo;
     private ArrayList<MusicalPhrase> phrases;
     
@@ -25,7 +29,7 @@ public class MusicalPiece {
         this.phrases = phrases;
     }
     
-    /**
+    /** Returns the integer number of ticks per beat
      * @return ticks
      */
     public Integer getTicks() {
@@ -53,7 +57,8 @@ public class MusicalPiece {
     }
     
     /**
-     * @return ticks
+     *  Queues the notes and lyrics to be played by the Sequence Player
+     * 
      */
     public void playPiece() {
         SequencePlayer player;
@@ -86,6 +91,7 @@ public class MusicalPiece {
     }
 
     /**
+     * Returns the title of the MusicalPiece
      * @return the title
      */
     public String getTitle() {
@@ -93,6 +99,7 @@ public class MusicalPiece {
     }
 
     /**
+     * Returns the composer of the MusicalPiece
      * @return the composer
      */
     public String getComposer() {
@@ -100,21 +107,24 @@ public class MusicalPiece {
     }
 
     /**
-     * @return the beatUnit
+     * Returns the note value that represents a beat of the MusicalPiece
+     * @return beatUnit
      */
     public Integer getBeatUnit() {
         return this.beatUnit;
     }
 
     /**
-     * @return the measureLength
+     * Returns the number of beats in a measure 
+     * @return measureLength
      */
     public Integer getMeasureLength() {
         return this.measureLength;
     }
 
     /**
-     * @return the tempo
+     * Returns the tempo of the MusicalPiece
+     * @return tempo
      */
     public Integer getTempo() {
         return this.tempo;

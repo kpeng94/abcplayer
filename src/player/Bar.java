@@ -1,31 +1,45 @@
 package player;
 
 import java.util.ArrayList;
-
+/**
+ * Represents a measure as a list of notes, restricted by measureLength and noteSum
+ * 
+ */
 public class Bar {
     private Integer measureLength;
     private Double notesSum;
     private ArrayList<Note> notes;
     
     public Bar(Integer measureLength) {
+    	// TODO add in some way of determining how many beats are allowed, because right now, noteSum is off in my opinion
         this.measureLength = measureLength;
         this.notesSum = 0.0;
         this.notes = new ArrayList<Note>();
     }
-
+    
+    /**
+     * Adds a note to the current measure
+     * @param note
+     */
     public void addNote(Note note) {
         if ((notesSum + note.getLength()) > measureLength) {
-            //TODO: (kpeng94) Throw some sort of exception
             throw new IllegalArgumentException("This note is too long to add.");
         }
         notesSum += note.getLength();
         notes.add(note);
     }
     
+    /**
+     * Returns the list of notes for the measure
+     * @return list of notes
+     */
     public ArrayList<Note> getNotes() {
         return new ArrayList<Note>(this.notes);
     }
     
+    /** Returns the integer number of ticks per beat
+     * @return ticks
+     */
     public int getTicks() {
         int ticks = 1; 
         int gcd;
