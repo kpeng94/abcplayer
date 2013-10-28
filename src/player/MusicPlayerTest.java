@@ -10,15 +10,15 @@ import org.junit.Test;
  */
 public class MusicPlayerTest {
     
-    @Test
-    public void testPieceOneTwoThree() {
-        String pieceOne = "X: 1\nT:Piece No.1\nM:4/4\nL:1/4\nQ:1/4=140\nK:C\nC C C3/4 D/4 E | E3/4 D/4 E3/4 F/4 G2 | (3c/2c/2c/2 (3G/2G/2G/2 (3B/2B/2B/2 (3C/2C/2C/2 | G3/4 F/4 E3/4 D/4 C2";
-        new MusicPlayer().parse(pieceOne, "");
-        String pieceTwo = "X:1\nT:Piece No.2\nM:C\nL:1/4\nQ:1/4=200\nK:C\n[^Fe]/2 [Fe]/2 z/2 [Fe]/2 z/2 [Fc]/2 [Fe] | [GBg] z G z | c3/2 G/2 z E | E/2 A B _B/2 A | (3Geg a f/2 g/2 | z/2 e c/2 d/2 B3/4 z3/4";
-        new MusicPlayer().parse(pieceTwo,"");
-        String pieceThree = "X:3\nT:Sample 3\nC:Me\nQ:1/8=100\nM:3/4\nL:1/8\nK:C\nz4 D2 | G4 BG | B4 A2 | G4 E2 | D4 D2 | G4 BG | B4 A2 | D'6 | D'2 z4 |]\nw: A-ma-zing | grace! How | sweet the | sound That | saved a | wretch like | me.";
-        new MusicPlayer().parse(pieceThree, "");
-    }
+//    @Test
+//    public void testPieceOneTwoThree() {
+//        String pieceOne = "X: 1\nT:Piece No.1\nM:4/4\nL:1/4\nQ:1/4=140\nK:C\nC C C3/4 D/4 E | E3/4 D/4 E3/4 F/4 G2 | (3c/2c/2c/2 (3G/2G/2G/2 (3B/2B/2B/2 (3C/2C/2C/2 | G3/4 F/4 E3/4 D/4 C2";
+//        new MusicPlayer().parse(pieceOne, "");
+//        String pieceTwo = "X:1\nT:Piece No.2\nM:C\nL:1/4\nQ:1/4=200\nK:C\n[^Fe]/2 [Fe]/2 z/2 [Fe]/2 z/2 [Fc]/2 [Fe] | [GBg] z G z | c3/2 G/2 z E | E/2 A B _B/2 A | (3Geg a f/2 g/2 | z/2 e c/2 d/2 B3/4 z3/4";
+//        new MusicPlayer().parse(pieceTwo,"");
+//        String pieceThree = "X:3\nT:Sample 3\nC:Me\nQ:1/8=100\nM:3/4\nL:1/8\nK:C\nz4 D2 | G4 BG | B4 A2 | G4 E2 | D4 D2 | G4 BG | B4 A2 | D'6 | D'2 z4 |]\nw: A-ma-zing | grace! How | sweet the | sound That | saved a | wretch like | me.";
+//        new MusicPlayer().parse(pieceThree, "");
+//    }
 
     @Test
     public void testPieceOneHeader() {

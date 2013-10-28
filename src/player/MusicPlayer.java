@@ -49,7 +49,7 @@ public class MusicPlayer {
             
             // Next 2 Lines ***FOR DEBUGGING ONLY***
             System.err.println(tree.toStringTree(parser));
-            ((RuleContext) tree).inspect(parser);
+//            ((RuleContext) tree).inspect(parser);
 
             // Walk the tree with the listener.
             ParseTreeWalker walker = new ParseTreeWalker();
