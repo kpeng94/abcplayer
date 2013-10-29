@@ -15,24 +15,29 @@ import sound.SequencePlayer;
 public class MusicalPiece {
     private String title;
     private String composer;
-    private Integer meterDenominator; // denominator in meter, represents the note value that represents one beat
-    private Integer meterNumerator; // numerator in meter, represents number of beats in a measure
-    private Integer tempo;
+    private int meterNumerator; // numerator in meter, represents number of beats in a measure
+    private int meterDenominator; // denominator in meter, represents the note value that represents one beat
+    private int tempoSpeed;
+    private int tempoNumerator; 
+    private int tempoDenominator;
     private ArrayList<MusicalPhrase> phrases;
     
-    public MusicalPiece(String title, String composer, Integer meterDenominator, Integer meterNumerator, Integer tempo, ArrayList<MusicalPhrase> phrases) {
+    public MusicalPiece(String title, String composer, int meterNumerator, Integer meterDenominator, 
+                                            int tempoSpeed, int tempoNumerator, int tempoDenominator, ArrayList<MusicalPhrase> phrases) {
         this.title = title;
         this.composer = composer;
-        this.meterDenominator = meterDenominator;
         this.meterNumerator = meterNumerator;
-        this.tempo = tempo;
+        this.meterDenominator = meterDenominator;
+        this.tempoSpeed = tempoSpeed;
+        this.tempoNumerator = tempoNumerator;
+        this.tempoDenominator = tempoDenominator;
         this.phrases = phrases;
     }
     
     /** Returns the integer number of ticks per beat
      * @return ticks
      */
-    public Integer getTicks() {
+    public Integer getTicksPerBeat() {
         int ticks = 1;
         int gcd;
         for (int i = 0; i < phrases.size(); i++) {
@@ -63,7 +68,7 @@ public class MusicalPiece {
     public void playPiece() {
         System.out.println("Title: " + this.title);
         System.out.println("Composer: " + this.composer);
-        System.out.println("Played in " + this.meterNumerator + "/" + this.meterDenominator + " time @ " + this.tempo + " BPM.");
+        System.out.println("Played in " + this.meterNumerator + "/" + this.meterDenominator + " time @ " + this.tempoSpeed + " BPM.");
         SequencePlayer player;
         try {
             LyricListener listener = new LyricListener() {
@@ -71,19 +76,22 @@ public class MusicalPiece {
                     System.out.println(text);
                 }
             };
-            player = new SequencePlayer(this.getTempo(), this.getTicks(), listener);
+            player = new SequencePlayer(this.getTempo(), this.getTicksPerBeat(), listener);
             for (MusicalPhrase phrase : this.phrases) {
                 int tickCount = 0;
                 for (Bar bar : phrase.getBars()) {
                     for (Note note : bar.getNotes()) {
+                        int ticksPerNote = this.getTicksPerBeat() * this.tempoDenominator * note.getNumerator() / this.tempoNumerator / note.getDenominator();
                         if (note instanceof PitchNote) {
                             for(int i=0; i<note.getNote().length; i++)
-                            	player.addNote(note.getNote()[i], tickCount, this.getTicks() * this.meterNumerator * note.getNumerator() / note.getDenominator());
+                                // getTicksPerBeat gives you the default amount for a note = tempoNum/tempoDen
+                                // We want ticks for a note that is noteNum / noteDen
+                            	player.addNote(note.getNote()[i], tickCount, ticksPerNote);
                         }
                         if (!(note.getLyric().equals(""))) {
                             player.addLyricEvent(note.getLyric(), tickCount);
                         }
-                        tickCount += note.getNumerator() * this.meterNumerator * this.getTicks() / note.getDenominator();
+                        tickCount += ticksPerNote;
                     }
                 }
             }
@@ -111,14 +119,6 @@ public class MusicalPiece {
     }
 
     /**
-     * Returns the note value that represents a beat of the MusicalPiece
-     * @return meterDenominator
-     */
-    public Integer getMeterDenominator() {
-        return this.meterDenominator;
-    }
-
-    /**
      * Returns the number of beats in a measure 
      * @return meterNumerator
      */
@@ -127,11 +127,19 @@ public class MusicalPiece {
     }
 
     /**
+     * Returns the note value that represents a beat of the MusicalPiece
+     * @return meterDenominator
+     */
+    public Integer getMeterDenominator() {
+        return this.meterDenominator;
+    }
+
+    /**
      * Returns the tempo of the MusicalPiece
      * @return tempo
      */
     public Integer getTempo() {
-        return this.tempo;
+        return this.tempoSpeed;
     }
 
 }
