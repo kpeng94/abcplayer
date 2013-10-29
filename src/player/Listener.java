@@ -23,9 +23,11 @@ public class Listener extends ABCMusicBaseListener {
    
     //Mutable Variables
     private HashMap<String, ArrayList<Bar>> voiceHash = new HashMap<String, ArrayList<Bar>>();
+    private Bar currentBar;
     private String currentVoice;
     private Pitch pitch;
     private char baseNote;
+    private int noteNumerator, noteDenominator;
 
     // 
     PitchCalculator pitchCalculator = new PitchCalculator();
@@ -72,6 +74,7 @@ public class Listener extends ABCMusicBaseListener {
         if (meter.equals("C")) {
             this.meterNumerator = 4;
             this.meterDenominator = 4;
+            this.currentBar = new Bar(this.meterNumerator, this.meterDenominator);
             return;
         }
         int slashLocation;
@@ -83,6 +86,7 @@ public class Listener extends ABCMusicBaseListener {
         // We should have gotten integers in front and behind the slash symbol.
         this.meterNumerator = Integer.parseInt(meter.substring(0, slashLocation));
         this.meterDenominator = Integer.parseInt(meter.substring(slashLocation + 1));
+        this.currentBar = new Bar(this.meterNumerator, this.meterDenominator);
     }
     
     @Override
@@ -213,9 +217,28 @@ public class Listener extends ABCMusicBaseListener {
 	    }
 	}
 	
+	@Override
+	public void exitNote_length(ABCMusicParser.Note_lengthContext ctx) {
+	    if (ctx.NUMBER().size() > 1) {
+	        noteNumerator = Integer.parseInt(ctx.NUMBER(0).getText());
+	        noteDenominator = Integer.parseInt(ctx.NUMBER(1).getText());	        
+	    } else if (ctx.NUMBER().size() > 0) {
+	        noteNumerator = 1;
+	        noteDenominator = Integer.parseInt(ctx.NUMBER(0).getText());
+	    } else {
+	        // TODO: set to default
+	        noteNumerator = 1;
+	        noteDenominator = 4;
+	    }
+	}
 	@Override 
 	public void exitNote(ABCMusicParser.NoteContext ctx) { 
-		for (int x=0; x< (ctx.getChildCount()-1)/2; x++){
-		}
+	    // TODO: Lyrics
+	    if (pitch != null) {
+	        // TODO: chords
+	        int[] notes = {pitch.toMidiNote()};
+	        this.currentBar.addNote(new PitchNote(this.noteNumerator, this.noteDenominator, notes, ""));
+	        pitch = null;
+	    }
 	}
 }

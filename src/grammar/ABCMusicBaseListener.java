@@ -57,9 +57,6 @@ public class ABCMusicBaseListener implements ABCMusicListener {
 	@Override public void enterAbc_line(ABCMusicParser.Abc_lineContext ctx) { }
 	@Override public void exitAbc_line(ABCMusicParser.Abc_lineContext ctx) { }
 
-	@Override public void enterTuplet_spec(ABCMusicParser.Tuplet_specContext ctx) { }
-	@Override public void exitTuplet_spec(ABCMusicParser.Tuplet_specContext ctx) { }
-
 	@Override public void enterField_composer(ABCMusicParser.Field_composerContext ctx) { }
 	@Override public void exitField_composer(ABCMusicParser.Field_composerContext ctx) { }
 
