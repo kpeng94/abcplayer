@@ -26,4 +26,16 @@ public class PitchCalculatorTest {
 		assertEquals(Fsharp.toMidiNote(), GF.toMidiNote());
 	}
 	
+	@Test
+	public void threePitchEqualityTest() {
+		// key G sharp and B major are the same
+		Pitch GsharpC=new PitchCalculator().getPitchForKey("G#m", "C");
+		Pitch BC = new PitchCalculator().getPitchForKey("B", "C");
+		assertEquals(GsharpC.toMidiNote(), BC.toMidiNote());
+		
+		Pitch GsharpG = new PitchCalculator().getPitchForKey("G#m", "G");
+		Pitch BG = new PitchCalculator().getPitchForKey("B",  "G");
+		assertEquals(GsharpG.toMidiNote(), BG.toMidiNote());
+	}
+	
 }
