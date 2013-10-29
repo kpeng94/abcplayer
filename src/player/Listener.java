@@ -26,7 +26,7 @@ public class Listener extends ABCMusicBaseListener {
     private Bar currentBar;
     private String currentVoice;
     private Pitch pitch;
-    private char baseNote;
+    private String baseNote;
     private int noteNumerator, noteDenominator;
 
     // 
@@ -149,59 +149,26 @@ public class Listener extends ABCMusicBaseListener {
 
 
 
-//    @Override
-//    public void enterPitch(ABCMusicParser.PitchContext ctx) {
-//        baseNote = ctx.BASENOTE().getText();
-//        pitch = pitchCalculator.getPitchForKey(this.key, baseNote);
-//    }   
-//    
-//    @Override
-//    public void exitAccidental(ABCMusicParser.AccidentalContext ctx) {
-//        if (ctx.start.getType() == ABCMusicLexer.SHARP) {
-//            String accidental = ctx.SHARP().getText();
-//            pitch = pitchCalculator.getPitchForKey("C", baseNote);
-//            pitch = pitch.transpose(accidental.length());
-//        } else if (ctx.start.getType() == ABCMusicLexer.NEUTRAL) {
-//            pitch = pitchCalculator.getPitchForKey("C", baseNote);
-//        } else if (ctx.start.getType() == ABCMusicLexer.FLAT) {
-//            String accidental = ctx.FLAT().getText();
-//            pitch = pitchCalculator.getPitchForKey("C", baseNote);
-//            pitch = pitch.transpose(-1 * accidental.length());
-//        }
-//    }
-
-	@Override
-	public void enterPitch(ABCMusicParser.PitchContext ctx) {
-		baseNote = ctx.BASENOTE().getText().charAt(0);
-        pitch = new Pitch(Character.toUpperCase(baseNote));
-        if (Character.toLowerCase(baseNote) == baseNote) {
-            pitch = pitch.transpose(Pitch.OCTAVE);
+    @Override
+    public void enterPitch(ABCMusicParser.PitchContext ctx) {
+        baseNote = ctx.BASENOTE().getText();
+        pitch = pitchCalculator.getPitchForKey(this.key, baseNote);
+    }   
+    
+    @Override
+    public void exitAccidental(ABCMusicParser.AccidentalContext ctx) {
+        if (ctx.start.getType() == ABCMusicLexer.SHARP) {
+            String accidental = ctx.SHARP().getText();
+            pitch = pitchCalculator.getPitchForKey("C", baseNote);
+            pitch = pitch.transpose(accidental.length());
+        } else if (ctx.start.getType() == ABCMusicLexer.NEUTRAL) {
+            pitch = pitchCalculator.getPitchForKey("C", baseNote);
+        } else if (ctx.start.getType() == ABCMusicLexer.FLAT) {
+            String accidental = ctx.FLAT().getText();
+            pitch = pitchCalculator.getPitchForKey("C", baseNote);
+            pitch = pitch.transpose(-1 * accidental.length());
         }
-	}	
-	
-	@Override
-	public void exitAccidental(ABCMusicParser.AccidentalContext ctx) {
-		if (ctx.start.getType() == ABCMusicLexer.SHARP) {
-			String accidental = ctx.SHARP().getText();
-	        pitch = new Pitch(Character.toUpperCase(baseNote));
-	        if (Character.toLowerCase(baseNote) == baseNote) {
-	            pitch = pitch.transpose(Pitch.OCTAVE);
-	        }
-			pitch = pitch.transpose(accidental.length());
-		} else if (ctx.start.getType() == ABCMusicLexer.NEUTRAL) {
-	        pitch = new Pitch(Character.toUpperCase(baseNote));
-            if (Character.toLowerCase(baseNote) == baseNote) {
-                pitch = pitch.transpose(Pitch.OCTAVE);
-            }
-		} else if (ctx.start.getType() == ABCMusicLexer.FLAT) {
-			String accidental = ctx.FLAT().getText();
-	        pitch = new Pitch(Character.toUpperCase(baseNote));
-            if (Character.toLowerCase(baseNote) == baseNote) {
-                pitch = pitch.transpose(Pitch.OCTAVE);
-            }
-			pitch = pitch.transpose(-1 * accidental.length());
-		}
-	}
+    }
 	
 	@Override
 	public void exitPitch(ABCMusicParser.PitchContext ctx) {
@@ -231,6 +198,7 @@ public class Listener extends ABCMusicBaseListener {
 	        noteDenominator = 4;
 	    }
 	}
+
 	@Override 
 	public void exitNote(ABCMusicParser.NoteContext ctx) { 
 	    // TODO: Lyrics
@@ -239,6 +207,31 @@ public class Listener extends ABCMusicBaseListener {
 	        int[] notes = {pitch.toMidiNote()};
 	        this.currentBar.addNote(new PitchNote(this.noteNumerator, this.noteDenominator, notes, ""));
 	        pitch = null;
+	    } else {
+	        this.currentBar.addNote(new RestNote(this.noteNumerator, this.noteDenominator, ""));
 	    }
+	    
+	}
+	
+	@Override
+	public void exitElement(ABCMusicParser.ElementContext ctx) {
+	    if (ctx.start.getType() == ABCMusicLexer.BAR) {
+	        String bar = ctx.BAR().getText();
+	        if (bar.equals("|") || bar.equals("||")) {
+	            System.out.println(new Bar(this.currentBar));
+	            System.out.println(bars);
+	            bars.add(new Bar(this.currentBar));
+	            this.currentBar = new Bar(this.meterNumerator, this.meterDenominator);
+	            
+	        }
+	    }
+	}
+	
+	public void enterMid_tune_field(ABCMusicParser.Mid_tune_fieldContext ctx) {
+	    this.bars = new ArrayList<Bar>();
+	}
+	
+	public void enterAbc_tune(ABCMusicParser.Abc_tuneContext ctx) {
+	    this.bars = new ArrayList<Bar>();
 	}
 }

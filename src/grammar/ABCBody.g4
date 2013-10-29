@@ -57,9 +57,7 @@ note_length: NUMBER* (SLASH NUMBER*)?;
 accidental: SHARP | FLAT | NEUTRAL;	
 tuplet_element: TUPLET_SPEC note_element+;
 multi_note: OPEN_BRACKET note+ CLOSE_BRACKET note_length?;
-mid_tune_field: field_voice;
-
-field_voice: IVOICE end_of_line;
+mid_tune_field: IVOICE end_of_line;
 lyric: ILYRIC;
 literal: BASENOTE | REST | BAR;
 

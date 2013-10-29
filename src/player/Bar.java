@@ -21,6 +21,14 @@ public class Bar {
         this.notes = new ArrayList<Note>();
     }
     
+    public Bar(Bar bar) {
+        this.meterNumerator = bar.meterNumerator;
+        this.meterDenominator = bar.meterDenominator;
+        this.meter = bar.meter;
+        this.notesSum = bar.notesSum;
+        this.notes = new ArrayList<Note>(bar.getNotes());
+    }
+    
     /**
      * Adds a note to the current measure
      * @param note
