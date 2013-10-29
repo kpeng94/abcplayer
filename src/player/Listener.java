@@ -38,8 +38,6 @@ public class Listener extends ABCMusicBaseListener {
     private HashMap<String, ArrayList<Bar>> voiceHash = new HashMap<String, ArrayList<Bar>>();
     
     PitchCalculator pitchCalculator = new PitchCalculator();
-
-
     
     /**
      * Removes all whitespace at the beginning of the string passed in.

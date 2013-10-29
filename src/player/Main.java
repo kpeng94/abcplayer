@@ -70,6 +70,7 @@ public class Main {
             walker.walk(listener, tree);
             
             MusicalPiece musicalPiece = ((Listener) listener).getMusicalPiece();
+            System.out.println(musicalPiece.toString());
             musicalPiece.playPiece();
         } 
         catch (IOException e) {

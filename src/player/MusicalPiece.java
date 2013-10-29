@@ -15,16 +15,16 @@ import sound.SequencePlayer;
 public class MusicalPiece {
     private String title;
     private String composer;
-    private Integer beatUnit; // denominator in meter, represents the note value that represents one beat
-    private Integer measureLength; // numerator in meter, represents number of beats in a measure
+    private Integer meterDenominator; // denominator in meter, represents the note value that represents one beat
+    private Integer meterNumerator; // numerator in meter, represents number of beats in a measure
     private Integer tempo;
     private ArrayList<MusicalPhrase> phrases;
     
-    public MusicalPiece(String title, String composer, Integer beatUnit, Integer measureLength, Integer tempo, ArrayList<MusicalPhrase> phrases) {
+    public MusicalPiece(String title, String composer, Integer meterDenominator, Integer meterNumerator, Integer tempo, ArrayList<MusicalPhrase> phrases) {
         this.title = title;
         this.composer = composer;
-        this.beatUnit = beatUnit;
-        this.measureLength = measureLength;
+        this.meterDenominator = meterDenominator;
+        this.meterNumerator = meterNumerator;
         this.tempo = tempo;
         this.phrases = phrases;
     }
@@ -63,7 +63,7 @@ public class MusicalPiece {
     public void playPiece() {
         System.out.println("Title: " + this.title);
         System.out.println("Composer: " + this.composer);
-        System.out.println("Played in " + this.measureLength + "/" + this.beatUnit + " time @ " + this.tempo + " BPM.");
+        System.out.println("Played in " + this.meterNumerator + "/" + this.meterDenominator + " time @ " + this.tempo + " BPM.");
         SequencePlayer player;
         try {
             LyricListener listener = new LyricListener() {
@@ -78,12 +78,12 @@ public class MusicalPiece {
                     for (Note note : bar.getNotes()) {
                         if (note instanceof PitchNote) {
                             for(int i=0; i<note.getNote().length; i++)
-                            	player.addNote(note.getNote()[i], tickCount, this.getTicks() * this.measureLength * note.getNumerator() / note.getDenominator());
+                            	player.addNote(note.getNote()[i], tickCount, this.getTicks() * this.meterNumerator * note.getNumerator() / note.getDenominator());
                         }
                         if (!(note.getLyric().equals(""))) {
                             player.addLyricEvent(note.getLyric(), tickCount);
                         }
-                        tickCount += note.getNumerator() * this.measureLength * this.getTicks() / note.getDenominator();
+                        tickCount += note.getNumerator() * this.meterNumerator * this.getTicks() / note.getDenominator();
                     }
                 }
             }
@@ -112,18 +112,18 @@ public class MusicalPiece {
 
     /**
      * Returns the note value that represents a beat of the MusicalPiece
-     * @return beatUnit
+     * @return meterDenominator
      */
-    public Integer getBeatUnit() {
-        return this.beatUnit;
+    public Integer getMeterDenominator() {
+        return this.meterDenominator;
     }
 
     /**
      * Returns the number of beats in a measure 
-     * @return measureLength
+     * @return meterNumerator
      */
-    public Integer getMeasureLength() {
-        return this.measureLength;
+    public Integer getMeterNumerator() {
+        return this.meterNumerator;
     }
 
     /**
