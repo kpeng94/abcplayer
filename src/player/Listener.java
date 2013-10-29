@@ -18,9 +18,10 @@ public class Listener extends ABCMusicBaseListener {
     // Header instance variables
     private String title, composer, key;
     private int meterNumerator, meterDenominator, 
-                          tempoNumerator, tempoDenominator, tempoSpeed,
+                          tempoNumerator, tempoDenominator, tempoSpeed, tempoBPM,
                           lengthNumerator, lengthDenominator;
-   
+    private boolean hasDefaultLength, hasTempo;
+    
     //Mutable Variables
     private HashMap<String, ArrayList<Bar>> voiceHash = new HashMap<String, ArrayList<Bar>>();
     private Bar currentBar;
@@ -74,23 +75,23 @@ public class Listener extends ABCMusicBaseListener {
         if (meter.equals("C")) {
             this.meterNumerator = 4;
             this.meterDenominator = 4;
-            this.currentBar = new Bar(this.meterNumerator, this.meterDenominator);
-            return;
-        }
-        int slashLocation;
-        for (slashLocation = 0; slashLocation < meter.length(); slashLocation++) {
-            if (meter.charAt(slashLocation) == '/') {
-                break;
+        } else {
+            int slashLocation;
+            for (slashLocation = 0; slashLocation < meter.length(); slashLocation++) {
+                if (meter.charAt(slashLocation) == '/') {
+                    break;
+                }
             }
+            // We should have gotten integers in front and behind the slash symbol.
+            this.meterNumerator = Integer.parseInt(meter.substring(0, slashLocation));
+            this.meterDenominator = Integer.parseInt(meter.substring(slashLocation + 1));
         }
-        // We should have gotten integers in front and behind the slash symbol.
-        this.meterNumerator = Integer.parseInt(meter.substring(0, slashLocation));
-        this.meterDenominator = Integer.parseInt(meter.substring(slashLocation + 1));
-        this.currentBar = new Bar(this.meterNumerator, this.meterDenominator);
+        this.currentBar = new Bar(this.meterNumerator, this.meterDenominator);            
     }
     
     @Override
     public void exitField_tempo(ABCMusicParser.Field_tempoContext ctx) {
+        hasTempo = true;
         String tempo = ctx.ITEMPO().getText();
         tempo = tempo.substring(2);
         tempo = removeWhitespaceAtBeginning(tempo);
@@ -120,6 +121,7 @@ public class Listener extends ABCMusicBaseListener {
 
     @Override
     public void exitField_default_length(ABCMusicParser.Field_default_lengthContext ctx) {
+        hasDefaultLength = true;
         String length = ctx.ILENGTH().getText();
         length = length.substring(2);
         length = removeWhitespaceAtBeginning(length);
@@ -147,7 +149,22 @@ public class Listener extends ABCMusicBaseListener {
     		currentVoice=voice;
     }
 
-
+    @Override
+    public void exitAbc_header(ABCMusicParser.Abc_headerContext ctx) {
+        if (!hasDefaultLength) {
+            if (this.meterNumerator * 1.0 / this.meterDenominator < 0.75) {
+                this.lengthNumerator = 1;
+                this.lengthDenominator = 16;
+            } else {
+                this.lengthNumerator = 1;
+                this.lengthDenominator = 8;
+            }
+        } else if (!hasTempo) {
+            this.tempoSpeed = 100;
+            this.tempoNumerator = this.lengthNumerator;
+            this.tempoDenominator = this.lengthDenominator;
+        }
+    }
 
     @Override
     public void enterPitch(ABCMusicParser.PitchContext ctx) {
@@ -187,15 +204,19 @@ public class Listener extends ABCMusicBaseListener {
 	@Override
 	public void exitNote_length(ABCMusicParser.Note_lengthContext ctx) {
 	    if (ctx.NUMBER().size() > 1) {
-	        noteNumerator = Integer.parseInt(ctx.NUMBER(0).getText());
-	        noteDenominator = Integer.parseInt(ctx.NUMBER(1).getText());	        
+	        this.noteNumerator = Integer.parseInt(ctx.NUMBER(0).getText()) * this.lengthNumerator;
+	        this.noteDenominator = Integer.parseInt(ctx.NUMBER(1).getText()) * this.lengthDenominator;	        
 	    } else if (ctx.NUMBER().size() > 0) {
-	        noteNumerator = 1;
-	        noteDenominator = Integer.parseInt(ctx.NUMBER(0).getText());
+	        if (ctx.SLASH() != null) {
+	            this.noteNumerator = this.lengthNumerator;
+	            this.noteDenominator = Integer.parseInt(ctx.NUMBER(0).getText()) * this.lengthDenominator;	            
+	        } else {
+	            this.noteNumerator = this.lengthNumerator * Integer.parseInt(ctx.NUMBER(0).getText());
+	            this.noteDenominator = this.lengthDenominator;
+	        }
 	    } else {
-	        // TODO: set to default
-	        noteNumerator = 1;
-	        noteDenominator = 4;
+	        noteNumerator = this.lengthNumerator;
+	        noteDenominator = this.lengthDenominator * 2;
 	    }
 	}
 
@@ -233,5 +254,8 @@ public class Listener extends ABCMusicBaseListener {
 	
 	public void enterAbc_tune(ABCMusicParser.Abc_tuneContext ctx) {
 	    this.bars = new ArrayList<Bar>();
+	    this.meterNumerator = 4;
+	    this.meterDenominator = 4;
+	    this.composer = "Unknown";
 	}
 }
