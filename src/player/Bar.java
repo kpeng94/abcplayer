@@ -35,13 +35,11 @@ public class Bar {
      */
     public void addNote(Note note) {
         if ((notesSum + note.getLength()) > meter) {
-            System.out.println(meter);
-            System.out.println(note.getLength());
-            System.out.println(notesSum);
             throw new IllegalArgumentException("This note is too long to add.");
         }
         notesSum += note.getLength();
         notes.add(note);
+        System.out.println(notesSum);
     }
     
     /**
