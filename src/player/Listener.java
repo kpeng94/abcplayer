@@ -307,10 +307,9 @@ public class Listener extends ABCMusicBaseListener {
 	    int chordNotes[] = new int[chord.size()];
 	    int chordNumerator = chord.get(0).getNumerator();
         int chordDenominator = chord.get(0).getDenominator();
-        for (int note = 0, j = 0; note < chord.size(); note++) {
-            for (int i = 0; i < chord.get(note).getNote().length; i++, j++) {
-                chordNotes[j] = chord.get(note).getNote()[i];
-            }
+        for (int note = 0; note < chord.size(); note++) {
+            chordNotes[note] = chord.get(note).getNote()[0];
+            System.out.println(chordNumerator + " / " + chordDenominator + ": " + chord.get(note).getNote()[0]);
         }
         // TODO: Name better...
         Note theChord = new PitchNote(chordNumerator * this.noteNumerator, 
@@ -402,7 +401,7 @@ public class Listener extends ABCMusicBaseListener {
 	public void exitElement(ABCMusicParser.ElementContext ctx) {
 	    if (ctx.start.getType() == ABCMusicLexer.BAR) {
 	        String bar = ctx.BAR().getText();
-	        if (bar.equals("|") || bar.equals("||")) {
+	        if (bar.equals("|") || bar.equals("||") || bar.equals("|]")) {
 	            for (int i = 0; i < this.currentBar.getNotes().size(); i++) {
 	                System.out.println(this.currentBar.getNotes().get(i).getLength());
 	            }
