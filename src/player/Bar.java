@@ -18,7 +18,6 @@ public class Bar {
      * @param meterDenominator - represents note value that represents a beat
      */
     public Bar(int meterNumerator, int meterDenominator) {
-    	// TODO add in some way of determining how many beats are allowed, because right now, noteSum is off in my opinion
         this.meterNumerator = meterNumerator;
         this.meterDenominator = meterDenominator;
         this.meter=(double) this.meterNumerator/this.meterDenominator;

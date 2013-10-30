@@ -18,12 +18,7 @@ public class RestNote implements Note{
         this.numerator = numerator;
         this.denominator = denominator;
     }
-        
-//    @Override
-//    public Note copy() {
-//        return new RestNote(this.numerator, this.denominator, this.lyric);
-//    }
-    
+            
     /**
      * Returns the numerator of the note's length
      * @return numerator
