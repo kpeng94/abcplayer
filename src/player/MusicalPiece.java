@@ -15,11 +15,10 @@ import sound.SequencePlayer;
 public class MusicalPiece {
     private String title;
     private String composer;
-    private int meterNumerator; // numerator in meter, represents number of beats in a measure
-    private int meterDenominator; // denominator in meter, represents the note value that represents one beat
-    private int tempoSpeed;
-    private int tempoNumerator; 
-    private int tempoDenominator;
+    // numerator in meter, represents number of beats in a measure
+    // denominator in meter, represents the note value that represents one beat
+    private int meterNumerator, meterDenominator;
+    private int tempoSpeed, tempoNumerator, tempoDenominator;
     private ArrayList<MusicalPhrase> phrases;
     
     public MusicalPiece(String title, String composer, int meterNumerator, Integer meterDenominator, 
