@@ -285,60 +285,37 @@ public class Listener extends ABCMusicBaseListener {
 	 * @param ctx Context for the note length
 	 */
 	public void exitNote_length(ABCMusicParser.Note_lengthContext ctx) {
-	    if(ctx.parent.getClass() == ABCMusicParser.NoteContext.class || ctx.parent.getClass() == ABCMusicParser.Note_or_restContext.class)  {
-    	    if (ctx.NUMBER().size() > 1) {
-    	        this.noteNumerator = Integer.parseInt(ctx.NUMBER(0).getText()) * this.lengthNumerator;
-    	        this.noteDenominator = Integer.parseInt(ctx.NUMBER(1).getText()) * this.lengthDenominator;	        
-    	    } else if (ctx.NUMBER().size() > 0) {
-    	        if (ctx.SLASH() != null) {
-                    if (ctx.getChild(0).getText().equals("/")) {
-                        this.noteNumerator = this.lengthNumerator;
-                        this.noteDenominator = Integer.parseInt(ctx.NUMBER(0).getText()) * this.lengthDenominator;                                     
-                    } else {
-                        this.noteNumerator = Integer.parseInt(ctx.NUMBER(0).getText()) * this.lengthNumerator;
-                        this.noteDenominator = this.lengthDenominator * 2;
-                    }
-    	        } else {
-    	            this.noteNumerator = this.lengthNumerator * Integer.parseInt(ctx.NUMBER(0).getText());
-    	            this.noteDenominator = this.lengthDenominator;
-    	        }
-    	    } else {
-    	        if (ctx.SLASH() != null) {
-    	            this.noteNumerator = this.lengthNumerator;
-    	            this.noteDenominator = this.lengthDenominator * 2;	            
-    	        } else {
-    	            this.noteNumerator = this.lengthNumerator;
-    	            this.noteDenominator = this.lengthDenominator;
-    	        }
-    	    }
-        } else {
-            if (ctx.NUMBER().size() > 1) {
-                this.chordN = Integer.parseInt(ctx.NUMBER(0).getText());
-                this.chordD = Integer.parseInt(ctx.NUMBER(1).getText());          
-            } else if (ctx.NUMBER().size() > 0) {
-                if (ctx.SLASH() != null) {
-                    if (ctx.getChild(0).getText().equals("/")) {
-                        this.chordN= 1;
-                        this.chordD= Integer.parseInt(ctx.NUMBER(0).getText());                                     
-                    } else {
-                        this.chordN= Integer.parseInt(ctx.NUMBER(0).getText());
-                        this.chordD= 2;
-                    }
+	    int numerator = 1, denominator = 1;
+        if (ctx.NUMBER().size() > 1) {
+            numerator = Integer.parseInt(ctx.NUMBER(0).getText());
+            denominator = Integer.parseInt(ctx.NUMBER(1).getText());
+        } else if (ctx.NUMBER().size() > 0) {
+            if (ctx.SLASH() != null) {
+                if (ctx.getChild(0).getText().equals("/")) {
+                    numerator = 1;
+                    denominator = Integer.parseInt(ctx.NUMBER(0).getText());
                 } else {
-                    this.chordN = Integer.parseInt(ctx.NUMBER(0).getText());
-                    this.chordD = 1;
+                    numerator = Integer.parseInt(ctx.NUMBER(0).getText());
+                    denominator = 2;
                 }
             } else {
-                if (ctx.SLASH() != null) {
-                    this.chordN = 1;
-                    this.chordD = 2;              
-                } else {
-                    this.chordN = 1;
-                    this.chordD = 1;
-                }
+                numerator = Integer.parseInt(ctx.NUMBER(0).getText());
+                denominator = 1;
+            }          
+        } else {
+            if (ctx.SLASH() != null) {
+                numerator = 1;
+                denominator = 2;
             }
         }
-    }
+        if(ctx.parent.getClass() == ABCMusicParser.NoteContext.class || ctx.parent.getClass() == ABCMusicParser.Note_or_restContext.class)  {
+            this.noteNumerator = numerator * this.lengthNumerator;
+            this.noteDenominator = denominator * this.lengthDenominator;
+        } else {
+            this.chordN = numerator;
+            this.chordD = denominator;
+        }
+}
 
 	@Override
 	/**
