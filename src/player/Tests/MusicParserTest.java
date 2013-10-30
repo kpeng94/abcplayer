@@ -28,6 +28,7 @@ import sound.PitchCalculator;
  * Class to test all the musical pieces in our sample_abc and extra_abc folder
  * Only tests successful parsing of the tree, doesn't play the files
  * 
+ * @category no_didit
  */
 public class MusicParserTest {
     
