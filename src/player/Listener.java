@@ -277,7 +277,7 @@ public class Listener extends ABCMusicBaseListener {
 	
 	@Override
 	public void exitNote_length(ABCMusicParser.Note_lengthContext ctx) {
-	    if(ctx.parent.getClass() == ABCMusicParser.NoteContext.class)  {
+	    if(ctx.parent.getClass() == ABCMusicParser.NoteContext.class || ctx.parent.getClass() == ABCMusicParser.Note_or_restContext.class)  {
     	    if (ctx.NUMBER().size() > 1) {
     	        this.noteNumerator = Integer.parseInt(ctx.NUMBER(0).getText()) * this.lengthNumerator;
     	        this.noteDenominator = Integer.parseInt(ctx.NUMBER(1).getText()) * this.lengthDenominator;	        
@@ -430,13 +430,14 @@ public class Listener extends ABCMusicBaseListener {
                 int[] notes = {this.pitch.toMidiNote()};
                 this.currentBar.addNote(new PitchNote(this.noteNumerator, this.noteDenominator, notes, ""));
                 if (this.isRepeatOn && !this.isOneTwoRepeat) {
-                    System.out.println("HERE1");
+                    System.out.println("I added this note into the current repeat bar: " + this.pitch.toMidiNote());
                     this.currentRepeatBar.addNote(new PitchNote(this.noteNumerator, this.noteDenominator, notes, ""));
                 }
                 this.pitch = null;
             } else {
                 this.currentBar.addNote(new RestNote(this.noteNumerator, this.noteDenominator, ""));
                 if (isRepeatOn && !isOneTwoRepeat) {
+                    System.out.println("I added this note into the current repeat bar: " + this.pitch);
                     this.currentRepeatBar.addNote(new RestNote(this.noteNumerator, this.noteDenominator, ""));
                 }
             }
@@ -458,7 +459,7 @@ public class Listener extends ABCMusicBaseListener {
 	            // If we're in a repeat section and it's not inside the [1 [2 part of it,
 	            // add this bar to the list of bars to repeat
 	            // make a new bar as the current repeat bar
-	            if (this.isRepeatOn && !this.isOneTwoRepeat) {
+                if (this.currentRepeatBar.getNotes().size() > 0) {
 	                this.repeatBars.add(new Bar(this.currentRepeatBar));
 	                this.currentRepeatBar = new Bar(this.meterNumerator, this.meterDenominator);
 	            }
@@ -467,14 +468,16 @@ public class Listener extends ABCMusicBaseListener {
 	        } else if (bar.equals("|:")) {
                 System.out.println("HERE2");
 	            this.isRepeatOn = true;
-	            // Check implementation later
 	            this.repeatBars = new ArrayList<Bar>();
 	        } else if (bar.equals(":|")) {
-                System.out.println("HERE3");
+	            this.bars.add(new Bar(this.currentBar));
+	            this.currentBar = new Bar(this.meterNumerator, this.meterDenominator);
 	            this.isRepeatOn = false;
 	            this.repeatBars.add(this.currentRepeatBar);
+	            System.out.println("HI2:" + this.bars.size());
 	            for (int repeatBar = 0; repeatBar < this.repeatBars.size(); repeatBar++) {
 	                this.bars.add(this.repeatBars.get(repeatBar));
+	                System.out.println("HI:" + this.bars.size());
 	            }
 	        }
 	    }
@@ -482,8 +485,10 @@ public class Listener extends ABCMusicBaseListener {
 	    if (ctx.start.getType() == ABCMusicLexer.NTH_REPEAT) {
 	        String nthRepeat = ctx.NTH_REPEAT().getText();
 	        if (nthRepeat.equals("[1")) {
+	            System.out.println("asdf");
 	            this.isOneTwoRepeat = true;
 	        } else if (nthRepeat.equals("[2")) {
+	            System.out.println("bcde");
 	            this.isOneTwoRepeat = false;
 	        }
 	    }
