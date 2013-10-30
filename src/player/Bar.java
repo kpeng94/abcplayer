@@ -84,4 +84,54 @@ public class Bar {
         }
         return ticks;
     }
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(meter);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + meterDenominator;
+		result = prime * result + meterNumerator;
+		result = prime * result + ((notes == null) ? 0 : notes.hashCode());
+		temp = Double.doubleToLongBits(notesSum);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Bar other = (Bar) obj;
+		if (Double.doubleToLongBits(meter) != Double
+				.doubleToLongBits(other.meter))
+			return false;
+		if (meterDenominator != other.meterDenominator)
+			return false;
+		if (meterNumerator != other.meterNumerator)
+			return false;
+		if (notes == null) {
+			if (other.notes != null)
+				return false;
+		} else if (!notes.equals(other.notes))
+			return false;
+		if (Double.doubleToLongBits(notesSum) != Double
+				.doubleToLongBits(other.notesSum))
+			return false;
+		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return "Bar [meterNumerator=" + meterNumerator + ", meterDenominator="
+				+ meterDenominator + ", meter=" + meter + ", notesSum="
+				+ notesSum + ", notes=" + notes + "]";
+	}
+
 }

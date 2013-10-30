@@ -10,6 +10,7 @@ import sound.PitchCalculator;
 
 /** 
  * Class to test all the musical pieces in our sample_abc folder
+ * Only tests parsing of the tree, doesn't play the files
  * @category no_didit
  */
 public class MusicPlayerTest {
@@ -91,6 +92,23 @@ public class MusicPlayerTest {
     }
     
     @Test
+    public void clockRead() {
+    	String clock = "extra_abc/clocks.abc";
+    	MusicPlayer.play(clock);
+    }
+    
+    @Test
+    public void janaGanaRead() {
+    	String jana = "extra_abc/jana_gana_mana.abc";
+    	MusicPlayer.play(jana);
+    }
+    
+    @Test(expected=RuntimeException.class)
+    public void happyBirthdayReadFailTest() {
+    	String happyBirthday="extra_abc/happy_birthday.abc";
+    	MusicPlayer.play(happyBirthday);
+    }
+    @Test
     public void headerParseTest() {
     	String pieceOneHeader = "X:1\nT:Simple scale\nC:Unknown\nM:4/4\nL:1/4\nQ:1/4=120\nK:C\nC D E F | G A B c | c B A G F E D C |";
     	MusicalPiece mp = new MusicPlayer().parse(pieceOneHeader, "");
@@ -111,6 +129,18 @@ public class MusicPlayerTest {
     	assertTrue(notes.get(0).getNote()[0] == (new PitchCalculator().getPitchForKey("D", "B").toMidiNote()));
     	assertTrue(notes.get(1).getNote()[0] == (new PitchCalculator().getPitchForKey("D", "B").toMidiNote()));
     	assertTrue(notes.get(2).getNote()[0] == (new PitchCalculator().getPitchForKey("D", "A").toMidiNote()));
-    	
     }
+    
+    @Test(expected=NullPointerException.class)
+    public void testFailParseMusic() {
+    	String alphabetSongBasic = "X:1\nT:Alphabet Song\nC:Traditional Kid's Song\nM:4/4\nL:1/4\nQ:1/4=100\nK:D\n|D D A A|B B A2|G G F F|E/2E/2E/2E/2 D2|";
+    	MusicalPiece mp= new MusicPlayer().parse(alphabetSongBasic, null);
+    }
+    
+    @Test(expected=NullPointerException.class)
+    public void testNullExceptionMusic() {
+    	MusicalPiece mp = new MusicPlayer().parse(null, "");
+    }
+    
+    
 }

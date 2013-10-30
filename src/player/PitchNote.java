@@ -21,6 +21,8 @@ public class PitchNote implements Note{
 		if ((numerator <= 0) || (denominator <= 0)){
 			throw new IllegalArgumentException("Illegal argument for numerator or denominator");
 		}
+		if (note == null)
+			throw new IllegalArgumentException("Note integer array can't be null");
 		this.numerator = numerator;
 		this.denominator = denominator;
 		this.note = note;

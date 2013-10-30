@@ -74,5 +74,36 @@ public class RestNote implements Note{
 	public String getLyric() {
 		return null;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + denominator;
+		result = prime * result + numerator;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RestNote other = (RestNote) obj;
+		if (denominator != other.denominator)
+			return false;
+		if (numerator != other.numerator)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "RestNote [numerator=" + numerator + ", denominator="
+				+ denominator + "]";
+	}
     
 }

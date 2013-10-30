@@ -164,4 +164,66 @@ public class MusicalPiece {
     public ArrayList<MusicalPhrase> getPhrases() {
         return this.phrases;
     }
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((composer == null) ? 0 : composer.hashCode());
+		result = prime * result + meterDenominator;
+		result = prime * result + meterNumerator;
+		result = prime * result + ((phrases == null) ? 0 : phrases.hashCode());
+		result = prime * result + tempoDenominator;
+		result = prime * result + tempoNumerator;
+		result = prime * result + tempoSpeed;
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MusicalPiece other = (MusicalPiece) obj;
+		if (composer == null) {
+			if (other.composer != null)
+				return false;
+		} else if (!composer.equals(other.composer))
+			return false;
+		if (meterDenominator != other.meterDenominator)
+			return false;
+		if (meterNumerator != other.meterNumerator)
+			return false;
+		if (phrases == null) {
+			if (other.phrases != null)
+				return false;
+		} else if (!phrases.equals(other.phrases))
+			return false;
+		if (tempoDenominator != other.tempoDenominator)
+			return false;
+		if (tempoNumerator != other.tempoNumerator)
+			return false;
+		if (tempoSpeed != other.tempoSpeed)
+			return false;
+		if (title == null) {
+			if (other.title != null)
+				return false;
+		} else if (!title.equals(other.title))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "MusicalPiece [title=" + title + ", composer=" + composer
+				+ ", meterNumerator=" + meterNumerator + ", meterDenominator="
+				+ meterDenominator + ", tempoSpeed=" + tempoSpeed
+				+ ", tempoNumerator=" + tempoNumerator + ", tempoDenominator="
+				+ tempoDenominator + ", phrases=" + phrases + "]";
+	}
 }

@@ -57,7 +57,7 @@ public class MusicPlayer {
             walker.walk(listener, tree);
             
             MusicalPiece musicalPiece = ((Listener) listener).getMusicalPiece();
-            musicalPiece.playPiece();
+//            musicalPiece.playPiece();
         } 
         catch (IOException e) {
             System.err.println("ERROR: " + e.getMessage());
