@@ -158,7 +158,10 @@ public class MusicalPiece {
      */
     // TODO MAKE THIS NOT HAVE REP EXPOSURE
     public ArrayList<MusicalPhrase> getPhrases() {
-        return this.phrases;
+        ArrayList<MusicalPhrase> copy = new ArrayList<MusicalPhrase>(this.phrases.size());
+        for (MusicalPhrase m : this.phrases) 
+            copy.add(m.clone());
+        return copy;
     }
 
 	@Override

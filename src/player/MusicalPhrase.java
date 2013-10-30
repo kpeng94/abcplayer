@@ -47,6 +47,11 @@ public class MusicalPhrase {
         }
         return ticks;
     }
+    
+    public MusicalPhrase clone() {
+        return new MusicalPhrase(new ArrayList<Bar>(this.bars));
+    }
+    
 	@Override
 	public int hashCode() {
 		final int prime = 31;

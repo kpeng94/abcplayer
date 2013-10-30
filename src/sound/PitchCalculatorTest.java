@@ -6,6 +6,12 @@ import org.junit.Test;
 
 import player.PitchNote;
 
+/**
+ * This will allow us to test the workings of the PitchCalculator.
+ * This test suite is not meant to be comprehensive.
+ *
+ */
+
 public class PitchCalculatorTest {
 
 	@Test
