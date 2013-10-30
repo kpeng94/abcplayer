@@ -15,8 +15,6 @@ import sound.SequencePlayer;
 public class MusicalPiece {
     private String title;
     private String composer;
-    // numerator in meter, represents number of beats in a measure
-    // denominator in meter, represents the note value that represents one beat
     private int meterNumerator, meterDenominator;
     private int tempoSpeed, tempoNumerator, tempoDenominator;
     private ArrayList<MusicalPhrase> phrases;
@@ -157,5 +155,13 @@ public class MusicalPiece {
     public Integer getTempo() {
         return this.tempoSpeed;
     }
-
+    
+    /**
+     * Returns a copy of the ArrayList of MusicalPhrases that make up the MusicalPiece
+     * @return phrases 
+     */
+    // TODO MAKE THIS NOT HAVE REP EXPOSURE
+    public ArrayList<MusicalPhrase> getPhrases() {
+        return this.phrases;
+    }
 }

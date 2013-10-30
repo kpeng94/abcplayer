@@ -18,10 +18,10 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 public class MusicPlayer {
     
-    public void parse(String piece, String testField) {
-        runListener(piece, testField);
+    public MusicalPiece parse(String piece, String testField) {
+//        runListener(piece, testField);
 //        TODO: return MusicalPiece
-//        return runListener(piece);
+        return runListener(piece,testField);
     }
     
     // TODO: remove or edit this later. Temporarily using this to test input reading for files.
@@ -48,7 +48,7 @@ public class MusicPlayer {
             tree = parser.abc_tune(); // "line" is the starter rule.
             
             // Next 2 Lines ***FOR DEBUGGING ONLY***
-            System.err.println(tree.toStringTree(parser));
+//            System.err.println(tree.toStringTree(parser));
 //            ((RuleContext) tree).inspect(parser);
 
             // Walk the tree with the listener.
@@ -57,7 +57,7 @@ public class MusicPlayer {
             walker.walk(listener, tree);
             
             MusicalPiece musicalPiece = ((Listener) listener).getMusicalPiece();
-//            musicalPiece.playPiece();
+            musicalPiece.playPiece();
         } 
         catch (IOException e) {
             System.err.println("ERROR: " + e.getMessage());
@@ -66,7 +66,7 @@ public class MusicPlayer {
     }
 
     
-    public void runListener(String input, String testField) {
+    public MusicalPiece runListener(String input, String testField) {
               CharStream stream = new ANTLRInputStream(input);
               // TODO: Change this to FileStream
               ABCMusicLexer lexer = new ABCMusicLexer(stream);
@@ -86,13 +86,13 @@ public class MusicPlayer {
                   tree = parser.abc_tune();
               }
 
-              System.err.println(tree.toStringTree(parser));
-              ((RuleContext) tree).inspect(parser);
+//              System.err.println(tree.toStringTree(parser));
+//              ((RuleContext) tree).inspect(parser);
               
-//              ParseTreeWalker walker = new ParseTreeWalker();
-//              ParseTreeListener listener = new Listener();
-//              walker.walk(listener, tree);
-//              return ((Listener) listener).getMusicalPiece();
+              ParseTreeWalker walker = new ParseTreeWalker();
+              ParseTreeListener listener = new Listener();
+              walker.walk(listener, tree);
+              return ((Listener) listener).getMusicalPiece();
               
     }
 }

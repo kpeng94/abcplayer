@@ -13,8 +13,16 @@ public class RestNote implements Note{
      * @param denominator - integer representing denominator of rest's length
      */
     public RestNote(int numerator, int denominator) {
+    	if (numerator <= 0 || denominator <= 0)
+    		throw new IllegalArgumentException("Numerator or Denominator can't be negative");
         this.numerator = numerator;
         this.denominator = denominator;
+    }
+    
+    // TODO REMOVE THIS
+    public RestNote(int numerator, int denominator, String lyric){
+    	this.numerator=numerator;
+    	this.denominator=denominator;
     }
     
 //    @Override

@@ -1,7 +1,8 @@
 package player;
 
+import static org.junit.Assert.*;
+
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Test;
 
@@ -56,6 +57,11 @@ public class MusicalRepresentationTest {
 		new RestNote(1,4);
 	}
 	
+	@Test(expected=IllegalArgumentException.class)
+	public void illegalRestNoteTest(){
+		new RestNote(-1, 4);
+	}
+	
 	@Test
 	public void restNoteMeasureTest() {
 		new RestNote(8,4);
@@ -80,7 +86,7 @@ public class MusicalRepresentationTest {
 			bar.addNote(new RestNote(1,4));
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void barTooManyNotesTest() {
 		Bar bar=new Bar(4,4);
 		for (int i=0; i<2; i++)
@@ -113,4 +119,33 @@ public class MusicalRepresentationTest {
 		barArray.add(bar2);
 		new MusicalPhrase(barArray);
 	}
+	
+	@Test
+	public void basicMusicalPieceTest() {
+		String title = "Test Title";
+		String composer = "Test Composer";
+		int meterNumerator = 1, meterDenominator =4;
+		int tempoSpeed=100;
+		int tempoNumerator = 1;
+		int tempoDenominator = 4;
+		ArrayList<MusicalPhrase> phrases = new ArrayList<MusicalPhrase>();
+		new MusicalPiece(title, composer, meterNumerator, meterDenominator, tempoSpeed, tempoNumerator, tempoDenominator, phrases);
+	}
+	
+	@Test
+	public void musicalPieceMethodTest() {
+		String title = "Test Title";
+		String composer = "Test Composer";
+		int meterNumerator = 1, meterDenominator =4;
+		int tempoSpeed=100;
+		int tempoNumerator = 1;
+		int tempoDenominator = 4;
+		ArrayList<MusicalPhrase> phrases = new ArrayList<MusicalPhrase>();
+		MusicalPiece mp = new MusicalPiece(title, composer, meterNumerator, meterDenominator, tempoSpeed, tempoNumerator, tempoDenominator, phrases);
+		assertTrue(mp.getTitle().equals(title));
+		assertTrue(mp.getComposer().equals(composer));
+		assertTrue(mp.getMeterDenominator().equals(meterDenominator));
+		assertTrue(mp.getMeterNumerator().equals(meterNumerator));
+		assertTrue(mp.getTempo().equals(tempoSpeed));
+			}
 }
