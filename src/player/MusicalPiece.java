@@ -15,6 +15,7 @@ public class MusicalPiece {
     private int meterNumerator, meterDenominator;
     private int tempoSpeed, tempoNumerator, tempoDenominator;
     private ArrayList<MusicalPhrase> phrases;
+    
     /**
      * Constructor for MusicalPiece
      * @param title - String representation of the title of the piece 

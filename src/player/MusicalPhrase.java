@@ -59,6 +59,7 @@ public class MusicalPhrase {
 		result = prime * result + ((bars == null) ? 0 : bars.hashCode());
 		return result;
 	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -75,6 +76,7 @@ public class MusicalPhrase {
 			return false;
 		return true;
 	}
+	
 	@Override
 	public String toString() {
 		return "MusicalPhrase [bars=" + bars + "]";
