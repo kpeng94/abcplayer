@@ -53,17 +53,17 @@ public class MusicalRepresentationTest {
 	
 	@Test
 	public void restNoteBasicTest() {
-		new RestNote(1,4, "zzz");
+		new RestNote(1,4);
 	}
 	
 	@Test
 	public void restNoteMeasureTest() {
-		new RestNote(8,4, "");
+		new RestNote(8,4);
 	}
 	
 	@Test
 	public void restNoteMultipleMeasureTest() {
-		new RestNote(16,4, "");
+		new RestNote(16,4);
 	}
 	
 	@Test
@@ -77,7 +77,7 @@ public class MusicalRepresentationTest {
 	public void barRestNoteTest() {
 		Bar bar = new Bar(4,4);
 		for (int i=0; i<4; i++)
-			bar.addNote(new RestNote(1,4, ""));
+			bar.addNote(new RestNote(1,4));
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -86,7 +86,7 @@ public class MusicalRepresentationTest {
 		for (int i=0; i<2; i++)
 		{
 			bar.addNote(new PitchNote(1,4,new int[]{9},"Testing for an error!"));
-			bar.addNote(new RestNote(2,4, ""));
+			bar.addNote(new RestNote(2,4));
 		}
 	}
 	
@@ -95,7 +95,7 @@ public class MusicalRepresentationTest {
 		ArrayList<Bar> barArray=new ArrayList<Bar>();
 		Bar bar=new Bar(4,4);
 		for (int i=0; i<4; i++)
-			bar.addNote(new RestNote(1,4, ""));
+			bar.addNote(new RestNote(1,4));
 		barArray.add(bar);
 		new MusicalPhrase(barArray);
 	}
@@ -106,7 +106,7 @@ public class MusicalRepresentationTest {
 		Bar bar=new Bar(4,4);
 		Bar bar2=new Bar(4,4);
 		for (int i=0; i<4; i++)
-			bar.addNote(new RestNote(1,4,""));
+			bar.addNote(new RestNote(1,4));
 		for (int k=0; k<4; k++)
 			bar2.addNote(new PitchNote(1,4,new int[] {9}, "Hi"));
 		barArray.add(bar);

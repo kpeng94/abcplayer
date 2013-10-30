@@ -5,7 +5,8 @@ import static org.junit.Assert.*;
 import java.awt.Window.Type;
 import org.junit.Test;
 
-/**
+/** 
+ * Class to test all the musical pieces in our sample_abc folder
  * @category no_didit
  */
 public class MusicPlayerTest {
@@ -19,7 +20,7 @@ public class MusicPlayerTest {
 //        String pieceThree = "X:3\nT:Sample 3\nC:Me\nQ:1/8=100\nM:3/4\nL:1/8\nK:C\nz4 D2 | G4 BG | B4 A2 | G4 E2 | D4 D2 | G4 BG | B4 A2 | D'6 | D'2 z4 |]\nw: A-ma-zing | grace! How | sweet the | sound That | saved a | wretch like | me.";
 //        new MusicPlayer().parse(pieceThree, "");
 //    }
-
+	
     @Test
     public void testPieceOneHeader() {
         String pieceOneHeader = "X: 1\nT:Piece No.1\nM:4/4\nL:1/4\nQ:1/4=140\nK:C\n";

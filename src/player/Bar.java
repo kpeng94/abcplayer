@@ -12,6 +12,11 @@ public class Bar {
     private double notesSum;
     private ArrayList<Note> notes;
     
+    /**
+     * Constructor for a bar, calculates the meter based off of meterNumerator and meterDenominator
+     * @param meterNumerator - represents measure length
+     * @param meterDenominator - represents note value that represents a beat
+     */
     public Bar(int meterNumerator, int meterDenominator) {
     	// TODO add in some way of determining how many beats are allowed, because right now, noteSum is off in my opinion
         this.meterNumerator = meterNumerator;
@@ -21,6 +26,10 @@ public class Bar {
         this.notes = new ArrayList<Note>();
     }
     
+    /**
+     * Constructs a new bar from a passed in bar
+     * @param bar
+     */
     public Bar(Bar bar) {
         this.meterNumerator = bar.meterNumerator;
         this.meterDenominator = bar.meterDenominator;

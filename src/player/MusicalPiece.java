@@ -20,7 +20,17 @@ public class MusicalPiece {
     private int meterNumerator, meterDenominator;
     private int tempoSpeed, tempoNumerator, tempoDenominator;
     private ArrayList<MusicalPhrase> phrases;
-    
+    /**
+     * Constructor for MusicalPiece
+     * @param title - String representation of the title of the piece 
+     * @param composer - String value of the composer
+     * @param meterNumerator - integer representing number of beats in a measure
+     * @param meterDenominator - integer representing the note value that represents one beat
+     * @param tempoSpeed - integer representing tempo
+     * @param tempoNumerator - integer representing the numerator of the tempo
+     * @param tempoDenominator - integer representing the denominator of the tempo
+     * @param phrases - ArrayList of MusicalPhrases
+     */
     public MusicalPiece(String title, String composer, int meterNumerator, Integer meterDenominator, 
                                             int tempoSpeed, int tempoNumerator, int tempoDenominator, ArrayList<MusicalPhrase> phrases) {
         this.title = title;
@@ -65,16 +75,21 @@ public class MusicalPiece {
      * 
      */
     public void playPiece() {
+    	
         System.out.println("Title: " + this.title);
         System.out.println("Composer: " + this.composer);
         System.out.println("Played in " + this.meterNumerator + "/" + this.meterDenominator + " time @ " + this.tempoSpeed + " BPM.");
         SequencePlayer player;
         try {
+        	
+        	// Create an instance of LyricListener and add a processLyricEvent to print out lyrics
             LyricListener listener = new LyricListener() {
                 public void processLyricEvent(String text) {
                     System.out.println(text);
                 }
             };
+            
+            // Iterates through each MusicalPhrase and queues the notes to be played by the SequencePlayer
             player = new SequencePlayer(this.getTempo(), this.getTicksPerBeat(), listener);
             for (MusicalPhrase phrase : this.phrases) {
                 int tickCount = 0;
