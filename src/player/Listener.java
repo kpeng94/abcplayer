@@ -44,9 +44,8 @@ public class Listener extends ABCMusicBaseListener {
     private ArrayList<Bar> repeatBars;
     private Bar currentRepeatBar;
     private ArrayList<Bar> barsInLine;
-
-    //Mutable Variables
     private HashMap<String, Voice> voiceHash = new HashMap<String, Voice>();
+    private HashMap<String, Integer> measureAccidentals = new HashMap<String, Integer>();
     PitchCalculator pitchCalculator = new PitchCalculator();
     
     /**
@@ -251,22 +250,32 @@ public class Listener extends ABCMusicBaseListener {
      * 
      */
     public void enterPitch(ABCMusicParser.PitchContext ctx) {
-        baseNote = ctx.BASENOTE().getText();
-        pitch = pitchCalculator.getPitchForKey(this.key, baseNote);
+        this.baseNote = ctx.BASENOTE().getText();
+        this.pitch = pitchCalculator.getPitchForKey(this.key, this.baseNote);            
+        if (this.measureAccidentals.containsKey(this.baseNote)) {
+            this.pitch = this.pitch.transpose(this.measureAccidentals.get(this.baseNote));
+        }        
     }   
     
     @Override
     public void exitAccidental(ABCMusicParser.AccidentalContext ctx) {
+        int accidentalTranspose = 0;
         if (ctx.start.getType() == ABCMusicLexer.SHARP) {
             String accidental = ctx.SHARP().getText();
-            pitch = pitchCalculator.getPitchForKey("C", baseNote);
-            pitch = pitch.transpose(accidental.length());
+            this.pitch = pitchCalculator.getPitchForKey("C", this.baseNote);
+            this.pitch = this.pitch.transpose(accidental.length());
+            accidentalTranspose = accidental.length();
         } else if (ctx.start.getType() == ABCMusicLexer.NEUTRAL) {
-            pitch = pitchCalculator.getPitchForKey("C", baseNote);
+            this.pitch = pitchCalculator.getPitchForKey("C", this.baseNote);
         } else if (ctx.start.getType() == ABCMusicLexer.FLAT) {
             String accidental = ctx.FLAT().getText();
-            pitch = pitchCalculator.getPitchForKey("C", baseNote);
-            pitch = pitch.transpose(-1 * accidental.length());
+            this.pitch = pitchCalculator.getPitchForKey("C", this.baseNote);
+            this.pitch = this.pitch.transpose(-1 * accidental.length());
+            accidentalTranspose = -1 * accidental.length();            
+        }
+        if (this.measureAccidentals.containsKey(this.baseNote)) {
+            this.measureAccidentals.remove(this.baseNote);
+            this.measureAccidentals.put(this.baseNote, accidentalTranspose);
         }
     }
 	
@@ -459,6 +468,7 @@ public class Listener extends ABCMusicBaseListener {
 	public void exitElement(ABCMusicParser.ElementContext ctx) {
 	    if (ctx.start.getType() == ABCMusicLexer.BAR) {
 	        String bar = ctx.BAR().getText();
+            this.measureAccidentals = new HashMap<String, Integer>();
 
 	        if (bar.equals("|") || bar.equals("||") || bar.equals("|]") || bar.equals("|[")) {
 	            // If we're in a repeat section and it's not inside the [1 [2 part of it,
