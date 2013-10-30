@@ -30,13 +30,12 @@ public class Listener extends ABCMusicBaseListener {
     private String baseNote;
     private int noteNumerator, noteDenominator, chordN, chordD;
     private boolean isChord, isTuplet, isRepeatOn, isOneTwoRepeat;
-    private ArrayList<Note> chord;
-    private ArrayList<Note> tuplet;
-    private ArrayList<Note> repeats;
+    private ArrayList<Note> chord, tuplet;
+    private ArrayList<Bar> repeatBars;
+    private Bar currentRepeatBar;
     
     //Mutable Variables
-    private HashMap<String, ArrayList<Bar>> voiceHash = new HashMap<String, ArrayList<Bar>>();
-    
+    private HashMap<String, Voice> voiceHash = new HashMap<String, Voice>();
     PitchCalculator pitchCalculator = new PitchCalculator();
     
     /**
@@ -69,6 +68,7 @@ public class Listener extends ABCMusicBaseListener {
     //
 
     
+    @Override
     /**
      * Initializes default parameters for the musical piece at the very beginning
      * when the listener enters the tree.
@@ -80,36 +80,36 @@ public class Listener extends ABCMusicBaseListener {
         this.meterNumerator = 4;
         this.meterDenominator = 4;
         this.composer = "Unknown";
-        this.repeats = new ArrayList<Note>();
+        this.repeatBars = new ArrayList<Bar>();
     }
 
+    @Override
     /**
      * Sets the title of the piece when the listener leaves the title node.
      * @param ctx Context for title
      */
-    @Override
     public void exitField_title(ABCMusicParser.Field_titleContext ctx) {
         String title = ctx.ITITLE().getText();
         title = title.substring(2);
         this.title = removeWhitespaceAtBeginning(title);
     }
 
+    @Override
     /**
      * Sets the composer of the piece when the listener leaves the composer node.
      * @param ctx Context for composer
      */
-    @Override
     public void exitField_composer(ABCMusicParser.Field_composerContext ctx) {
         String composer = ctx.ICOMPOSER().getText();
         composer = composer.substring(2);
         this.composer = removeWhitespaceAtBeginning(composer);        
     }
 
+    @Override
     /**
      * Sets the meter of the piece when the listener leaves the meter node.
      * @param ctx Context for meter 
      */
-    @Override
     public void exitField_meter(ABCMusicParser.Field_meterContext ctx) {
         String meter = ctx.IMETER().getText();
         meter = meter.substring(2);
@@ -127,14 +127,15 @@ public class Listener extends ABCMusicBaseListener {
             this.meterNumerator = Integer.parseInt(meter.substring(0, slashLocation));
             this.meterDenominator = Integer.parseInt(meter.substring(slashLocation + 1));
         }
-        this.currentBar = new Bar(this.meterNumerator, this.meterDenominator);            
+        this.currentBar = new Bar(this.meterNumerator, this.meterDenominator);
+        this.currentRepeatBar = new Bar(this.meterNumerator, this.meterDenominator);
     }
     
+    @Override
     /**
      * Sets the tempo of the piece when the listener leaves the tempo node.
      * @param ctx Context for tempo
      */
-    @Override
     public void exitField_tempo(ABCMusicParser.Field_tempoContext ctx) {
         hasTempo = true;
         String tempo = ctx.ITEMPO().getText();
@@ -157,22 +158,22 @@ public class Listener extends ABCMusicBaseListener {
         this.tempoSpeed = Integer.parseInt(tempo.substring(equalLocation + 1));
     }
 
+    @Override
     /**
      * Sets the tempo of the piece when the listener leaves the tempo node.
      * @param ctx Context for tempo
      */
-    @Override
     public void exitField_key(ABCMusicParser.Field_keyContext ctx) {
         String key = ctx.IKEY().getText();
         key= key.substring(2);
         this.key= removeWhitespaceAtBeginning(key);
     }
 
+    @Override
     /**
      * Sets the default note length of the piece when the listener leaves the default length node.
      * @param ctx Context for default note length
      */
-    @Override
     public void exitField_default_length(ABCMusicParser.Field_default_lengthContext ctx) {
         hasDefaultLength = true;
         String length = ctx.ILENGTH().getText();
@@ -190,30 +191,29 @@ public class Listener extends ABCMusicBaseListener {
         this.lengthDenominator = Integer.parseInt(length.substring(slashLocation + 1));
     }
 
+//    @Override 
     /**
      * Sets the voices of the piece in the header when the listener leaves the voice nodes.
      * @param ctx Context for voices 
      */
-    @Override 
-    public void exitField_voice(ABCMusicParser.Field_voiceContext ctx) { 
-    	String voice = ctx.IVOICE().getText();
-    	voice = voice.substring(2);
-    	voice = removeWhitespaceAtBeginning(voice);
-    	
-    	if (!voiceHash.containsKey(voice)) {
-            voiceHash.put(voice, new ArrayList<Bar>());
-    	}
-    	else {
-            currentVoice=voice;    	    
-    	}
-    }
-
+//    public void exitField_voice(ABCMusicParser.Field_voiceContext ctx) { 
+//    	String voice = ctx.IVOICE().getText();
+//    	voice = voice.substring(2);
+//    	voice = removeWhitespaceAtBeginning(voice);
+//    	
+//    	if (!voiceHash.containsKey(voice)) {
+//            voiceHash.put(voice, new Voice(true, false, this.currentRepeatBar, this.repeatBars));
+//    	}
+//    }
+    
+    @Override
     /**
      * Initializes parameters for the abc file that were missing in the header.
      * @param ctx Context for the header
      */
-    @Override
     public void exitAbc_header(ABCMusicParser.Abc_headerContext ctx) {
+        this.isRepeatOn = true;
+        this.isOneTwoRepeat = false;
         if (!hasDefaultLength) {
             if (this.meterNumerator * 1.0 / this.meterDenominator < 0.75) {
                 this.lengthNumerator = 1;
@@ -237,7 +237,10 @@ public class Listener extends ABCMusicBaseListener {
     // Handling a note
     //
     
-    @Override
+    @Override    
+    /**
+     * 
+     */
     public void enterPitch(ABCMusicParser.PitchContext ctx) {
         baseNote = ctx.BASENOTE().getText();
         pitch = pitchCalculator.getPitchForKey(this.key, baseNote);
@@ -332,13 +335,13 @@ public class Listener extends ABCMusicBaseListener {
 
 	@Override
 	public void enterMulti_note(ABCMusicParser.Multi_noteContext ctx) {
-	    isChord = true;
-	    chord = new ArrayList<Note>();
+	    this.isChord = true;
+	    this.chord = new ArrayList<Note>();
 	}
 	
 	@Override
 	public void exitMulti_note(ABCMusicParser.Multi_noteContext ctx) {
-	    isChord= false;
+	    this.isChord= false;
 	    int chordNotes[] = new int[chord.size()];
 	    int chordNumerator = chord.get(0).getNumerator();
         int chordDenominator = chord.get(0).getDenominator();
@@ -349,13 +352,12 @@ public class Listener extends ABCMusicBaseListener {
         Note theChord = new PitchNote(chordNumerator * this.chordN, 
                                                                         chordDenominator * this.chordD, 
                                                                         chordNotes, "");
-//        System.out.println("theChord's " + theChord.getNumerator() + " / " + theChord.getDenominator());
         if (isTuplet) {
             this.tuplet.add(theChord);            
         } else {
             this.currentBar.addNote(theChord);
             if (isRepeatOn && !isOneTwoRepeat) {
-                this.repeats.add(theChord);
+                this.currentRepeatBar.addNote(theChord);
             }
         }
 
@@ -364,7 +366,7 @@ public class Listener extends ABCMusicBaseListener {
     @Override
     public void enterTuplet_element(ABCMusicParser.Tuplet_elementContext ctx) {
        this.isTuplet = true;
-       tuplet = new ArrayList<Note>();
+       this.tuplet = new ArrayList<Note>();
     }
 
 	@Override
@@ -373,40 +375,40 @@ public class Listener extends ABCMusicBaseListener {
 	    
 	    // TODO: Magic numbers (here and throughout)
 	    if (tupletSpec.substring(1).equals("3")) {
-	        if (tuplet.size() != 3) {
+	        if (this.tuplet.size() != 3) {
 	            // TODO: throw error
 	        }
 	        
 	        for (int i = 0; i < 3; i++) {
-	            int noteNumerator = tuplet.get(i).getNumerator();
-	            int noteDenominator = tuplet.get(i).getDenominator();
-	            this.currentBar.addNote(new PitchNote(noteNumerator * 2, noteDenominator * 3, tuplet.get(i).getNote(), ""));
-                if (isRepeatOn && !isOneTwoRepeat) {
-                    this.repeats.add(new PitchNote(noteNumerator * 2, noteDenominator * 3, tuplet.get(i).getNote(), ""));
+	            int noteNumerator = this.tuplet.get(i).getNumerator();
+	            int noteDenominator = this.tuplet.get(i).getDenominator();
+	            this.currentBar.addNote(new PitchNote(noteNumerator * 2, noteDenominator * 3, this.tuplet.get(i).getNote(), ""));
+                if (this.isRepeatOn && !this.isOneTwoRepeat) {
+                    this.currentRepeatBar.addNote(new PitchNote(noteNumerator * 2, noteDenominator * 3, this.tuplet.get(i).getNote(), ""));
                 }
 	        }	       
 	    } else if (tupletSpec.substring(1).equals("2")) {
-            if (tuplet.size() != 2) {
+            if (this.tuplet.size() != 2) {
                 // throw error
             }
             for (int i = 0; i < 2; i++) {
-                int noteNumerator = tuplet.get(i).getNumerator();
-                int noteDenominator = tuplet.get(i).getDenominator();
-                this.currentBar.addNote(new PitchNote(noteNumerator * 3, noteDenominator * 2, tuplet.get(i).getNote(), ""));
-                if (isRepeatOn && !isOneTwoRepeat) {
-                    this.repeats.add(new PitchNote(noteNumerator * 3, noteDenominator * 2, tuplet.get(i).getNote(), ""));
+                int noteNumerator = this.tuplet.get(i).getNumerator();
+                int noteDenominator = this.tuplet.get(i).getDenominator();
+                this.currentBar.addNote(new PitchNote(noteNumerator * 3, noteDenominator * 2, this.tuplet.get(i).getNote(), ""));
+                if (this.isRepeatOn && !this.isOneTwoRepeat) {
+                    this.currentRepeatBar.addNote(new PitchNote(noteNumerator * 3, noteDenominator * 2, this.tuplet.get(i).getNote(), ""));
                 }
             }          
 	    } else {
-            if (tuplet.size() != 4) {
+            if (this.tuplet.size() != 4) {
                 // throw error
             }
             for (int i = 0; i < 4; i++) {
-                int noteNumerator = tuplet.get(i).getNumerator();
-                int noteDenominator = tuplet.get(i).getDenominator();
-                this.currentBar.addNote(new PitchNote(noteNumerator * 3, noteDenominator * 4, tuplet.get(i).getNote(), ""));
-                if (isRepeatOn && !isOneTwoRepeat) {
-                    this.repeats.add(new PitchNote(noteNumerator * 3, noteDenominator * 4, tuplet.get(i).getNote(), ""));
+                int noteNumerator = this.tuplet.get(i).getNumerator();
+                int noteDenominator = this.tuplet.get(i).getDenominator();
+                this.currentBar.addNote(new PitchNote(noteNumerator * 3, noteDenominator * 4, this.tuplet.get(i).getNote(), ""));
+                if (this.isRepeatOn && !this.isOneTwoRepeat) {
+                    this.currentRepeatBar.addNote(new PitchNote(noteNumerator * 3, noteDenominator * 4, this.tuplet.get(i).getNote(), ""));
                 }
             }
 	        
@@ -427,22 +429,17 @@ public class Listener extends ABCMusicBaseListener {
             if (this.pitch != null) {
                 int[] notes = {this.pitch.toMidiNote()};
                 this.currentBar.addNote(new PitchNote(this.noteNumerator, this.noteDenominator, notes, ""));
-                for (int i = 0; i < this.currentBar.getNotes().size();  i++) {
-                    for (int j = 0; j < this.currentBar.getNotes().get(i).getNote().length; j++) {
-                        System.out.println(this.currentBar.getNotes().get(i).getNote()[j]);
-                    }
+                if (this.isRepeatOn && !this.isOneTwoRepeat) {
+                    System.out.println("HERE1");
+                    this.currentRepeatBar.addNote(new PitchNote(this.noteNumerator, this.noteDenominator, notes, ""));
                 }
-//                if (isRepeatOn && !isOneTwoRepeat) {
-//                    this.repeats.add(new PitchNote(this.noteNumerator, this.noteDenominator, notes, ""));
-//                }
-                pitch = null;
+                this.pitch = null;
             } else {
                 this.currentBar.addNote(new RestNote(this.noteNumerator, this.noteDenominator, ""));
-//                if (isRepeatOn && !isOneTwoRepeat) {
-//                    this.repeats.add(new RestNote(this.noteNumerator, this.noteDenominator, ""));
-//                }
+                if (isRepeatOn && !isOneTwoRepeat) {
+                    this.currentRepeatBar.addNote(new RestNote(this.noteNumerator, this.noteDenominator, ""));
+                }
             }
-	        
 	    }
 	}
 	
@@ -457,65 +454,84 @@ public class Listener extends ABCMusicBaseListener {
 	public void exitElement(ABCMusicParser.ElementContext ctx) {
 	    if (ctx.start.getType() == ABCMusicLexer.BAR) {
 	        String bar = ctx.BAR().getText();
-	        if (bar.equals("|") || bar.equals("||") || bar.equals("|]")) {
+	        if (bar.equals("|") || bar.equals("||") || bar.equals("|]") || bar.equals("|[")) {
+	            // If we're in a repeat section and it's not inside the [1 [2 part of it,
+	            // add this bar to the list of bars to repeat
+	            // make a new bar as the current repeat bar
+	            if (this.isRepeatOn && !this.isOneTwoRepeat) {
+	                this.repeatBars.add(new Bar(this.currentRepeatBar));
+	                this.currentRepeatBar = new Bar(this.meterNumerator, this.meterDenominator);
+	            }
 	            this.bars.add(new Bar(this.currentBar));
 	            this.currentBar = new Bar(this.meterNumerator, this.meterDenominator);
-	            
-	        } /*else if (bar.equals("|:")) {
+	        } else if (bar.equals("|:")) {
+                System.out.println("HERE2");
 	            this.isRepeatOn = true;
 	            // Check implementation later
-	            this.repeats = new ArrayList<Note>();
+	            this.repeatBars = new ArrayList<Bar>();
 	        } else if (bar.equals(":|")) {
+                System.out.println("HERE3");
 	            this.isRepeatOn = false;
-	            Bar repeatBar = new Bar(this.meterNumerator, this.meterDenominator);
-	            for (int i = 0; i < this.repeats.size(); i++) {
-	                repeatBar.addNote(this.repeats.get(i));
+	            this.repeatBars.add(this.currentRepeatBar);
+	            for (int repeatBar = 0; repeatBar < this.repeatBars.size(); repeatBar++) {
+	                this.bars.add(this.repeatBars.get(repeatBar));
 	            }
-	            this.bars.add(repeatBar);
-	        }*/
+	        }
 	    }
 	    
-/*	    if (ctx.start.getType() == ABCMusicLexer.NTH_REPEAT) {
+	    if (ctx.start.getType() == ABCMusicLexer.NTH_REPEAT) {
 	        String nthRepeat = ctx.NTH_REPEAT().getText();
 	        if (nthRepeat.equals("[1")) {
 	            this.isOneTwoRepeat = true;
-	        } else {
+	        } else if (nthRepeat.equals("[2")) {
 	            this.isOneTwoRepeat = false;
 	        }
-	    }*/
+	    }
 	}
 
 	@Override
 	public void enterMid_tune_field(ABCMusicParser.Mid_tune_fieldContext ctx) {
-	    if (this.currentVoice != null) {
-	        if (!this.voiceHash.containsKey(this.currentVoice)) {
-	            this.voiceHash.put(this.currentVoice, new ArrayList<Bar>());
-	        }
-	        for (int i = 0; i < this.bars.size(); i++) {
-	            this.voiceHash.get(this.currentVoice).add(bars.get(i));
-	        }
-	        this.bars = new ArrayList<Bar>();	        
-	    }
-	    String voice = ctx.IVOICE().getText().substring(2);
+	    
+        if (!this.voiceHash.containsKey(this.currentVoice)) {
+            this.voiceHash.put(this.currentVoice, new Voice(this.isRepeatOn, this.isOneTwoRepeat, this.currentRepeatBar, this.repeatBars));
+        } else{
+            this.voiceHash.get(this.currentVoice).setRepeatOn(this.isRepeatOn);
+            this.voiceHash.get(this.currentVoice).setOneTwoRepeat(this.isOneTwoRepeat);
+            this.voiceHash.get(this.currentVoice).setCurrentRepeatBar(this.currentRepeatBar);
+            this.voiceHash.get(this.currentVoice).setRepeatBars(this.repeatBars);
+        }
+        this.voiceHash.get(this.currentVoice).addBars(this.bars);
+        this.bars = new ArrayList<Bar>();	
+
+        String voice = ctx.IVOICE().getText().substring(2);
 	    voice = removeWhitespaceAtBeginning(voice);
 	    this.currentVoice = voice;
+	    
+	    // This means this is the first time that this voice has appeared.
+	    Voice currentVoiceValue = this.voiceHash.get(this.currentVoice);
+	    if (currentVoiceValue == null) {
+	        this.isRepeatOn = true;
+	        this.isOneTwoRepeat = false;
+	        this.currentRepeatBar = new Bar(this.meterNumerator, this.meterDenominator);
+	        this.repeatBars = new ArrayList<Bar>();
+	    } else {
+	        this.isRepeatOn = currentVoiceValue.getRepeatOn();
+            this.isOneTwoRepeat = currentVoiceValue.getOneTwoRepeat();
+            this.currentRepeatBar = currentVoiceValue.getCurrentRepeatBar();
+            this.repeatBars = currentVoiceValue.getRepeatBars();
+	    }
 	}
 	
 	@Override
 	public void exitAbc_music(ABCMusicParser.Abc_musicContext ctx) {
-	    if (!this.voiceHash.containsKey(this.currentVoice)) {
-            this.voiceHash.put(this.currentVoice, new ArrayList<Bar>());
+        if (!this.voiceHash.containsKey(this.currentVoice)) {
+            this.voiceHash.put(this.currentVoice, new Voice(this.isRepeatOn, this.isOneTwoRepeat, this.currentRepeatBar, this.repeatBars));
         }
-        for (int i = 0; i < this.bars.size(); i++) {
-            this.voiceHash.get(this.currentVoice).add(bars.get(i));
-        }
+        this.voiceHash.get(this.currentVoice).addBars(this.bars);
         this.bars = new ArrayList<Bar>();
-        for (Entry<String, ArrayList<Bar>> entry : voiceHash.entrySet()) {
-            this.phrases.add(new MusicalPhrase(entry.getValue()));
+        for (Entry<String, Voice> entry : voiceHash.entrySet()) {
+            this.phrases.add(new MusicalPhrase(entry.getValue().getVoiceBars()));
         }
-        System.out.println("SPECKEY:" + pitchCalculator.getPitchForKey("C", "g").toMidiNote());
-
 	}
 	
-	// TODO: check for overrides
 }
