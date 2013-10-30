@@ -71,8 +71,7 @@ public class Main {
         String fileName;
         do {
             // Display prompt
-            System.out.println("\nEnter ABC Song Name. ");
-            // TODO: edit println statement to give example as well.
+            System.out.println("\nEnter ABC Song Name. (ex: extra_abc/god_knows.abc)");
             // Read input as file path relative to abcplayer directory
             fileName = in.readLine();
             // Terminate if input empty

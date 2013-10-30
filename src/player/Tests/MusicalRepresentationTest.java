@@ -1,10 +1,17 @@
-package player;
+package player.Tests;
 
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
 import org.junit.Test;
+
+import player.Bar;
+import player.MusicalPhrase;
+import player.MusicalPiece;
+import player.PitchNote;
+import player.RestNote;
+import player.Voice;
 
 /**
  * This is the test suite for our ADT

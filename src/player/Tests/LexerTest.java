@@ -1,4 +1,4 @@
-package player;
+package player.Tests;
 
 import static org.junit.Assert.*;
 import grammar.ABCLyricLexer;

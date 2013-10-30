@@ -1,4 +1,4 @@
-package player;
+package player.Tests;
 
 import static org.junit.Assert.*;
 import grammar.ABCMusicLexer;
@@ -12,6 +12,9 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.Test;
+
+import player.Listener;
+import player.MusicalPiece;
 
 public class ListenerTest {
 
