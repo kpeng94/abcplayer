@@ -39,4 +39,8 @@ public interface Note {
      */
     public String getLyric();
     
+    /**
+     * Sets the lyric
+     */
+    public void setLyric(String lyric);
 }

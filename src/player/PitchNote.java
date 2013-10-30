@@ -45,6 +45,10 @@ public class PitchNote implements Note{
 		return this.lyric;
 	}   
 	
+	@Override
+	public void setLyric(String lyric) {
+	    this.lyric = lyric;
+	}
 //	@Override 
 //	public Note copy() {
 //	    return new PitchNote(this.numerator, this.denominator, this.note.clone(), this.lyric);

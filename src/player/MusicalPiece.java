@@ -86,7 +86,6 @@ public class MusicalPiece {
                                 // getTicksPerBeat gives you the default amount for a note = tempoNum/tempoDen
                                 // We want ticks for a note that is noteNum / noteDen
                             	player.addNote(note.getNote()[i], tickCount, ticksPerNote);
-                                System.out.println(note.getNote()[i]);
                             }
                         }
                         if (!(note.getLyric().equals(""))) {

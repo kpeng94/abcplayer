@@ -47,7 +47,7 @@ IVOICE: 'V:'[ \t]*[a-zA-Z0-9.,'"?\-!& ]+;
  */
 
 abc_music: abc_line+;
-abc_line: element+ (EOL | EOF) (lyric (EOL | EOF))? | mid_tune_field | comment;
+abc_line: element+ (EOL | EOF) (ILYRIC (EOL | EOF))? | mid_tune_field | comment;
 element: note_element | tuplet_element | BAR | NTH_REPEAT | SPACE;
 note_element: note | multi_note;
 note: note_or_rest note_length?;
@@ -58,7 +58,6 @@ accidental: SHARP | FLAT | NEUTRAL;
 tuplet_element: TUPLET_SPEC note_element+;
 multi_note: OPEN_BRACKET note+ CLOSE_BRACKET note_length?;
 mid_tune_field: IVOICE end_of_line;
-lyric: ILYRIC;
 literal: BASENOTE | REST | BAR;
 
 comment: COMMENTSIGN TEXT EOL;

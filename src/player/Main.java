@@ -22,8 +22,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-
-
 /**
  * Main entry point of your application.
  */
@@ -60,17 +58,12 @@ public class Main {
             ParseTree tree;
             tree = parser.abc_tune(); // "line" is the starter rule.
             
-            // Next 2 Lines ***FOR DEBUGGING ONLY***
-            //System.err.println(tree.toStringTree(parser));
-//            ((RuleContext) tree).inspect(parser);
-
             // Walk the tree with the listener.
             ParseTreeWalker walker = new ParseTreeWalker();
             ParseTreeListener listener = new Listener();
             walker.walk(listener, tree);
             
             MusicalPiece musicalPiece = ((Listener) listener).getMusicalPiece();
-//            System.out.println(musicalPiece.toString());
             musicalPiece.playPiece();
         } 
         catch (IOException e) {

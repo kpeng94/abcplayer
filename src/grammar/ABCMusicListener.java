@@ -60,9 +60,6 @@ public interface ABCMusicListener extends ParseTreeListener {
 	void enterNote_or_rest(ABCMusicParser.Note_or_restContext ctx);
 	void exitNote_or_rest(ABCMusicParser.Note_or_restContext ctx);
 
-	void enterLyric(ABCMusicParser.LyricContext ctx);
-	void exitLyric(ABCMusicParser.LyricContext ctx);
-
 	void enterField_default_length(ABCMusicParser.Field_default_lengthContext ctx);
 	void exitField_default_length(ABCMusicParser.Field_default_lengthContext ctx);
 

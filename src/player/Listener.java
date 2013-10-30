@@ -1,5 +1,7 @@
 package player;
 
+import grammar.ABCLyricLexer;
+import grammar.ABCLyricParser;
 import grammar.ABCMusicBaseListener;
 import grammar.ABCMusicLexer;
 import grammar.ABCMusicParser;
@@ -7,6 +9,15 @@ import grammar.ABCMusicParser;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
+
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.TokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeListener;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import sound.Pitch;
 import sound.PitchCalculator;
@@ -33,7 +44,8 @@ public class Listener extends ABCMusicBaseListener {
     private ArrayList<Note> chord, tuplet;
     private ArrayList<Bar> repeatBars;
     private Bar currentRepeatBar;
-    
+    private ArrayList<Bar> barsInLine;
+
     //Mutable Variables
     private HashMap<String, Voice> voiceHash = new HashMap<String, Voice>();
     PitchCalculator pitchCalculator = new PitchCalculator();
@@ -61,12 +73,10 @@ public class Listener extends ABCMusicBaseListener {
         return new MusicalPiece(this.title, this.composer, this.meterNumerator, this.meterDenominator, 
                                                           this.tempoSpeed, this.tempoNumerator, this.tempoDenominator, this.phrases);
     }
-
     
     //
     // METHODS FOR HANDLING WHEN THE LISTENER ENTERS AND EXITS THE HEADER 
     //
-
     
     @Override
     /**
@@ -418,10 +428,7 @@ public class Listener extends ABCMusicBaseListener {
 	
 	@Override 
 	public void exitNote(ABCMusicParser.NoteContext ctx) { 
-	    // TODO: Lyrics
 	    if (this.isChord) {
-	        // TODO: May want to do some ADT changing later because to me (kpeng94), 
-	        // this implementation of an array doesn't make a lot of sense
 	        this.chord.add(new PitchNote(this.noteNumerator, this.noteDenominator, new int[] {pitch.toMidiNote()}, ""));
 	    } else if (this.isTuplet) {
 	        this.tuplet.add(new PitchNote(this.noteNumerator, this.noteDenominator, new int[] {pitch.toMidiNote()}, ""));
@@ -430,14 +437,12 @@ public class Listener extends ABCMusicBaseListener {
                 int[] notes = {this.pitch.toMidiNote()};
                 this.currentBar.addNote(new PitchNote(this.noteNumerator, this.noteDenominator, notes, ""));
                 if (this.isRepeatOn && !this.isOneTwoRepeat) {
-                    System.out.println("I added this note into the current repeat bar: " + this.pitch.toMidiNote());
                     this.currentRepeatBar.addNote(new PitchNote(this.noteNumerator, this.noteDenominator, notes, ""));
                 }
                 this.pitch = null;
             } else {
                 this.currentBar.addNote(new RestNote(this.noteNumerator, this.noteDenominator, ""));
                 if (isRepeatOn && !isOneTwoRepeat) {
-                    System.out.println("I added this note into the current repeat bar: " + this.pitch);
                     this.currentRepeatBar.addNote(new RestNote(this.noteNumerator, this.noteDenominator, ""));
                 }
             }
@@ -465,6 +470,7 @@ public class Listener extends ABCMusicBaseListener {
 	                this.currentRepeatBar = new Bar(this.meterNumerator, this.meterDenominator);
 	            }
 	            this.bars.add(new Bar(this.currentBar));
+                this.barsInLine.add(new Bar(this.currentBar));
 	            this.currentBar = new Bar(this.meterNumerator, this.meterDenominator);
 	        } else if (bar.equals("|:")) {
 	            this.isRepeatOn = true;
@@ -472,6 +478,7 @@ public class Listener extends ABCMusicBaseListener {
 	        } else if (bar.equals(":|")) {
                 this.isRepeatOn = false;
 	            this.bars.add(new Bar(this.currentBar));
+                this.barsInLine.add(new Bar(this.currentBar));
 	            this.currentBar = new Bar(this.meterNumerator, this.meterDenominator);
 	            this.repeatBars.add(this.currentRepeatBar);
 	            this.currentRepeatBar = new Bar(this.meterNumerator, this.meterDenominator);
@@ -484,10 +491,8 @@ public class Listener extends ABCMusicBaseListener {
 	    if (ctx.start.getType() == ABCMusicLexer.NTH_REPEAT) {
 	        String nthRepeat = ctx.NTH_REPEAT().getText();
 	        if (nthRepeat.equals("[1")) {
-	            System.out.println("asdf");
 	            this.isOneTwoRepeat = true;
 	        } else if (nthRepeat.equals("[2")) {
-	            System.out.println("bcde");
 	            this.isOneTwoRepeat = false;
 	        }
 	    }
@@ -525,7 +530,44 @@ public class Listener extends ABCMusicBaseListener {
             this.repeatBars = currentVoiceValue.getRepeatBars();
 	    }
 	}
-	
+
+	@Override
+	public void enterAbc_line(ABCMusicParser.Abc_lineContext ctx) {
+	    this.barsInLine = new ArrayList<Bar>();
+	}
+
+	@Override
+	public void exitAbc_line(ABCMusicParser.Abc_lineContext ctx) {
+	    
+	    if (ctx.ILYRIC() != null) {
+	        String lyrics = ctx.ILYRIC().getText();
+	        lyrics = lyrics.substring(2);
+	        lyrics = removeWhitespaceAtBeginning(lyrics);
+
+            CharStream stream = new ANTLRInputStream(lyrics);
+            ABCLyricLexer lexer = new ABCLyricLexer(stream);
+            lexer.reportErrorsAsExceptions();
+            TokenStream tokens = new CommonTokenStream(lexer);
+            
+            // Feed the tokens into the parser.
+            ABCLyricParser parser = new ABCLyricParser(tokens);
+            parser.reportErrorsAsExceptions();
+            
+            // Generate the parse tree using the starter rule.
+            ParseTree tree;
+            tree = parser.lyric(); // "line" is the starter rule.
+           
+            ParseTreeWalker walker = new ParseTreeWalker();
+            ParseTreeListener listener = new PlayerLyricListener(this.barsInLine);
+            walker.walk(listener, tree);
+            ArrayList<Bar> barsWithLyrics = ((PlayerLyricListener) listener).getBarsInLine();
+            for(int i =0 ; i < barsWithLyrics.size(); i++) {
+                for (int j = 0; j < this.barsInLine.get(i).getNotes().size(); j++) {
+                    this.barsInLine.get(i).getNotes().get(j).setLyric(barsWithLyrics.get(i).getNotes().get(j).getLyric());
+                }
+            }
+	    }
+	}
 	@Override
 	public void exitAbc_music(ABCMusicParser.Abc_musicContext ctx) {
         if (!this.voiceHash.containsKey(this.currentVoice)) {

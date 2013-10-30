@@ -44,4 +44,8 @@ public class RestNote implements Note{
         return this.lyric;
     }   
     
+    @Override
+    public void setLyric(String lyric) {
+        this.lyric = lyric;
+    }
 }
