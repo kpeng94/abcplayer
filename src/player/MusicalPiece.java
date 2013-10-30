@@ -83,10 +83,12 @@ public class MusicalPiece {
                     for (Note note : bar.getNotes()) {
                         int ticksPerNote = this.getTicksPerBeat() * this.tempoDenominator * note.getNumerator() / this.tempoNumerator / note.getDenominator();
                         if (note instanceof PitchNote) {
-                            for(int i=0; i<note.getNote().length; i++)
+                            for(int i=0; i<note.getNote().length; i++) {                                
                                 // getTicksPerBeat gives you the default amount for a note = tempoNum/tempoDen
                                 // We want ticks for a note that is noteNum / noteDen
                             	player.addNote(note.getNote()[i], tickCount, ticksPerNote);
+                                System.out.println(note.getNote()[i]);
+                            }
                         }
                         if (!(note.getLyric().equals(""))) {
                             player.addLyricEvent(note.getLyric(), tickCount);

@@ -9,7 +9,6 @@ public interface Note {
     public int denominator = 4;
     public int numerator = 1;
 
-//    public Note copy();
     /**
      * Returns the numerator of the Note
      * @return numerator

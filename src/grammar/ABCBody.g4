@@ -24,7 +24,7 @@ NTH_REPEAT:  ([[][1])|([[][2]);
 OCTAVE: ([']|[,])+;
 NUMBER: [0-9]+;
 SLASH: '/';
-SPACE: ' ' -> skip;
+SPACE: ' ';
 LYRICAL_ELEMENT_TOKEN: ' '|'-'|'_'|'*'|'~'|'\-'|'|';
 ILYRIC: 'w:'[ \t]*([A-Za-z0-9'\\!.,()?&$#@]+|LYRICAL_ELEMENT_TOKEN)*;
 OPEN_BRACKET : '[';

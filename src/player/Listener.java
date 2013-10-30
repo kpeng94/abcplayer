@@ -28,7 +28,7 @@ public class Listener extends ABCMusicBaseListener {
     private String currentVoice;
     private Pitch pitch;
     private String baseNote;
-    private int noteNumerator, noteDenominator;
+    private int noteNumerator, noteDenominator, chordN, chordD;
     private boolean isChord, isTuplet, isRepeatOn, isOneTwoRepeat;
     private ArrayList<Note> chord;
     private ArrayList<Note> tuplet;
@@ -274,29 +274,61 @@ public class Listener extends ABCMusicBaseListener {
 	
 	@Override
 	public void exitNote_length(ABCMusicParser.Note_lengthContext ctx) {
-	    if (ctx.NUMBER().size() > 1) {
-	        this.noteNumerator = Integer.parseInt(ctx.NUMBER(0).getText()) * this.lengthNumerator;
-	        this.noteDenominator = Integer.parseInt(ctx.NUMBER(1).getText()) * this.lengthDenominator;	        
-	    } else if (ctx.NUMBER().size() > 0) {
-	        if (ctx.SLASH() != null) {
-	            // TODO: 3 /
-//	            System.out.println("Payload: ");
-	            this.noteNumerator = this.lengthNumerator;
-	            this.noteDenominator = Integer.parseInt(ctx.NUMBER(0).getText()) * this.lengthDenominator;	            
-	        } else {
-	            this.noteNumerator = this.lengthNumerator * Integer.parseInt(ctx.NUMBER(0).getText());
-	            this.noteDenominator = this.lengthDenominator;
-	        }
-	    } else {
-	        if (ctx.SLASH() != null) {
-	            this.noteNumerator = this.lengthNumerator;
-	            this.noteDenominator = this.lengthDenominator * 2;	            
-	        } else {
-	            this.noteNumerator = this.lengthNumerator;
-	            this.noteDenominator = this.lengthDenominator;
-	        }
-	    }
-	}
+	    if(ctx.parent.getClass() == ABCMusicParser.NoteContext.class)  {
+    	    if (ctx.NUMBER().size() > 1) {
+    	        this.noteNumerator = Integer.parseInt(ctx.NUMBER(0).getText()) * this.lengthNumerator;
+    	        this.noteDenominator = Integer.parseInt(ctx.NUMBER(1).getText()) * this.lengthDenominator;	        
+    	    } else if (ctx.NUMBER().size() > 0) {
+    	        if (ctx.SLASH() != null) {
+    	            // TODO: 3 /
+                    if (ctx.getChild(0).getText().equals("/")) {
+                        this.noteNumerator = this.lengthNumerator;
+                        this.noteDenominator = Integer.parseInt(ctx.NUMBER(0).getText()) * this.lengthDenominator;                                     
+                    } else {
+                        this.noteNumerator = Integer.parseInt(ctx.NUMBER(0).getText()) * this.lengthNumerator;
+                        this.noteDenominator = this.lengthDenominator * 2;
+                    }
+    	        } else {
+    	            this.noteNumerator = this.lengthNumerator * Integer.parseInt(ctx.NUMBER(0).getText());
+    	            this.noteDenominator = this.lengthDenominator;
+    	        }
+    	    } else {
+    	        if (ctx.SLASH() != null) {
+    	            this.noteNumerator = this.lengthNumerator;
+    	            this.noteDenominator = this.lengthDenominator * 2;	            
+    	        } else {
+    	            this.noteNumerator = this.lengthNumerator;
+    	            this.noteDenominator = this.lengthDenominator;
+    	        }
+    	    }
+        } else {
+            if (ctx.NUMBER().size() > 1) {
+                this.chordN = Integer.parseInt(ctx.NUMBER(0).getText());
+                this.chordD = Integer.parseInt(ctx.NUMBER(1).getText());          
+            } else if (ctx.NUMBER().size() > 0) {
+                if (ctx.SLASH() != null) {
+                    if (ctx.getChild(0).getText().equals("/")) {
+                        this.chordN= 1;
+                        this.chordD= Integer.parseInt(ctx.NUMBER(0).getText());                                     
+                    } else {
+                        this.chordN= Integer.parseInt(ctx.NUMBER(0).getText());
+                        this.chordD= 2;
+                    }
+                } else {
+                    this.chordN = Integer.parseInt(ctx.NUMBER(0).getText());
+                    this.chordD = 1;
+                }
+            } else {
+                if (ctx.SLASH() != null) {
+                    this.chordN = 1;
+                    this.chordD = 2;              
+                } else {
+                    this.chordN = 1;
+                    this.chordD = 1;
+                }
+            }
+        }
+    }
 
 	@Override
 	public void enterMulti_note(ABCMusicParser.Multi_noteContext ctx) {
@@ -312,12 +344,12 @@ public class Listener extends ABCMusicBaseListener {
         int chordDenominator = chord.get(0).getDenominator();
         for (int note = 0; note < chord.size(); note++) {
             chordNotes[note] = chord.get(note).getNote()[0];
-            System.out.println(chordNumerator + " / " + chordDenominator + ": " + chord.get(note).getNote()[0]);
         }
         // TODO: Name better...
-        Note theChord = new PitchNote(chordNumerator * this.noteNumerator, 
-                                                                        chordDenominator * this.noteDenominator, 
+        Note theChord = new PitchNote(chordNumerator * this.chordN, 
+                                                                        chordDenominator * this.chordD, 
                                                                         chordNotes, "");
+//        System.out.println("theChord's " + theChord.getNumerator() + " / " + theChord.getDenominator());
         if (isTuplet) {
             this.tuplet.add(theChord);            
         } else {
@@ -331,13 +363,12 @@ public class Listener extends ABCMusicBaseListener {
 
     @Override
     public void enterTuplet_element(ABCMusicParser.Tuplet_elementContext ctx) {
-       isTuplet = true;
+       this.isTuplet = true;
        tuplet = new ArrayList<Note>();
     }
 
 	@Override
 	public void exitTuplet_element(ABCMusicParser.Tuplet_elementContext ctx) {
-	    isTuplet = false;
 	    String tupletSpec = ctx.TUPLET_SPEC().getText();
 	    
 	    // TODO: Magic numbers (here and throughout)
@@ -380,31 +411,36 @@ public class Listener extends ABCMusicBaseListener {
             }
 	        
 	    }
-
+        this.isTuplet = false;
 	}
 	
 	@Override 
 	public void exitNote(ABCMusicParser.NoteContext ctx) { 
 	    // TODO: Lyrics
-	    if (isChord) {
+	    if (this.isChord) {
 	        // TODO: May want to do some ADT changing later because to me (kpeng94), 
 	        // this implementation of an array doesn't make a lot of sense
 	        this.chord.add(new PitchNote(this.noteNumerator, this.noteDenominator, new int[] {pitch.toMidiNote()}, ""));
-	    } else if (isTuplet) {
+	    } else if (this.isTuplet) {
 	        this.tuplet.add(new PitchNote(this.noteNumerator, this.noteDenominator, new int[] {pitch.toMidiNote()}, ""));
 	    } else {
             if (this.pitch != null) {
                 int[] notes = {this.pitch.toMidiNote()};
                 this.currentBar.addNote(new PitchNote(this.noteNumerator, this.noteDenominator, notes, ""));
-                if (isRepeatOn && !isOneTwoRepeat) {
-                    this.repeats.add(new PitchNote(this.noteNumerator, this.noteDenominator, notes, ""));
+                for (int i = 0; i < this.currentBar.getNotes().size();  i++) {
+                    for (int j = 0; j < this.currentBar.getNotes().get(i).getNote().length; j++) {
+                        System.out.println(this.currentBar.getNotes().get(i).getNote()[j]);
+                    }
                 }
+//                if (isRepeatOn && !isOneTwoRepeat) {
+//                    this.repeats.add(new PitchNote(this.noteNumerator, this.noteDenominator, notes, ""));
+//                }
                 pitch = null;
             } else {
                 this.currentBar.addNote(new RestNote(this.noteNumerator, this.noteDenominator, ""));
-                if (isRepeatOn && !isOneTwoRepeat) {
-                    this.repeats.add(new RestNote(this.noteNumerator, this.noteDenominator, ""));
-                }
+//                if (isRepeatOn && !isOneTwoRepeat) {
+//                    this.repeats.add(new RestNote(this.noteNumerator, this.noteDenominator, ""));
+//                }
             }
 	        
 	    }
@@ -425,7 +461,7 @@ public class Listener extends ABCMusicBaseListener {
 	            this.bars.add(new Bar(this.currentBar));
 	            this.currentBar = new Bar(this.meterNumerator, this.meterDenominator);
 	            
-	        } else if (bar.equals("|:")) {
+	        } /*else if (bar.equals("|:")) {
 	            this.isRepeatOn = true;
 	            // Check implementation later
 	            this.repeats = new ArrayList<Note>();
@@ -436,17 +472,17 @@ public class Listener extends ABCMusicBaseListener {
 	                repeatBar.addNote(this.repeats.get(i));
 	            }
 	            this.bars.add(repeatBar);
-	        }
+	        }*/
 	    }
 	    
-	    if (ctx.start.getType() == ABCMusicLexer.NTH_REPEAT) {
+/*	    if (ctx.start.getType() == ABCMusicLexer.NTH_REPEAT) {
 	        String nthRepeat = ctx.NTH_REPEAT().getText();
 	        if (nthRepeat.equals("[1")) {
 	            this.isOneTwoRepeat = true;
 	        } else {
 	            this.isOneTwoRepeat = false;
 	        }
-	    }
+	    }*/
 	}
 
 	@Override
@@ -474,10 +510,11 @@ public class Listener extends ABCMusicBaseListener {
             this.voiceHash.get(this.currentVoice).add(bars.get(i));
         }
         this.bars = new ArrayList<Bar>();
-        
         for (Entry<String, ArrayList<Bar>> entry : voiceHash.entrySet()) {
             this.phrases.add(new MusicalPhrase(entry.getValue()));
         }
+        System.out.println("SPECKEY:" + pitchCalculator.getPitchForKey("C", "g").toMidiNote());
+
 	}
 	
 	// TODO: check for overrides
