@@ -18,13 +18,7 @@ public class RestNote implements Note{
         this.numerator = numerator;
         this.denominator = denominator;
     }
-    
-    // TODO REMOVE THIS
-    public RestNote(int numerator, int denominator, String lyric){
-    	this.numerator=numerator;
-    	this.denominator=denominator;
-    }
-    
+        
 //    @Override
 //    public Note copy() {
 //        return new RestNote(this.numerator, this.denominator, this.lyric);
@@ -108,6 +102,6 @@ public class RestNote implements Note{
     
     @Override
     public void setLyric(String lyric) {
-        this.lyric = lyric;
+        return;
     }
 }

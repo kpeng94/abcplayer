@@ -5,8 +5,6 @@ import grammar.ABCLyricParser;
 
 import java.util.ArrayList;
 
-import org.antlr.v4.runtime.misc.Pair;
-
 public class PlayerLyricListener extends ABCLyricBaseListener{
     private ArrayList<Bar> barsInLine;
     private int barPosition = 0;
@@ -26,7 +24,14 @@ public class PlayerLyricListener extends ABCLyricBaseListener{
             this.notePositionInBar -= this.barsInLine.get(barPosition).getNotes().size();
             this.barPosition++;
         }
-        int numberToSkip = 0;
+        while (this.barsInLine.get(barPosition).getNotes().get(notePositionInBar).getClass() == RestNote.class) {
+            this.notePositionInBar++;
+            // Need to readjust again to make sure there are no index out of bounds exceptions.
+            while(barPosition < this.barsInLine.size() && this.notePositionInBar >= this.barsInLine.get(barPosition).getNotes().size() ) {
+                this.notePositionInBar -= this.barsInLine.get(barPosition).getNotes().size();
+                this.barPosition++;
+            }
+        }
         if (ctx.ASTERISK() != null) {
             this.notePositionInBar++;
             if (this.notePositionInBar == this.barsInLine.get(barPosition).getNotes().size()) {
@@ -41,7 +46,7 @@ public class PlayerLyricListener extends ABCLyricBaseListener{
         } else {
             if (ctx.UNDERSCORE() != null) {
                 String word = ctx.WORD().getText().replace("~"," ").replace("\\-", "-");
-                this.barsInLine.get(barPosition).getNotes().get(notePositionInBar).setLyric(word.concat("*"+(1 + numberToSkip)));
+                this.barsInLine.get(barPosition).getNotes().get(notePositionInBar).setLyric(word.concat(" (FOR "+(ctx.UNDERSCORE().getText().lastIndexOf("_") + 2 + " NOTES)")));
                 this.notePositionInBar += ctx.UNDERSCORE().getText().lastIndexOf("_") + 2;
                 while(barPosition < this.barsInLine.size() && this.notePositionInBar >= this.barsInLine.get(barPosition).getNotes().size() ) {
                     this.notePositionInBar -= this.barsInLine.get(barPosition).getNotes().size();

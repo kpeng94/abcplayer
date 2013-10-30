@@ -2,10 +2,7 @@ package player;
 
 import java.util.ArrayList;
 
-import javax.sound.midi.MidiUnavailableException;
-
 import sound.LyricListener;
-import sound.Pitch;
 import sound.SequencePlayer;
 /**
  * Represents an ABC file after being parsed, made up of a list of MusicalPhrases
@@ -100,9 +97,9 @@ public class MusicalPiece {
                                 // We want ticks for a note that is noteNum / noteDen
                             	player.addNote(note.getNote()[i], tickCount, ticksPerNote);
                             }
-                        }
-                        if (!(note.getLyric().equals(""))) {
-                            player.addLyricEvent(note.getLyric(), tickCount);
+                            if (!(note.getLyric().equals(""))) {
+                                player.addLyricEvent(note.getLyric(), tickCount);
+                            }
                         }
                         tickCount += ticksPerNote;
                     }

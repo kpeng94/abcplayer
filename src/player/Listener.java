@@ -13,7 +13,6 @@ import java.util.Map.Entry;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
@@ -30,7 +29,7 @@ public class Listener extends ABCMusicBaseListener {
     // Instance variables in header
     private String title, composer, key;
     private int meterNumerator, meterDenominator, 
-                          tempoNumerator, tempoDenominator, tempoSpeed, tempoBPM,
+                          tempoNumerator, tempoDenominator, tempoSpeed,
                           lengthNumerator, lengthDenominator;
     private boolean hasDefaultLength, hasTempo;
     
@@ -441,9 +440,9 @@ public class Listener extends ABCMusicBaseListener {
                 }
                 this.pitch = null;
             } else {
-                this.currentBar.addNote(new RestNote(this.noteNumerator, this.noteDenominator, ""));
+                this.currentBar.addNote(new RestNote(this.noteNumerator, this.noteDenominator));
                 if (isRepeatOn && !isOneTwoRepeat) {
-                    this.currentRepeatBar.addNote(new RestNote(this.noteNumerator, this.noteDenominator, ""));
+                    this.currentRepeatBar.addNote(new RestNote(this.noteNumerator, this.noteDenominator));
                 }
             }
 	    }
