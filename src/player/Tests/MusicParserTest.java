@@ -181,19 +181,14 @@ public class MusicParserTest {
           
           // Generate the parse tree using the starter rule.
           ParseTree tree;
-          tree = parser.abc_tune(); // "line" is the starter rule.
-          
-          // Next 2 Lines ***FOR DEBUGGING ONLY***
-          //System.err.println(tree.toStringTree(parser));
-          //((RuleContext) tree).inspect(parser);
-
+          tree = parser.abc_tune(); 
+      
           // Walk the tree with the listener.
           ParseTreeWalker walker = new ParseTreeWalker();
           ParseTreeListener listener = new Listener();
           walker.walk(listener, tree);
           
           MusicalPiece musicalPiece = ((Listener) listener).getMusicalPiece();
-          //musicalPiece.playPiece();
       } 
       catch (IOException e) {
           System.err.println("ERROR: " + e.getMessage());
@@ -209,7 +204,6 @@ public class MusicParserTest {
       lexer.reportErrorsAsExceptions();
       TokenStream tokens = new CommonTokenStream(lexer);
       
-
       ABCMusicParser parser = new ABCMusicParser(tokens);
       parser.reportErrorsAsExceptions();
       
@@ -221,9 +215,6 @@ public class MusicParserTest {
       } else {
           tree = parser.abc_tune();
       }
-
-//      System.err.println(tree.toStringTree(parser));
-//      ((RuleContext) tree).inspect(parser);
       
       ParseTreeWalker walker = new ParseTreeWalker();
       ParseTreeListener listener = new Listener();

@@ -390,7 +390,7 @@ public class Listener extends ABCMusicBaseListener {
 	        }	       
 	    } else if (tupletSpec.substring(1).equals("2")) {
             if (this.tuplet.size() != 2) {
-                // throw error
+                // TODO: throw error
             }
             for (int i = 0; i < 2; i++) {
                 int noteNumerator = this.tuplet.get(i).getNumerator();
@@ -402,7 +402,7 @@ public class Listener extends ABCMusicBaseListener {
             }          
 	    } else {
             if (this.tuplet.size() != 4) {
-                // throw error
+                // TODO: throw error
             }
             for (int i = 0; i < 4; i++) {
                 int noteNumerator = this.tuplet.get(i).getNumerator();
