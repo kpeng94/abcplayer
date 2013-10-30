@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import org.antlr.v4.codegen.model.chunk.ThisRulePropertyRef_ctx;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -22,7 +23,6 @@ import sound.Pitch;
 import sound.PitchCalculator;
 
 public class Listener extends ABCMusicBaseListener {
-    // TODO: handle null cases
     private ArrayList<MusicalPhrase> phrases;
     private ArrayList<Bar> bars;
     
@@ -247,7 +247,8 @@ public class Listener extends ABCMusicBaseListener {
     
     @Override    
     /**
-     * 
+     * Produces a pitch when entering a pitch note, temporarily ignoring octaves.
+     * @param ctx Context for the pitch note.
      */
     public void enterPitch(ABCMusicParser.PitchContext ctx) {
         this.baseNote = ctx.BASENOTE().getText();
@@ -258,6 +259,12 @@ public class Listener extends ABCMusicBaseListener {
     }   
     
     @Override
+    /** 
+     * Produces a new pitch based off the accidental and the current pitch.
+     * This is because having an accidental means we need to recalculate the pitch
+     * instead of following the key signature.
+     * @param ctx Context for accidental note.
+     */
     public void exitAccidental(ABCMusicParser.AccidentalContext ctx) {
         int accidentalTranspose = 0;
         if (ctx.start.getType() == ABCMusicLexer.SHARP) {
@@ -278,22 +285,30 @@ public class Listener extends ABCMusicBaseListener {
             this.measureAccidentals.put(this.baseNote, accidentalTranspose);
         }
     }
-	
+
 	@Override
+	/**
+	 * Modifies pitch to be the correct octave.
+	 * @param ctx Context for a pitch note
+	 */
 	public void exitPitch(ABCMusicParser.PitchContext ctx) {
 	    if (ctx.OCTAVE() != null) {
 	        String octave = ctx.OCTAVE().getText();
             for (int i = 0; i < octave.length(); i++) {
                 if (octave.charAt(i) == ',') {
-                    pitch = pitch.transpose(-Pitch.OCTAVE);
+                    this.pitch = this.pitch.transpose(-Pitch.OCTAVE);
                 } else {
-                    pitch = pitch.transpose(Pitch.OCTAVE);
+                    this.pitch = this.pitch.transpose(Pitch.OCTAVE);
                 }
             }           	        
 	    }
 	}
 	
 	@Override
+	/**
+	 * Sets the length of the note in the appropriate instance variable.
+	 * @param ctx Context for the note length
+	 */
 	public void exitNote_length(ABCMusicParser.Note_lengthContext ctx) {
 	    if(ctx.parent.getClass() == ABCMusicParser.NoteContext.class || ctx.parent.getClass() == ABCMusicParser.Note_or_restContext.class)  {
     	    if (ctx.NUMBER().size() > 1) {
@@ -352,12 +367,21 @@ public class Listener extends ABCMusicBaseListener {
     }
 
 	@Override
+	/**
+	 * Resets the notes in a chord to be empty and sets the instance variable isChord to be true
+	 * (meaning we have entered a chord).
+	 * @ctx Context for multi note
+	 */
 	public void enterMulti_note(ABCMusicParser.Multi_noteContext ctx) {
 	    this.isChord = true;
 	    this.chord = new ArrayList<Note>();
 	}
 	
 	@Override
+    /**
+     * Adds the chord to our list of notes
+     * @ctx Context for multi note
+     */
 	public void exitMulti_note(ABCMusicParser.Multi_noteContext ctx) {
 	    this.isChord= false;
 	    int chordNotes[] = new int[chord.size()];
@@ -366,7 +390,6 @@ public class Listener extends ABCMusicBaseListener {
         for (int note = 0; note < chord.size(); note++) {
             chordNotes[note] = chord.get(note).getNote()[0];
         }
-        // TODO: Name better...
         Note theChord = new PitchNote(chordNumerator * this.chordN, 
                                                                         chordDenominator * this.chordD, 
                                                                         chordNotes, "");
@@ -381,13 +404,23 @@ public class Listener extends ABCMusicBaseListener {
 
 	}
 
+	
     @Override
+    /**
+     * Resets the notes in a tuplet to be empty and sets the instance variable isTuplet to be true
+     * (meaning we have entered a tuplet).
+     * @ctx Context for tuplet
+     */
     public void enterTuplet_element(ABCMusicParser.Tuplet_elementContext ctx) {
        this.isTuplet = true;
        this.tuplet = new ArrayList<Note>();
     }
 
 	@Override
+    /**
+     * Adds the notes in the tuplet to our list of notes
+     * @ctx Context for tuplet
+     */
 	public void exitTuplet_element(ABCMusicParser.Tuplet_elementContext ctx) {
 	    String tupletSpec = ctx.TUPLET_SPEC().getText();
 	    
@@ -435,6 +468,10 @@ public class Listener extends ABCMusicBaseListener {
 	}
 	
 	@Override 
+    /**
+     * Adds the note to the appropriate place (chord, tuplet, or bar)
+     * @param ctx Context for note
+     */
 	public void exitNote(ABCMusicParser.NoteContext ctx) { 
 	    if (this.isChord) {
 	        this.chord.add(new PitchNote(this.noteNumerator, this.noteDenominator, new int[] {pitch.toMidiNote()}, ""));
@@ -458,6 +495,10 @@ public class Listener extends ABCMusicBaseListener {
 	}
 	
 	@Override
+	/**
+	 * Sets the pitch null if we've exited a rest.
+	 * @param ctx Context for note_or_rest
+	 */
 	public void exitNote_or_rest(ABCMusicParser.Note_or_restContext ctx) {
 	    if (ctx.REST() != null) {
 	        this.pitch = null;
@@ -465,6 +506,11 @@ public class Listener extends ABCMusicBaseListener {
 	}
 	
 	@Override
+	/**
+	 * Checks the type of bar and turns on or off repeats accordingly. 
+	 * Adds the bar to our list of bars.
+	 * @param ctx Context for element
+	 */
 	public void exitElement(ABCMusicParser.ElementContext ctx) {
 	    if (ctx.start.getType() == ABCMusicLexer.BAR) {
 	        String bar = ctx.BAR().getText();
@@ -508,8 +554,11 @@ public class Listener extends ABCMusicBaseListener {
 	}
 
 	@Override
+	/**
+	 * Updates the voice and adds the notes associated with the old voice into the voiceHash hash map.
+	 * @param ctx Context for voice
+	 */
 	public void enterMid_tune_field(ABCMusicParser.Mid_tune_fieldContext ctx) {
-	    
         if (!this.voiceHash.containsKey(this.currentVoice)) {
             this.voiceHash.put(this.currentVoice, new Voice(this.isRepeatOn, this.isOneTwoRepeat, this.currentRepeatBar, this.repeatBars));
         } else{
@@ -541,11 +590,19 @@ public class Listener extends ABCMusicBaseListener {
 	}
 
 	@Override
+	/**
+	 * Resets the bars in the line to be empty.
+	 * @param ctx Context for abc line
+	 */
 	public void enterAbc_line(ABCMusicParser.Abc_lineContext ctx) {
 	    this.barsInLine = new ArrayList<Bar>();
 	}
 
 	@Override
+	/**
+	 * Adds the lyrics to the line if there are any.
+	 * @param ctx Context for abc line
+	 */
 	public void exitAbc_line(ABCMusicParser.Abc_lineContext ctx) {
 	    
 	    if (ctx.ILYRIC() != null) {
@@ -577,7 +634,13 @@ public class Listener extends ABCMusicBaseListener {
             }
 	    }
 	}
+	
 	@Override
+	/**
+	 * Adds the last voice to the voiceHash map and then adds the phrases from the hash map
+	 * to our phrases array list.
+	 * @param ctx Context for abc music
+	 */
 	public void exitAbc_music(ABCMusicParser.Abc_musicContext ctx) {
         if (!this.voiceHash.containsKey(this.currentVoice)) {
             this.voiceHash.put(this.currentVoice, new Voice(this.isRepeatOn, this.isOneTwoRepeat, this.currentRepeatBar, this.repeatBars));
