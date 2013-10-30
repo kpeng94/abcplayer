@@ -455,29 +455,28 @@ public class Listener extends ABCMusicBaseListener {
 	public void exitElement(ABCMusicParser.ElementContext ctx) {
 	    if (ctx.start.getType() == ABCMusicLexer.BAR) {
 	        String bar = ctx.BAR().getText();
+
 	        if (bar.equals("|") || bar.equals("||") || bar.equals("|]") || bar.equals("|[")) {
 	            // If we're in a repeat section and it's not inside the [1 [2 part of it,
 	            // add this bar to the list of bars to repeat
 	            // make a new bar as the current repeat bar
-                if (this.currentRepeatBar.getNotes().size() > 0) {
+                if (this.isRepeatOn && !this.isOneTwoRepeat && this.currentRepeatBar.getNotes().size() > 0) {
 	                this.repeatBars.add(new Bar(this.currentRepeatBar));
 	                this.currentRepeatBar = new Bar(this.meterNumerator, this.meterDenominator);
 	            }
 	            this.bars.add(new Bar(this.currentBar));
 	            this.currentBar = new Bar(this.meterNumerator, this.meterDenominator);
 	        } else if (bar.equals("|:")) {
-                System.out.println("HERE2");
 	            this.isRepeatOn = true;
 	            this.repeatBars = new ArrayList<Bar>();
 	        } else if (bar.equals(":|")) {
+                this.isRepeatOn = false;
 	            this.bars.add(new Bar(this.currentBar));
 	            this.currentBar = new Bar(this.meterNumerator, this.meterDenominator);
-	            this.isRepeatOn = false;
 	            this.repeatBars.add(this.currentRepeatBar);
-	            System.out.println("HI2:" + this.bars.size());
+	            this.currentRepeatBar = new Bar(this.meterNumerator, this.meterDenominator);
 	            for (int repeatBar = 0; repeatBar < this.repeatBars.size(); repeatBar++) {
 	                this.bars.add(this.repeatBars.get(repeatBar));
-	                System.out.println("HI:" + this.bars.size());
 	            }
 	        }
 	    }
