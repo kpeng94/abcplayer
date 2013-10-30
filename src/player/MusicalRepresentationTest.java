@@ -1,7 +1,8 @@
 package player;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Test;
 
@@ -53,17 +54,22 @@ public class MusicalRepresentationTest {
 	
 	@Test
 	public void restNoteBasicTest() {
-		new RestNote(1,4, "zzz");
+		new RestNote(1,4);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void illegalRestNoteTest(){
+		new RestNote(-1, 4);
 	}
 	
 	@Test
 	public void restNoteMeasureTest() {
-		new RestNote(8,4, "");
+		new RestNote(8,4);
 	}
 	
 	@Test
 	public void restNoteMultipleMeasureTest() {
-		new RestNote(16,4, "");
+		new RestNote(16,4);
 	}
 	
 	@Test
@@ -77,16 +83,16 @@ public class MusicalRepresentationTest {
 	public void barRestNoteTest() {
 		Bar bar = new Bar(4,4);
 		for (int i=0; i<4; i++)
-			bar.addNote(new RestNote(1,4, ""));
+			bar.addNote(new RestNote(1,4));
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void barTooManyNotesTest() {
 		Bar bar=new Bar(4,4);
 		for (int i=0; i<2; i++)
 		{
 			bar.addNote(new PitchNote(1,4,new int[]{9},"Testing for an error!"));
-			bar.addNote(new RestNote(2,4, ""));
+			bar.addNote(new RestNote(2,4));
 		}
 	}
 	
@@ -95,7 +101,7 @@ public class MusicalRepresentationTest {
 		ArrayList<Bar> barArray=new ArrayList<Bar>();
 		Bar bar=new Bar(4,4);
 		for (int i=0; i<4; i++)
-			bar.addNote(new RestNote(1,4, ""));
+			bar.addNote(new RestNote(1,4));
 		barArray.add(bar);
 		new MusicalPhrase(barArray);
 	}
@@ -106,11 +112,116 @@ public class MusicalRepresentationTest {
 		Bar bar=new Bar(4,4);
 		Bar bar2=new Bar(4,4);
 		for (int i=0; i<4; i++)
-			bar.addNote(new RestNote(1,4,""));
+			bar.addNote(new RestNote(1,4));
 		for (int k=0; k<4; k++)
 			bar2.addNote(new PitchNote(1,4,new int[] {9}, "Hi"));
 		barArray.add(bar);
 		barArray.add(bar2);
 		new MusicalPhrase(barArray);
 	}
+	
+	@Test
+	public void basicMusicalPieceTest() {
+		String title = "Test Title";
+		String composer = "Test Composer";
+		int meterNumerator = 1, meterDenominator =4;
+		int tempoSpeed=100;
+		int tempoNumerator = 1;
+		int tempoDenominator = 4;
+		ArrayList<MusicalPhrase> phrases = new ArrayList<MusicalPhrase>();
+		new MusicalPiece(title, composer, meterNumerator, meterDenominator, tempoSpeed, tempoNumerator, tempoDenominator, phrases);
+	}
+	
+	@Test
+	public void musicalPieceMethodTest() {
+		String title = "Test Title";
+		String composer = "Test Composer";
+		int meterNumerator = 1, meterDenominator =4;
+		int tempoSpeed=100;
+		int tempoNumerator = 1;
+		int tempoDenominator = 4;
+		ArrayList<MusicalPhrase> phrases = new ArrayList<MusicalPhrase>();
+		MusicalPiece mp = new MusicalPiece(title, composer, meterNumerator, meterDenominator, tempoSpeed, tempoNumerator, tempoDenominator, phrases);
+		assertTrue(mp.getTitle().equals(title));
+		assertTrue(mp.getComposer().equals(composer));
+		assertTrue(mp.getMeterDenominator().equals(meterDenominator));
+		assertTrue(mp.getMeterNumerator().equals(meterNumerator));
+		assertTrue(mp.getTempo().equals(tempoSpeed));
+		}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void nullPitchNoteTest() {
+		new PitchNote(1, 4, null, null);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void addNoteNullBarTest() {
+		Bar bar=new Bar(1,4);
+		bar.addNote(null);
+	}
+	
+	@Test
+	public void basicVoiceTest() {
+		boolean isRepeatOn = true;
+        boolean isOneTwoRepeat = true;
+        Bar currentRepeatBar = new Bar(1,4);
+        ArrayList<Bar> repeatBars = new ArrayList<Bar>();
+        ArrayList<Bar> voiceBars = new ArrayList<Bar>();
+		new Voice(isRepeatOn, isOneTwoRepeat, currentRepeatBar, repeatBars);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void nullVoiceTest() {
+		boolean isRepeatOn = true;
+        boolean isOneTwoRepeat = true;
+        Bar currentRepeatBar = null;
+        ArrayList<Bar> repeatBars = new ArrayList<Bar>();
+        ArrayList<Bar> voiceBars = new ArrayList<Bar>();
+		new Voice(isRepeatOn, isOneTwoRepeat, currentRepeatBar, repeatBars);
+	}
+	
+	@Test
+	public void voiceGetRepeatReturnTest() {
+		boolean isRepeatOn = true;
+        boolean isOneTwoRepeat = true;
+        Bar currentRepeatBar = new Bar(1,4);
+        ArrayList<Bar> repeatBars = new ArrayList<Bar>();
+        ArrayList<Bar> voiceBars = new ArrayList<Bar>();
+		Voice voice = new Voice(isRepeatOn, isOneTwoRepeat, currentRepeatBar, repeatBars);
+		assertTrue(voice.getRepeatOn() == isRepeatOn);
+	}
+	
+	@Test
+	public void voiceGetIsOneTwoRepeatReturnTest() {
+		boolean isRepeatOn = true;
+        boolean isOneTwoRepeat = true;
+        Bar currentRepeatBar = new Bar(1,4);
+        ArrayList<Bar> repeatBars = new ArrayList<Bar>();
+        ArrayList<Bar> voiceBars = new ArrayList<Bar>();
+		Voice voice = new Voice(isRepeatOn, isOneTwoRepeat, currentRepeatBar, repeatBars);
+		assertTrue(voice.getOneTwoRepeat() == isRepeatOn);
+	}
+	
+	@Test
+	public void voiceEqualityTest() {
+		// Voice 1
+		boolean isRepeatOn = true;
+        boolean isOneTwoRepeat = true;
+        Bar currentRepeatBar = new Bar(1,4);
+        ArrayList<Bar> repeatBars = new ArrayList<Bar>();
+        ArrayList<Bar> voiceBars = new ArrayList<Bar>();
+		Voice voice = new Voice(isRepeatOn, isOneTwoRepeat, currentRepeatBar, repeatBars);
+		
+		// Voice 2
+		boolean isRepeatOn1 = true;
+        boolean isOneTwoRepeat1 = true;
+        Bar currentRepeatBar1 = new Bar(1,4);
+        ArrayList<Bar> repeatBars1 = new ArrayList<Bar>();
+        ArrayList<Bar> voiceBars1 = new ArrayList<Bar>();
+		Voice voice1 = new Voice(isRepeatOn1, isOneTwoRepeat1, currentRepeatBar1, repeatBars1);
+		
+		assertTrue(voice.equals(voice1));
+	}
+	
+
 }

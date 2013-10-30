@@ -201,14 +201,19 @@ public class PitchCalculator {
     public Pitch getPitchForKey(String key, String note) {
         HashMap<String,Pitch> innerMap = outerMap.get(key);
         if (innerMap == null) {
-            return null;
+        	throw new IllegalArgumentException("Key signature not accepted");
         }
         if (note.toLowerCase().equals(note)) {
             return innerMap.get(note.toUpperCase()).transpose(Pitch.OCTAVE);
         }
         return innerMap.get(note);
     }
-    
+    /**
+     * Adds the pitches for each respective key into the HashMaps 
+     * @param key - The key signature
+     * @param note - a String of the note
+     * @param pitch - the Pitch Object representing that note in the respective key
+     */
     private void addPitchForKey(String key, String note, Pitch pitch) {
         HashMap<String,Pitch> innerMap = outerMap.get(key);
         if (innerMap == null) {

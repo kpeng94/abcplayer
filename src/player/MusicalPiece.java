@@ -15,12 +15,20 @@ import sound.SequencePlayer;
 public class MusicalPiece {
     private String title;
     private String composer;
-    // numerator in meter, represents number of beats in a measure
-    // denominator in meter, represents the note value that represents one beat
     private int meterNumerator, meterDenominator;
     private int tempoSpeed, tempoNumerator, tempoDenominator;
     private ArrayList<MusicalPhrase> phrases;
-    
+    /**
+     * Constructor for MusicalPiece
+     * @param title - String representation of the title of the piece 
+     * @param composer - String value of the composer
+     * @param meterNumerator - integer representing number of beats in a measure
+     * @param meterDenominator - integer representing the note value that represents one beat
+     * @param tempoSpeed - integer representing tempo
+     * @param tempoNumerator - integer representing the numerator of the tempo
+     * @param tempoDenominator - integer representing the denominator of the tempo
+     * @param phrases - ArrayList of MusicalPhrases
+     */
     public MusicalPiece(String title, String composer, int meterNumerator, Integer meterDenominator, 
                                             int tempoSpeed, int tempoNumerator, int tempoDenominator, ArrayList<MusicalPhrase> phrases) {
         this.title = title;
@@ -65,16 +73,21 @@ public class MusicalPiece {
      * 
      */
     public void playPiece() {
+    	
         System.out.println("Title: " + this.title);
         System.out.println("Composer: " + this.composer);
         System.out.println("Played in " + this.meterNumerator + "/" + this.meterDenominator + " time @ " + this.tempoSpeed + " BPM.");
         SequencePlayer player;
         try {
+        	
+        	// Create an instance of LyricListener and add a processLyricEvent to print out lyrics
             LyricListener listener = new LyricListener() {
                 public void processLyricEvent(String text) {
                     System.out.println(text);
                 }
             };
+            
+            // Iterates through each MusicalPhrase and queues the notes to be played by the SequencePlayer
             player = new SequencePlayer(this.getTempo(), this.getTicksPerBeat(), listener);
             for (MusicalPhrase phrase : this.phrases) {
                 int tickCount = 0;
@@ -141,5 +154,75 @@ public class MusicalPiece {
     public Integer getTempo() {
         return this.tempoSpeed;
     }
+    
+    /**
+     * Returns a copy of the ArrayList of MusicalPhrases that make up the MusicalPiece
+     * @return phrases 
+     */
+    // TODO MAKE THIS NOT HAVE REP EXPOSURE
+    public ArrayList<MusicalPhrase> getPhrases() {
+        return this.phrases;
+    }
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((composer == null) ? 0 : composer.hashCode());
+		result = prime * result + meterDenominator;
+		result = prime * result + meterNumerator;
+		result = prime * result + ((phrases == null) ? 0 : phrases.hashCode());
+		result = prime * result + tempoDenominator;
+		result = prime * result + tempoNumerator;
+		result = prime * result + tempoSpeed;
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MusicalPiece other = (MusicalPiece) obj;
+		if (composer == null) {
+			if (other.composer != null)
+				return false;
+		} else if (!composer.equals(other.composer))
+			return false;
+		if (meterDenominator != other.meterDenominator)
+			return false;
+		if (meterNumerator != other.meterNumerator)
+			return false;
+		if (phrases == null) {
+			if (other.phrases != null)
+				return false;
+		} else if (!phrases.equals(other.phrases))
+			return false;
+		if (tempoDenominator != other.tempoDenominator)
+			return false;
+		if (tempoNumerator != other.tempoNumerator)
+			return false;
+		if (tempoSpeed != other.tempoSpeed)
+			return false;
+		if (title == null) {
+			if (other.title != null)
+				return false;
+		} else if (!title.equals(other.title))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "MusicalPiece [title=" + title + ", composer=" + composer
+				+ ", meterNumerator=" + meterNumerator + ", meterDenominator="
+				+ meterDenominator + ", tempoSpeed=" + tempoSpeed
+				+ ", tempoNumerator=" + tempoNumerator + ", tempoDenominator="
+				+ tempoDenominator + ", phrases=" + phrases + "]";
+	}
 }
