@@ -37,6 +37,14 @@ public class LexerTest {
         verifyLexer("X: 3\nT: Sample 3\nC: Me\nQ: 1/8=100\nM: 3/4\nL: 1/8\nK: C", new String[] {"X: 3", "\n", "T: Sample 3", "\n", "C: Me", "\n", "Q: 1/8=100", "\n", "M: 3/4", "\n", "L: 1/8", "\n", "K: C"});
     }
     
+    @Test
+    public void testSmallFile() {
+    	// Testing a small to verify lexer tokenizing the header and a body properly
+    	verifyLexer("X:1\nT:Alphabet Song\nC:Traditional Kid's Song\nM:4/4\nL:1/4\nQ:1/4=100\nK:D\nD D A A|B B A2|", new String[] 
+    			{"X:1","\n","T:Alphabet Song","\n", "C:Traditional Kid's Song","\n", "M:4/4", "\n","L:1/4","\n", "Q:1/4=100","\n", "K:D","\n", "D", " ", "D", " ", "A"," ", "A", "|", "B", " ","B", " ", "A","2", "|"});
+    	
+    }
+    
     // Here, we will test ABCBody grammar portion against the three warm up pieces file.
     
     @Test
@@ -85,11 +93,12 @@ public class LexerTest {
         lexer.reportErrorsAsExceptions();
         List<? extends Token> actualTokens = lexer.getAllTokens();
 
-//        assertEquals(expectedTokens.length, actualTokens.size());
+        assertEquals(expectedTokens.length, actualTokens.size());
         
         for(int i = 0; i < actualTokens.size(); i++) {
              String actualToken = actualTokens.get(i).getText();
              String expectedToken = expectedTokens[i];
+//             System.out.println(expectedToken);
 //             System.out.println(actualToken);
              assertEquals(actualToken, expectedToken);
         }
