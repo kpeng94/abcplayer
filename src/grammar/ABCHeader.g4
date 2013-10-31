@@ -14,15 +14,15 @@ grammar ABCHeader;
  * These are the lexical rules. They define the tokens used by the lexer.
  */
 INUMBER: 'X:'[ \t]*[0-9]+;
-ITITLE: 'T:'[ \t]*[a-zA-Z0-9.,'"?\\\-!&#@/;><()_ ]+;
-ICOMPOSER: 'C:'[ \t]*[a-zA-Z0-9.,'"?\\\-!&#@/;><()_ ]+;
+ITITLE: 'T:'[ \t]*[a-zA-Z0-9.,'"?\\\-!&#@/;><()_ ~]+;
+ICOMPOSER: 'C:'[ \t]*[a-zA-Z0-9.,'"?\\\-!&#@/;><()_ ~]+;
 ILENGTH: 'L:'[ \t]*[0-9]+'/'[0-9]+;
 IMETER: 'M:'[ \t]*((([C][\|])|[C])|[0-9]+'/'[0-9]+);
 ITEMPO: 'Q:'[ \t]*((([C][\|])|[C])|([0-9]+'/'[0-9]+)('='[0-9]+)*);
-IVOICE: 'V:'[ \t]*[a-zA-Z0-9.,'"?\\\-!&#@/;><()_ ]+;
+IVOICE: 'V:'[ \t]*[a-zA-Z0-9.,'"?\\\-!&#@/;><()_ ~]+;
 IKEY: 'K:'[ \t]*[a-gA-g][#b]?[m]?;
 EOL: [\r\n];
-COMMENTSIGN: '%'[a-zA-Z0-9.,'"?\\\-!&#@/;><()_ ]*;
+COMMENTSIGN: '%'[a-zA-Z0-9.,'"?\\\-!&#@/;><()_ ~]*;
 
 /*
  * These are the parser rules. They define the structures used by the parser.

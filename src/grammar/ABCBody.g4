@@ -26,7 +26,7 @@ NUMBER: [0-9]+;
 SLASH: '/';
 SPACE: ' ';
 LYRICAL_ELEMENT_TOKEN: ' '|'-'|'_'|'*'|'~'|'\-'|'|';
-ILYRIC: 'w:'[ \t]*([A-Za-z0-9'\\!.,()?&$#@]+|LYRICAL_ELEMENT_TOKEN)*;
+ILYRIC: 'w:'[ \t]*([A-Za-z0-9'\\!.,()?&$#@/;"]+|LYRICAL_ELEMENT_TOKEN)*;
 OPEN_BRACKET : '[';
 CLOSE_BRACKET : ']';
 TUPLET_SPEC: '('[1-9];
