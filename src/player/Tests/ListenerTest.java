@@ -24,13 +24,29 @@ import player.MusicalPiece;
 public class ListenerTest {
 
 	/**
-	 * Header Tests
+	 * This class tests methods in the listener against the creation of a tree
+	 * in out ADT.
+	 * 
+	 * Testing Strategy:
+	 *  1) Listener Helper Methods
+	 *      a) Test trailing whitespace removal helper method
+	 *      
+	 *  2) Header -> ADT:
+	 *      a) Test the header title is being stored in the ADT
+	 *      b) Test the header composer is being stored in the ADT
+	 *      c) Test the header meter is being stored in the ADT
+	 *      d) Test the header tempo is being stored in the ADT
+	 * 
+	 *  3) Body -> ADT:
+	 *      a) Test the phrases title is being stored in the ADT
+	 *      b) Test that repeat is working properly is being stored in the ADT
 	 * 
 	 * @category no_didit
 	 */
 	
 	@Test
 	public void whitespaceRemovalTest() {
+	    // Test trailing whitespace removal method
 		String white = "     abcdef";
 		String output=new Listener().removeWhitespaceAtBeginning(white);
 		assertTrue("abcdef".equals(output));
@@ -38,9 +54,48 @@ public class ListenerTest {
 	
 	@Test
 	public void headerTitleTest() {
+	 // Test the header title is being stored in the ADT
 		MusicalPiece mp = parse("sample_abc/abc_song.abc");
 		assertTrue(mp.getTitle().equals("Alphabet Song"));
 	}
+	
+	@Test
+    public void headerComposerTest() {
+	 // Test the header composer is being stored in the ADT
+        MusicalPiece mp = parse("extra_abc/clocks.abc");
+        assertTrue(mp.getComposer().equals("Coldplay"));
+    }
+	
+	@Test
+    public void headerMeterTest() {
+	 // Test the header meter is being stored in the ADT
+        MusicalPiece mp = parse("extra_abc/clocks.abc");
+        assertTrue(mp.getMeterNumerator().equals(4));
+        assertTrue(mp.getMeterDenominator().equals(4));
+    }
+	
+	@Test
+    public void headerTempoTest() {
+	 // Test the header tempo is being stored in the ADT
+        MusicalPiece mp = parse("extra_abc/clocks.abc");
+        assertTrue(mp.getTempo().equals(130));
+    }
+	
+    @Test
+    public void headerPhrasesTest() {
+     // Test the phrases title is being stored in the ADT
+        MusicalPiece mp = parse("extra_abc/clocks.abc");
+        assertTrue(mp.getPhrases().size() == 1);
+        assertEquals(mp.getPhrases().get(0).getBars().get(0).getNotes().get(0).getLength(), 0.125, 0.0001);
+    }
+    
+    @Test
+    public void headerRepeatTest() {
+     // Test that repeat is working properly is being stored in the ADT
+        MusicalPiece mp = parse("extra_abc/clocks.abc");
+        assertTrue(mp.getPhrases().size() == 1);
+        assertEquals(mp.getPhrases().get(0).getBars().size(), 11);
+    }
 	
 	  //Allows to test parsing of string input. If the parsing fails ANTLR will throw an exception.
 	  public static MusicalPiece parse(String filePath) {
