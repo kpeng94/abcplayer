@@ -27,6 +27,9 @@ import sound.PitchCalculator;
 /** 
  * Class to test all the musical pieces in our sample_abc and extra_abc folder
  * Only tests successful parsing of the tree, doesn't play the files
+ * Testing Strategy: test all abc files in extra_abc and sample_abc, and test
+ * parsing of notes and header fields, also test that illegal abc files that aren't supported by our spec
+ * throw an error
  * 
  * @category no_didit
  */
