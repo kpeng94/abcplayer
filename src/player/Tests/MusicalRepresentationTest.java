@@ -38,12 +38,12 @@ import player.Voice;
  * 	4) MusicalPhrases:
  * 		a) Create a musical phrase with one bar
  * 		b) Create a musical phrase with multiple bars
- *      e) Ensures that there is no representation exposure in MusicalPhrases
+ *      c) Ensures that there is no representation exposure in MusicalPhrases
  *  
  *  5) MusicalPiece:
  *      a) Create a basic MusicalPiece datatype
  *      b) Test that each getter of MusicalPiece works from a constructor
- *      e) Ensures that there is no representation exposure in MusicalPiece
+ *      c) Ensures that there is no representation exposure in MusicalPiece
  *      
  *  6) Voices:
  *      a) Creation of a Voice object with constructor
