@@ -454,7 +454,7 @@ public class Listener extends ABCMusicBaseListener {
 	        String bar = ctx.BAR().getText();
             this.measureAccidentals = new HashMap<String, Integer>();
 
-	        if (bar.equals("|") || bar.equals("||") || bar.equals("|]") || bar.equals("|[")) {
+	        if (bar.equals("|") || bar.equals("||") || bar.equals("|]") || bar.equals("[|")) {
 	            // If we're in a repeat section and it's not inside the [1 [2 part of it,
 	            // add this bar to the list of bars to repeat
 	            // make a new bar as the current repeat bar
@@ -465,6 +465,11 @@ public class Listener extends ABCMusicBaseListener {
 	            this.bars.add(new Bar(this.currentBar));
                 this.barsInLine.add(new Bar(this.currentBar));
 	            this.currentBar = new Bar(this.meterNumerator, this.meterDenominator);
+	            if (bar.equals("||") || bar.equals("|]")) {
+	                this.isRepeatOn = true;
+	                this.isOneTwoRepeat = false;
+	                this.repeatBars = new ArrayList<Bar>();
+	            }
 	        } else if (bar.equals("|:")) {
 	            this.isRepeatOn = true;
 	            this.repeatBars = new ArrayList<Bar>();
