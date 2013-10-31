@@ -13,8 +13,10 @@ import org.junit.Test;
 
 /**
  * This is the test suite for Lexer. These tests will make 
- * sure your Lexer works as expected by testing tokenization
- * of the three sample pieces and various small pieces of text.
+ * sure our Lexer works as expected by testing tokenization
+ * of the three sample pieces and various small pieces of notes.
+ * We also test against combinations of tokens like bars, sharps, chords
+ * and lyrics. We also test on a sample file with header and notes
  */
 public class LexerTest {
 

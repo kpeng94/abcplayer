@@ -8,12 +8,14 @@ import player.PitchNote;
 
 /**
  * This will allow us to test the workings of the PitchCalculator.
- * This test suite is not meant to be comprehensive.
+ * Testing Strategy: We test multiple different keys and check that 
+ * the Pitchs being returned are equivalent and correct
  *
  */
 
 public class PitchCalculatorTest {
-
+	
+	// Basic pitch calculator test to make sure it's working properly
 	@Test
 	public void basicPitchCalculatorTest() {
 		// C in Key A minor and C in Key C major is 
@@ -22,6 +24,8 @@ public class PitchCalculatorTest {
 		assertEquals(AmC.toMidiNote(), CC.toMidiNote());
 	}
 	
+	// Test two pitches returned are equivalent to each other and to the 
+	// original pitch transposed properly
 	@Test
 	public void twoPitchEqualityTest() {
 		// key G major and E minor have F sharp as a normal F
@@ -32,6 +36,7 @@ public class PitchCalculatorTest {
 		assertEquals(Fsharp.toMidiNote(), GF.toMidiNote());
 	}
 	
+	// Tests three pitches to be equal to each other
 	@Test
 	public void threePitchEqualityTest() {
 		// key G sharp and B major are the same
