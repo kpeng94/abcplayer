@@ -174,21 +174,6 @@ public class Listener extends ABCMusicBaseListener {
         this.lengthDenominator = Integer.parseInt(length.substring(slashLocation + 1));
     }
 
-//    @Override 
-    /**
-     * Sets the voices of the piece in the header when the listener leaves the voice nodes.
-     * @param ctx Context for voices 
-     */
-//    public void exitField_voice(ABCMusicParser.Field_voiceContext ctx) { 
-//    	String voice = ctx.IVOICE().getText();
-//    	voice = voice.substring(2);
-//    	voice = removeWhitespaceAtBeginning(voice);
-//    	
-//    	if (!voiceHash.containsKey(voice)) {
-//            voiceHash.put(voice, new Voice(true, false, this.currentRepeatBar, this.repeatBars));
-//    	}
-//    }
-    
     @Override
     /**
      * Initializes parameters for the abc file that were missing in the header.
