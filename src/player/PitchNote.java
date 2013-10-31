@@ -74,6 +74,9 @@ public class PitchNote implements Note{
 		return this.lyric;
 	}   
 	
+	/**
+	 * Setter method to set the lyric associated with the note
+	 */
 	@Override
 	public void setLyric(String lyric) {
 	    this.lyric = lyric;

@@ -61,9 +61,6 @@ public class Bar {
         int ticks = 1; 
         int gcd;
         for (int i = 0; i < notes.size(); i++) {
-            /** 
-             * TODO (kpeng94): Later factor this gcd code out by writing a class with a static method.
-             */
             int noteTicks = notes.get(i).getDenominator();
             /**
              * Computing the gcd of the two will help us compute the LCM.
@@ -83,7 +80,10 @@ public class Bar {
         }
         return ticks;
     }
-
+    /**
+     * Returns hash value of the Bar
+     * @return integer hash value
+     */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -98,7 +98,10 @@ public class Bar {
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
-
+	/**
+	 * Checks if this object is equal to another object
+	 * @return boolean value
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -125,7 +128,10 @@ public class Bar {
 			return false;
 		return true;
 	}
-	
+	/**
+	 * Returns String representation of this bar
+	 * @return String
+	 */
 	@Override
 	public String toString() {
 		return "Bar [meterNumerator=" + meterNumerator + ", meterDenominator="

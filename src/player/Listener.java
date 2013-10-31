@@ -21,7 +21,10 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import sound.Pitch;
 import sound.PitchCalculator;
-
+/**
+ * Listener to lex and parse an ABC Music file
+ *
+ */
 public class Listener extends ABCMusicBaseListener {
     private ArrayList<MusicalPhrase> phrases;
     
@@ -362,7 +365,7 @@ public class Listener extends ABCMusicBaseListener {
 	    // We split these up into cases for the type of tuplet
 	    if (tupletSpec.substring(1).equals("3")) {
 	        if (this.tuplet.size() != 3) {
-	            // TODO: throw error
+	            throw new IllegalArgumentException("Tuplet doesn't have size of 3");
 	        }
 	        
 	        for (int i = 0; i < 3; i++) {
@@ -375,7 +378,7 @@ public class Listener extends ABCMusicBaseListener {
 	        }	       
 	    } else if (tupletSpec.substring(1).equals("2")) {
             if (this.tuplet.size() != 2) {
-                // TODO: throw error
+                throw new IllegalArgumentException("Tuplet doesn't have size of 2");
             }
             for (int i = 0; i < 2; i++) {
                 int noteNumerator = this.tuplet.get(i).getNumerator();
@@ -387,7 +390,7 @@ public class Listener extends ABCMusicBaseListener {
             }          
 	    } else {
             if (this.tuplet.size() != 4) {
-                // TODO: throw error
+                throw new IllegalArgumentException("Tuplet doesn't have a size of 4");
             }
             for (int i = 0; i < 4; i++) {
                 int noteNumerator = this.tuplet.get(i).getNumerator();

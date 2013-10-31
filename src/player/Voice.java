@@ -112,6 +112,10 @@ public class Voice {
         return this.voiceBars;
     }
 
+    /**
+     * Create a hash value for this Voice
+     * @return integer hash value
+     */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -128,6 +132,10 @@ public class Voice {
 		return result;
 	}
 
+	/**
+	 * Method to check equality of this object with another object
+	 * @return boolean value representing if two objects are equal
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -158,7 +166,11 @@ public class Voice {
 			return false;
 		return true;
 	}
-
+	
+	/**
+	 * Creates a string representation of Voice
+	 * @return string representing the voice
+	 */
 	@Override
 	public String toString() {
 		return "Voice [isRepeatOn=" + isRepeatOn + ", isOneTwoRepeat="

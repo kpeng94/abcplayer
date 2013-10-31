@@ -157,7 +157,6 @@ public class MusicalPiece {
      * Returns a copy of the ArrayList of MusicalPhrases that make up the MusicalPiece
      * @return phrases 
      */
-    // TODO MAKE THIS NOT HAVE REP EXPOSURE
     public ArrayList<MusicalPhrase> getPhrases() {
         ArrayList<MusicalPhrase> copy = new ArrayList<MusicalPhrase>(this.phrases.size());
         for (MusicalPhrase m : this.phrases) 
@@ -165,6 +164,10 @@ public class MusicalPiece {
         return copy;
     }
 
+    /**
+     * Returns an integer hash value representing the MusicalPiece
+     * @return integer hash value
+     */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -181,6 +184,10 @@ public class MusicalPiece {
 		return result;
 	}
 
+	/**
+	 * Equals method to compare equality of current MusicalPiece with another one
+	 * @return boolean value of equality
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -217,7 +224,12 @@ public class MusicalPiece {
 			return false;
 		return true;
 	}
-
+	
+	
+	/**
+	 * Returns a string representation of the current Musical Piece
+	 * @return string of the MusicalPiece
+	 */
 	@Override
 	public String toString() {
 		return "MusicalPiece [title=" + title + ", composer=" + composer

@@ -63,7 +63,11 @@ public class RestNote implements Note{
 	public String getLyric() {
 		return null;
 	}
-
+	
+	/**
+	 * Returns an integer hash code value for the RestNote
+	 * @return integer reprsenting hash value
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -73,6 +77,10 @@ public class RestNote implements Note{
 		return result;
 	}
 
+	/**
+	 * Equals method to compare this RestNote with another one
+	 * @return boolean representing if two objects are equal
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -88,13 +96,21 @@ public class RestNote implements Note{
 			return false;
 		return true;
 	}
-
+	
+	/**
+	 * Creates a string representation of the RestNote
+	 * @return String representing RestNote
+	 */
 	@Override
 	public String toString() {
 		return "RestNote [numerator=" + numerator + ", denominator="
 				+ denominator + "]";
 	}
     
+	/**
+	 * Method to setLyric with the RestNote but just returns because
+	 * RestNotes don't have lyrics associated with them
+	 */
     @Override
     public void setLyric(String lyric) {
         return;

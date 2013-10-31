@@ -48,10 +48,18 @@ public class MusicalPhrase {
         return ticks;
     }
     
+    /**
+     * Returns a deep copy of MusicalPhrase
+     * @return MusicalPhrase
+     */
     public MusicalPhrase clone() {
         return new MusicalPhrase(new ArrayList<Bar>(this.bars));
     }
     
+    /**
+     * Returns the hashCode value for this MusicalPhrase
+     * @return integer representing hash value
+     */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -60,6 +68,10 @@ public class MusicalPhrase {
 		return result;
 	}
 	
+	/**
+	 * Equals method to test if two objects are equal
+	 * @return boolean value of equality
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -77,6 +89,10 @@ public class MusicalPhrase {
 		return true;
 	}
 	
+	/**
+	 * Creates a string representation of the MusicalPhrase
+	 * @return string of MusicalPhrase
+	 */
 	@Override
 	public String toString() {
 		return "MusicalPhrase [bars=" + bars + "]";
